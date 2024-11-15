@@ -1,0 +1,292 @@
+/* 
+DEFAULT THEME 
+prime  : 4262ff
+*/
+
+:root {
+  --prime: #4262ff;
+  --second: #4262ff60;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+form#absy_form_package .row {
+  display: flex;
+  align-items: center;
+}
+
+form#absy_form_package .pointer {
+  cursor: pointer;
+}
+
+/* RADIO */
+
+form#absy_form_package .absy_pkg_radio input[name="absy_pkg_radio"] {
+  display: none;
+}
+
+form#absy_form_package .absy_pkg_radio input[type="radio"] + label {
+  position: relative;
+  display: inline-block;
+  padding-left: 1.5em;
+  margin-right: 2em;
+  cursor: pointer;
+  line-height: 1em;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+form#absy_form_package .absy_pkg_radio input[type="radio"] + label:before,
+form#absy_form_package .absy_pkg_radio input[type="radio"] + label:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  text-align: center;
+  color: white;
+  font-family: Times;
+  border-radius: 50%;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+form#absy_form_package .absy_pkg_radio input[type="radio"] + label:before {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 0.2em white, inset 0 0 0 1em white;
+}
+
+form#absy_form_package
+  .absy_pkg_radio
+  input[type="radio"]
+  + label:hover:before {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 0.3em white, inset 0 0 0 1em #c6c6c6;
+}
+
+form#absy_form_package
+  .absy_pkg_radio
+  input[type="radio"]:checked
+  + label:before {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 0 0.2em white, inset 0 0 0 1em var(--prime);
+}
+
+/********** Range Input Styles **********/
+
+/* RANGE */
+
+/*Range Reset*/
+form#absy_form_package input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 15rem;
+}
+
+/* Removes default focus */
+form#absy_form_package input[type="range"]:focus {
+  outline: none;
+}
+
+/***** Chrome, Safari, Opera and Edge Chromium styles *****/
+/* slider track */
+form#absy_form_package input[type="range"]::-webkit-slider-runnable-track {
+  background-color: var(--second);
+  border-radius: 0.5rem;
+  height: 0.3rem;
+}
+
+/* slider thumb */
+form#absy_form_package input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  /* Override default look */
+  appearance: none;
+  margin-top: -12px;
+  /* Centers thumb on the track */
+
+  /*custom styles*/
+  background-color: var(--prime);
+  height: 2rem;
+  width: 1rem;
+}
+
+form#absy_form_package input[type="range"]:focus::-webkit-slider-thumb {
+  border: 1px solid var(--second);
+  outline: 1px solid var(--second);
+  outline-offset: 0.125rem;
+}
+
+/******** Firefox styles ********/
+/* slider track */
+form#absy_form_package input[type="range"]::-moz-range-track {
+  background-color: var(--second);
+  border-radius: 0.5rem;
+  height: 0.5rem;
+}
+
+/* slider thumb */
+form#absy_form_package input[type="range"]::-moz-range-thumb {
+  border: none;
+  /*Removes extra border that FF applies*/
+  border-radius: 0;
+  /*Removes default border-radius that FF applies*/
+
+  /*custom styles*/
+  background-color: var(--prime);
+  height: 2rem;
+  width: 1rem;
+}
+
+form#absy_form_package input[type="range"]:focus::-moz-range-thumb {
+  border: 1px solid var(--second);
+  outline: 1px solid var(--second);
+  outline-offset: 0.125rem;
+}
+
+/* CHECKBOX */
+
+form .absy_pkg_checkbox {
+  visibility: hidden;
+  margin-top: 10px;
+}
+
+form .absy_pkg_checkbox + label {
+  position: relative;
+  padding-left: 5px;
+}
+
+form .absy_pkg_checkbox + label::before {
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  /*   text-align: center; */
+  border: 2px solid var(--prime);
+  content: " ";
+  width: 16px;
+  height: 16px;
+  transition: all 0.1s ease-in, border-color 0.05s ease-in;
+}
+
+form .absy_pkg_checkbox:checked + label::before {
+  transform: rotate(40deg);
+  border-top-color: transparent;
+  border-left-color: transparent;
+  top: 2px;
+  left: -15px;
+  width: 7px;
+  height: 14px;
+}
+
+/* Dropdown */
+
+.absy_pkg_dropdown {
+  border-radius: 10px;
+  /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); */
+}
+
+.absy_pkg_dropdown-header {
+  /* padding: 15px; */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.absy_pkg_dropdown-body {
+  /* width: 92%; */
+  /* width: inherit; */
+  border-top: 1px solid #e5e8ec;
+  background-color: #fff;
+  display: none;
+  position: absolute;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: scroll;
+  z-index: 999;
+}
+
+.absy_pkg_dropdown-body.open {
+  display: block;
+}
+
+.absy_pkg_dropdown-item {
+  padding: 15px;
+}
+
+.absy_pkg_dropdown-item:hover {
+  cursor: pointer;
+}
+
+.absy_pkg_dropdown-item-dot {
+  opacity: 0;
+  color: var(--prime);
+  transition: all 0.2s ease-in-out;
+}
+
+.absy_pkg_dropdown-item-dot.selected {
+  opacity: 1;
+}
+
+.icon {
+  font-size: 13px;
+  color: var(--prime);
+  transform: rotate(0deg);
+  transition: all 0.2s ease-in-out;
+}
+
+.icon.open {
+  transform: rotate(90deg);
+}
+
+/* SCROLLBAR */
+
+/* width */
+form#absy_form_package ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+form#absy_form_package ::-webkit-scrollbar-track {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+/* Handle */
+form#absy_form_package ::-webkit-scrollbar-thumb {
+  background: var(--prime);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+form#absy_form_package ::-webkit-scrollbar-thumb:hover {
+  background: var(--prime);
+}
+
+.switch {
+  width: 100px;
+  height: 10px;
+  background-color: #4262ff60;
+  position: relative;
+  border-radius: 50px;
+  border: 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.switch .point {
+  width: 20px;
+  height: 20px;
+  background-color: #4262ff;
+  padding: 5px;
+  border-radius: 50px;
+  position: absolute;
+  left: -5;
+  transition: all 0.2s ease-in-out;
+}
