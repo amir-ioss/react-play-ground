@@ -35,11 +35,14 @@ const DynamicForm = ({ data, onSubmit, className, itemClassName, containerClass,
     return (
         <form onSubmit={handleSubmit(handleFormSubmit)} className={twMerge(`w-full flex justify-between flex-wrap max-w-lg gap-x-4 bg-white dark_:bg-black rounded-md ${className}`)}>
             {data.map((field, index) => {
-                const { type, name, label, options, className, containerClass: f_containerClass, showLabel: f_showLabel, layout, ...rest } = field;
+                const { type, name, label, render, options, className, containerClass: f_containerClass, showLabel: f_showLabel, layout, ...rest } = field;
 
                 // Ensure field has a name, otherwise skip rendering.
                 if (!name) return null;
-
+                if (render) {
+                    let _field = { ...field, register: register, error: errors[name] }
+                    return render?.(_field)
+                }
 
                 return (
                     <div key={index} className={twMerge(`${layout == 'row' ? ' flex-1 ' : 'w-full'} flex flex-col space-y-1 mb-4 ${containerClass ?? ''} ${f_containerClass ?? ''}`)}>

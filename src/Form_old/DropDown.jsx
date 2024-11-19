@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useOutsideAlerter } from '../../global/utils';
 
 
 {/* <DropDown
@@ -14,6 +13,7 @@ import { useOutsideAlerter } from '../../global/utils';
     </div>}
   classNameContainer="mt-4"
 /> */}
+
 
 
 const DropDown = ({
@@ -79,9 +79,9 @@ const DropDown = ({
               />}
           <p className="mr-2">{data?.find((item) => item.value == value)?.title ?? placeholder}</p>
               </div>
-          <span translate="no" className="material-symbols-rounded">
+          {/* <span translate="no" className="material-symbols-rounded">
             {isOpen ? 'keyboard_arrow_up' : 'expand_more'}
-          </span>
+          </span> */}
         </button>
       </>
     }
