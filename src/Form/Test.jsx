@@ -1,71 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Joi from 'joi';
 import DynamicForm from './index'
-import DropDown from '../Form_old/DropDown'
-
-
-const Cards = ({ register }) => {
-    return <>
-        <h2>Select a Card</h2>
-
-        <div style={{ display: "flex", gap: "1rem" }}>
-            {/* Card 1 */}
-            <label
-                style={{
-                    // border: selectedCard === "card1" ? "2px solid blue" : "2px solid gray",
-                    padding: "1rem",
-                    cursor: "pointer",
-                }}
-            >
-                <input
-                    type="radio"
-                    value="card1"
-                    {...register("selectedCard", { required: true })}
-                    style={{ display: "none" }}
-                />
-                Card 1
-            </label>
-
-            {/* Card 2 */}
-            <label
-                style={{
-                    // border: selectedCard === "card2" ? "2px solid blue" : "2px solid gray",
-                    padding: "1rem",
-                    cursor: "pointer",
-                }}
-            >
-                <input
-                    type="radio"
-                    value="card2"
-                    {...register("selectedCard", { required: true })}
-                    style={{ display: "none" }}
-                />
-                Card 2
-            </label>
-
-            {/* Card 3 */}
-            <label
-                style={{
-                    // border: selectedCard === "card3" ? "2px solid blue" : "2px solid gray",
-                    padding: "1rem",
-                    cursor: "pointer",
-                }}
-            >
-                <input
-                    type="radio"
-                    value="card3"
-                    {...register("selectedCard", { required: true })}
-                    style={{ display: "none" }}
-                />
-                Card 3
-            </label>
-
-
-        </div>
-
-    </>
-}
-
+import DropDown from './DropDown'
 
 
 export default function index() {
@@ -73,19 +9,28 @@ export default function index() {
     const formData = [
         {
             type: 'cards',
-            name: 'country',
-            label: 'Country',
+            name: 'cards',
+            label: 'cards',
             options: [
                 { value: 'usa', title: 'United States' },
                 { value: 'canada', title: 'Canada' },
             ],
             validation: Joi.string().required().messages({
-                'string.empty': 'Country is required',
+                'string.empty': 'cards is required',
             }),
             render: (field) => {
-                console.log(field);
-                return <div>
-                    <Cards register={field.register} />
+                console.log({ field });
+
+                return <div className='border'>
+                    <h2>Select a Card</h2>
+                    <div className='flex gap-x-2'>
+                        {new Array(4).fill("*").map((_, id) => <label key={id}
+                            className={`border-2 p-2 cursor-pointer ${field.value === "Card " + id ? "border-blue-400" : "border-gray-400"}`}
+                            onClick={() => field.onChange("Card " + id)}
+                        >
+                            Card {id + 1}
+                        </label>)}
+                    </div>
                     <p className='text-red-600 w-full'>{field.error?.message}</p>
                 </div>
             }
@@ -103,29 +48,37 @@ export default function index() {
             className: "bg-red-400",
             containerClass: "",
             render: (field) => {
-                return <div className='w-full my-6'>
-                    <p className='w-full'>{field.name}</p>
+                return <div className='my-6'>
+                    <p>{field.name}</p>
                     <input className='w-full' {...field.register(field.name)} placeholder='test' value={field.value} />
                     <p className='text-red-600 w-full'>{field.error?.message}</p>
                 </div>
             }
-            // showLabel: false
-
         },
         {
             type: 'select',
-            name: 'country',
+            name: 'dropdown',
             label: 'Country',
             options: [
                 { value: 'usa', title: 'United States' },
                 { value: 'canada', title: 'Canada' },
             ],
             validation: Joi.string().required().messages({
-                'string.empty': 'Country is required',
+                'string.empty': 'DropDown is required',
             }),
             render: (field) => {
-                return <DropDown data={field.options} onSelect={_ => null} />
-            }
+                return <div className='w-[40%]'>
+                    <DropDown input={field} data={field.options} onSelect={_ => {
+                        // console.log({ _ });
+                    }}
+                        value={field.value}
+                        classNameContainer="w-full"
+                    />
+                    <p>{field.error?.message}</p>
+                </div>
+            },
+
+
         },
         {
             type: 'email',
@@ -135,7 +88,7 @@ export default function index() {
                 'string.empty': 'Email is required',
                 'string.email': 'Email must be a valid email address',
             }),
-            layout: 'row',
+            // layout: 'row',
         },
         {
             type: 'password',
@@ -145,7 +98,7 @@ export default function index() {
                 'string.empty': 'Password is required',
                 'string.min': 'Password must be at least 6 characters long',
             }),
-            layout: 'row',
+            // layout: 'row',
         },
         {
             type: 'number',
@@ -156,7 +109,7 @@ export default function index() {
                 'number.min': 'Age must be at least 0',
                 'number.max': 'Age cannot be more than 100',
             }),
-            className: "bg-red-400 border-4 border-black rounded-full",
+            // className: "bg-red-400 border-4 border-black rounded-full",
         },
         {
             type: 'date',
@@ -202,13 +155,13 @@ export default function index() {
             validation: Joi.string().pattern(/^[0-9]{10}$/).messages({
                 'string.pattern.base': 'Phone number must be 10 digits',
             }),
-            layout: 'row'
+            // layout: 'row'
         },
         {
             type: 'search',
             name: 'search',
             label: 'Search',
-            layout: 'row'
+            // layout: 'row'
         },
         // {
         //     type: 'color',
@@ -221,6 +174,7 @@ export default function index() {
             label: 'Volume',
             min: 0,
             max: 100,
+            className: "w-[40%]"
         },
         {
             type: 'file',
@@ -282,14 +236,17 @@ export default function index() {
     // Render the form
 
     return (
-        <div className='m-auto w-1/2 py-12 bg-white px-4'>
+        <div
+            // className='m-auto w-1/2 py-12 bg-white px-4'
+            className='px-4  '
+        >
             <DynamicForm
                 data={formData}
                 onSubmit={handleFormSubmit}
-                itemClassName="border-red-400"
-            // label={false}
-            // containerClass="w-full"
-            // className="space-between"
+                // itemClassName="border-red-400"
+                // label={false}
+                containerClass="w-[40%]"
+                className="w-[80%] m-auto flex justify-evenly"
             />
 
         </div>

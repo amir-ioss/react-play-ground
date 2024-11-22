@@ -33,7 +33,8 @@ root.render(
     {/* <Button/> */}
     {/* <MyComponent text={"THIS IS TEST"} /> */}
     {/* <Canvas/> */}
-    <Navigation />
+    <Form />
+    {/* <Navigation /> */}
   </React.StrictMode>
 );
 
