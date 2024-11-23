@@ -33,7 +33,7 @@ export default function index() {
                     </div>
                     <p className='text-red-600 w-full'>{field.error?.message}</p>
                 </div>
-            }
+            },
         },
         {
             type: 'text',
@@ -88,6 +88,7 @@ export default function index() {
                 'string.empty': 'Email is required',
                 'string.email': 'Email must be a valid email address',
             }),
+
             // layout: 'row',
         },
         {
@@ -245,8 +246,8 @@ export default function index() {
                 onSubmit={handleFormSubmit}
                 // itemClassName="border-red-400"
                 // label={false}
-                containerClass="w-[40%]"
-                className="w-[80%] m-auto flex justify-evenly"
+                // containerClass="w-full"
+                className="w-[80%] m-auto flex justify-evenly grid grid-cols-3" 
             />
 
         </div>
