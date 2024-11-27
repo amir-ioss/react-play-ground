@@ -7,6 +7,8 @@ import Canvas from "./Canvas/Canvas";
 import Pattern from "./Pattern";
 import Form from "./Form/Test";
 import Navigation from "./Navigation";
+import Chart from "./Chart";
+import Flow from "./Flow";
 import reportWebVitals from "./reportWebVitals";
 // import { Input,Button } from "pkg_gpt";
 // import { Button } from "my-react-ui-ioss-test";
@@ -33,7 +35,9 @@ root.render(
     {/* <Button/> */}
     {/* <MyComponent text={"THIS IS TEST"} /> */}
     {/* <Canvas/> */}
-    <Form />
+    {/* <Form /> */}
+    {/* <Chart /> */}
+    <Flow />
     {/* <Navigation /> */}
   </React.StrictMode>
 );
