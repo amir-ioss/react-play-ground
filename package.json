@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@xyflow/react": "^12.3.5",
     "ipfs-http-client": "^58.0.0",
     "joi": "^17.13.3",
     "lightweight-charts": "^4.2.1",

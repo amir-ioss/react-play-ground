@@ -1,72 +1,56 @@
-import React, { useMemo, useState } from 'react';
-import ReactFlow, { addEdge, Handle, Background, applyNodeChanges, applyEdgeChanges } from 'reactflow';
-import 'reactflow/dist/style.css';
-import {ConditionNode, CustomNode} from './nodes'
-import {queriesMaker}  from './queriesMaker';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
+
+import '@xyflow/react/dist/style.css';
+import { ValueNode, MathNode, ConditionNode, CustomNode, IndicatorNode, HHLLNode } from './nodes'
+import { queriesMaker } from './queriesMaker';
 
 const initialNodes = [
     {
         id: '1',
-        type: 'customNode',
-        data: { label: 'SMA', value: 'talib.SMA(close, 5)' },
+        type: 'HHLLNode',
+        data: { label: 'Value', value: 'SMA', outputType: 'number' },
         position: { x: 50, y: 50 },
     },
-    {
-        id: '2',
-        type: 'customNode',
-        data: { label: 'EMA', value: 'talib.EMA(close, 5)' },
-        position: { x: 300, y: 50 },
-    },
+    // {
+    //     id: '1',
+    //     type: 'IndicatorNode',
+    //     data: { label: 'Value', value: 'SMA', outputType: 'number' },
+    //     position: { x: 50, y: 50 },
+    // },
+    // {
+    //     id: '2',
+    //     type: 'ConditionNode',
+    //     data: { label: 'Operator', value: '', inputType: 'string', type: 'check' },
+    //     position: { x: 350, y: 50 },
+    // },
+    // {
+    //     id: '2',
+    //     type: 'customNode',
+    //     data: { label: 'EMA', value: 'talib.EMA(close, 5)' },
+    //     position: { x: 300, y: 50 },
+    // },
 ];
 
 const initialEdges = [
-    // { id: 'e1-2', source: '1', target: '2' },
+    { id: 'e1-2', source: '1', target: '2', reconnectable: 'target', animated: false, targetHandle: "talib.EMA(close,15)" },
     // { id: 'e2-3', source: '2', target: '3' },
 ];
 
 
 function FlowExample() {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+
+    const edgeReconnectSuccessful = useRef(true);
+    // const [nodes, setNodes] = useState(initialNodes);
+    // const [edges, setEdges] = useState(initialEdges);
+    const [nodes, setNodes] = useNodesState(initialNodes);
+    const [edges, setEdges] = useEdgesState(initialEdges);
+
 
     const updateNodeValue = (nodeId, newValue) => {
         setNodes((nds) =>
             nds.map((node) => (node.id === nodeId ? { ...node, data: { ...node.data, value: newValue } } : node))
         );
-    };
-
-    const nodeTypes = useMemo(() => ({
-        customNode: (props) => <CustomNode {...props} updateNode={updateNodeValue} />,
-        ConditionNode: (props) => <ConditionNode {...props} updateNode={updateNodeValue} />,
-    }), []);
-
-
-    const onNodesChange = (changes) =>
-        setNodes((nds) => applyNodeChanges(changes, nds));
-
-    const onEdgesChange = (changes) =>
-        setEdges((eds) => applyEdgeChanges(changes, eds));
-
-
-    const onConnect = (params) => {
-        console.log('Connecting:', params); // Logs handle ids like input-1, output-2
-        setEdges((eds) => addEdge(params, eds));
-    };
-
-
-    // Add a new node dynamically
-    const addNode = () => {
-        const newNode = {
-            id: `${nodes.length + 1}`, // Unique ID for the new node
-            // type: 'default',
-            type: 'ConditionNode',
-            data: { label: `Node ${nodes.length + 1}` },
-            position: {
-                x: Math.random() * 500, // Random x position
-                y: Math.random() * 500, // Random y position
-            },
-        };
-        setNodes((nds) => [...nds, newNode]);
     };
 
 
@@ -83,6 +67,85 @@ function FlowExample() {
         });
 
         return previousNodeValues;
+    };
+
+
+
+    const nodeTypes = useMemo(() => ({
+        ValueNode: (props) => <ValueNode {...props} updateNode={updateNodeValue} />,
+        IndicatorNode: (props) => <IndicatorNode {...props} updateNode={updateNodeValue} />,
+        MathNode: (props) => <MathNode {...props} updateNode={updateNodeValue} />,
+        CustomNode: (props) => <CustomNode {...props} updateNode={updateNodeValue} />,
+        ConditionNode: (props) => <ConditionNode {...props} updateNode={updateNodeValue} />,
+        HHLLNode: (props) => <HHLLNode {...props} updateNode={updateNodeValue} />,
+    }), []);
+
+
+    const onNodesChange = (changes) =>
+        setNodes((nds) => applyNodeChanges(changes, nds));
+
+    const onEdgesChange = (changes) =>
+        setEdges((eds) => applyEdgeChanges(changes, eds));
+
+
+    const onReconnectStart = useCallback(() => {
+        edgeReconnectSuccessful.current = false;
+    }, []);
+
+    const onReconnect = useCallback((oldEdge, newConnection) => {
+        edgeReconnectSuccessful.current = true;
+        setEdges((els) => reconnectEdge(oldEdge, newConnection, els));
+    }, []);
+
+    const onReconnectEnd = useCallback((_, edge) => {
+        if (!edgeReconnectSuccessful.current) {
+            setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+        }
+
+        edgeReconnectSuccessful.current = true;
+    }, []);
+
+
+    const isValidConnection = (sourceNode, targetNode) => {
+        return true
+        // Check if data types match
+        console.log(sourceNode?.data?.outputType, "===", targetNode?.data?.inputType);
+
+        return sourceNode?.data?.outputType === targetNode?.data?.inputType;
+    };
+
+    const onConnect = useCallback(
+        (connection) => {
+            // Get source and target nodes
+            const sourceNode = nodes.find((node) => node.id === connection.source);
+            const targetNode = nodes.find((node) => node.id === connection.target);
+
+            // console.log('Connecting:', connection); // Logs handle ids like input-1, output-2
+            if (isValidConnection(sourceNode, targetNode)) {
+                setEdges((eds) => addEdge(connection, eds));
+            } else {
+                alert('Connection failed: Data types do not match.');
+            }
+        },
+        []
+    );
+
+
+
+
+    // Add a new node dynamically
+    const addNode = (node = 'ConditionNode', data = {}) => {
+        const newNode = {
+            id: `${nodes.length + 1}`, // Unique ID for the new node
+            // type: 'default',
+            type: node,
+            data: { label: `${node} ${nodes.length + 1}`, ...data },
+            position: {
+                x: Math.random() * 500, // Random x position
+                y: Math.random() * 500, // Random y position
+            },
+        };
+        setNodes((nds) => [...nds, newNode]);
     };
 
 
@@ -132,22 +195,17 @@ function FlowExample() {
         const orderedOutput = executionOrder.map((id) => {
             const node = nodes.find((n) => n.id === id);
             const preNode = getPreviousNodes(node.id);
+            console.log({ preNode });
+
 
             //   console.log(`Executing Node: ${currentNode?.data.label}`);
             //   console.log(`Previous Node Values:`, previousNodeValues);
-            return { id: node.id, label: node.data.label, value: node.data.value, preNode };
+            return { id: node.id, ...node.data, preNode };
         });
 
         // console.log('Execution Order:', orderedOutput);
         return orderedOutput;
     };
-
-    return <div> <button
-        onClick={()=> queriesMaker()}
-        className='ml-4'
-    >
-        TEST
-    </button></div>
 
     return (
         <div style={{ width: '100%', height: '100vh' }}>
@@ -158,7 +216,10 @@ function FlowExample() {
                 nodeTypes={nodeTypes}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
-                fitView
+                onReconnect={onReconnect}
+                onReconnectStart={onReconnectStart}
+                onReconnectEnd={onReconnectEnd}
+                // fitView
                 edgesSelectable={true} // Enables edge selection
 
             >
@@ -167,29 +228,50 @@ function FlowExample() {
 
             <div className='absolute top-0'>
 
-                <button
-                    onClick={() => {
-                        // console.log(nodes, edges);
-                        let data = getExecutionOrder()
-                        console.log(data);
+                <button onClick={() => addNode('IndicatorNode')}
+                    className='ml-2 border-2 border-black px-2' >
+                    Indicator +
+                </button>
 
-                        // const values = nodes.map((node) => ({
-                        //     id: node.id,
-                        //     value: node.data.value,
-                        // }));
-                        // console.log('Node Values:', values);
+
+                <button
+                    onClick={() => addNode('ValueNode')}
+                    className='ml-2 border-2 border-black px-2'
+                >
+                    Value +
+                </button>
+
+
+                <button
+                    onClick={() => addNode('MathNode', { type: 'math' })}
+                    className='ml-2 border-2 border-black px-2'
+                >
+                    Math +
+                </button>
+
+
+
+                <button
+                    onClick={() => addNode('ConditionNode', { type: 'check' })}
+                    className='ml-2 border-2 border-black px-2'
+                >
+                    Cond +
+                </button>
+
+
+
+                <button
+                    className='ml-2 border-2 border-black px-10 bg-gray-200'
+                    onClick={() => {
+                        console.log(nodes, edges);
+                        let data = getExecutionOrder()
+                        console.log("nodes : ", data);
+                        let query = queriesMaker(data)
+                        console.log("query : ", query);
                     }}
                 >
-                    Log Node Values
+                    TEST
                 </button>
-
-                <button
-                    onClick={addNode}
-                    className='ml-4'
-                >
-                    add node +
-                </button>
-
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-var obj = [
+var _obj = [
   {
     id: "1",
     label: "SMA",
@@ -44,7 +44,8 @@ var obj = [
       {
         id: "4",
         label: "SMA",
-        value: "talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[0]",
+        value:
+          "talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[0]",
       },
       {
         id: "1",
@@ -82,30 +83,38 @@ var obj = [
 //  # Initialize the output dictionary
 //  output = {}
 
-const queriesMaker = () => {
+const queriesMaker = (obj) => {
   // Validate the input object
   // if (typeof obj !== 'object' || obj === null) {
   //   throw new Error('Invalid input: Expected an object.');
   // }
 
   const inputs = {}; // Use inputs for any required processing
-  console.log(obj); // Log the input object for debugging
+  // console.log(obj); // Log the input object for debugging
 
   // Example logic for processing the input object
   for (const key in obj) {
-    let query = obj[key].value;
     if (Object.hasOwnProperty.call(obj, key)) {
+      
       var $ = obj[key];
-     
+      let query = $.value;
+      const find_id = ID => obj.findIndex(_=> _.id == ID)
+      const input = INDEX => find_id($.preNode[INDEX]?.["id"])
+      // console.log($.id);
 
-      if ($.type == "check") {
-        // query = `[${$.preNode[0]?.['id']} ${$.value} output['1'][i] for i, x in enumerate(close)]`
-        query = `[output['${$.preNode[0]?.['id']}'][i] ${$.value} output['${$.preNode[1]?.['id']}'][i] for i in range(len(close)) if output['${$.preNode[0]?.['id']}'][i] is not None]`;
+
+      if ($.type == "math") {
+        query = `output['${input(0)}'] ${$.value} output['${input(1)}']`;
       }
+   
+      if ($.type == "check") {
+        query = `[output['${input(0)}'][i] ${$.value} output['${input(1)}'][i] for i in range(len(close)) if output['${input(0)}'][i] is not None]`;
+      }
+
       inputs[key] = query; // Process and store key-value pairs
     }
   }
-  console.log({ inputs });
+  // console.log({ inputs });
 
   return inputs; // Return processed inputs
 };
