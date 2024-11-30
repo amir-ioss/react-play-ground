@@ -1,76 +1,54 @@
 var _obj = [
   {
-    id: "1",
-    label: "SMA",
-    value: "talib.SMA(close, 5)",
-    preNode: [],
+      "id": "1",
+      "label": "IndicatorNode 1",
+      "value": [
+          "talib.talib.EMA(close,15)(close,5)"
+      ],
+      "preNode": []
   },
   {
-    id: "2",
-    label: "EMA",
-    value: "talib.EMA(close, 5)",
-    preNode: [],
+      "id": "3",
+      "label": "CoinNode 3",
+      "value": [
+          "time",
+          "open",
+          "high",
+          "low",
+          "close",
+          "volume"
+      ],
+      "type": "coin_data",
+      "preNode": []
   },
   {
-    id: "3",
-    label: "Node 3",
-    value: "==",
-    type: "check",
-    preNode: [
-      {
-        id: "1",
-        label: "SMA",
-        value: "talib.SMA(close, 5)",
-      },
-      {
-        id: "2",
-        label: "EMA",
-        value: "talib.EMA(close, 5)",
-      },
-    ],
-  },
-  {
-    id: "4",
-    label: "SMA",
-    value: "talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[0]",
-    preNode: [],
-  },
-  {
-    id: "5",
-    label: "Node 5",
-    value: ">",
-    type: "check",
-    preNode: [
-      {
-        id: "4",
-        label: "SMA",
-        value:
-          "talib.MACD(close, fastperiod=12, slowperiod=26, signalperiod=9)[0]",
-      },
-      {
-        id: "1",
-        label: "SMA",
-        value: "talib.SMA(close, 5)",
-      },
-    ],
-  },
-  {
-    id: "5",
-    label: "Node 5",
-    preNode: [
-      {
-        id: "1",
-        label: "SMA",
-        value: "talib.SMA(close, 5)",
-      },
-      {
-        id: "4",
-        label: "Node 4",
-      },
-    ],
-  },
-];
-
+      "id": "2",
+      "label": "ConditionNode 2",
+      "value": ">",
+      "type": "check",
+      "preNode": [
+          {
+              "id": "1",
+              "label": "IndicatorNode 1",
+              "value": [
+                  "talib.talib.EMA(close,15)(close,5)"
+              ]
+          },
+          {
+              "id": "3",
+              "label": "CoinNode 3",
+              "value": [
+                  "time",
+                  "open",
+                  "high",
+                  "low",
+                  "close",
+                  "volume"
+              ]
+          }
+      ]
+  }
+]
 //  # Inputs containing steps and conditions
 //  inputs = {
 //  "1": "talib.SMA(close, 5)",  # Simple Moving Average
@@ -97,7 +75,8 @@ const queriesMaker = (obj) => {
     if (Object.hasOwnProperty.call(obj, key)) {
       
       var $ = obj[key];
-      let query = $.value;
+      
+      let query = $.value[0];
       const find_id = ID => obj.findIndex(_=> _.id == ID)
       const input = INDEX => find_id($.preNode[INDEX]?.["id"])
       // console.log($.id);
@@ -106,8 +85,16 @@ const queriesMaker = (obj) => {
       if ($.type == "math") {
         query = `output['${input(0)}'] ${$.value} output['${input(1)}']`;
       }
+
+      // if ($.type == "hhll") {
+      //   if($.preNode){
+          
+      //   }
+      //   console.log('asbsy',$);
+      // }
    
       if ($.type == "check") {
+        // if($.type == '')
         query = `[output['${input(0)}'][i] ${$.value} output['${input(1)}'][i] for i in range(len(close)) if output['${input(0)}'][i] is not None]`;
       }
 

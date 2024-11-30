@@ -82,7 +82,7 @@ const IndicatorNode = ({ data, id, updateNode }) => {
         // updateNode(id, `talib.${state.indicator}(close, fastperiod=12, slowperiod=26, signalperiod=9)[0]`);
         const params = Object.values(state).slice(1).join(',')
 
-        updateNode(id, `talib.${state.indicator}(${params})`)
+        updateNode(id, [`talib.${state.indicator}(${params})`])
         console.log(state);
 
     }, [state])
@@ -144,7 +144,7 @@ const IndicatorNode = ({ data, id, updateNode }) => {
         <Handle
             type="source"
             position={Position.Right}
-            id={'src_indicator_' + id} // Another unique id
+            id={'0'} // Another unique id
             style={{ background: 'green', width: 15, height: 15 }}
             reconnectable="target"
             markerEnd={{

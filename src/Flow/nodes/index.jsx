@@ -9,6 +9,7 @@ import {
 import { ValueNode, MathNode } from './Math'
 import { IndicatorNode } from './Indicators'
 import { HHLLNode } from './hhll'
+import CoinNode from './CoinNode'
 
 const CustomNode = ({ data, id, updateNode }) => {
     // Handler for input changes
@@ -62,31 +63,25 @@ const CustomNode = ({ data, id, updateNode }) => {
 
 
 const OPTIONS = [
-    {value : null,	name : "SELECT"},
-    {value : "<",	name : "< Less Than"},
-    {value : "<=",	name : "<= Less Than or Equal To"},
-    {value : "!=",	name : "!= Not Equal"},
-    {value : "==",	name : "== Equal"},
-    {value : ">",	name : "> Greater Than"},
-    {value : ">=",	name : ">= Greater Than or Equal To"}]
+    { value: null, name: "SELECT" },
+    { value: "<", name: "< Less Than" },
+    { value: "<=", name: "<= Less Than or Equal To" },
+    { value: "!=", name: "!= Not Equal" },
+    { value: "==", name: "== Equal" },
+    { value: ">", name: "> Greater Than" },
+    { value: ">=", name: ">= Greater Than or Equal To" }]
 
 const ConditionNode = memo(({ data, id, updateNode }) => {
 
 
-
-
-
-    // Handler for input changes
-    const onInputChange = (event) => {
-        updateNode(id, event.target.value);
-
-    };
 
     // SOURCES 
     const edges = useEdges().filter(_ => _.target == id)
     const nodesData = useNodesData(
         edges.map((connection) => connection.source),
     );
+
+
     let inputes = {}
     nodesData.forEach(_ => {
         edges.forEach(e => {
@@ -96,6 +91,20 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
         })
     })
 
+
+    const getVal = (INPUT_ID = 1) => {
+        const edge = edges.filter(e => e.targetHandle == INPUT_ID)?.[0]
+        const val = nodesData.filter(e => e.id == edge?.source)?.[0]
+        
+        if (!val?.data) return null
+        return val.data.value[edge.sourceHandle]
+    }
+
+
+    // Handler for input changes
+    const onInputChange = (event) => {
+        updateNode(id, [event.target.value, getVal(0), getVal(1)]);
+    };
 
 
     return <div
@@ -123,11 +132,11 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
             <Handle
                 type="target"
                 position={Position.Left}
-                id={'target-' + id} // Another unique id
+                id={"0"} // Another unique id
                 style={{ background: 'orange', width: 15, height: 15 }}
             />
-            <p className='text-xs'>{'target-' + id}</p>
-            <p className="px-4">{inputes['target-' + id] ?? 'Value 1'}</p>
+            <p className='text-xs'>0</p>
+            <p className="px-4">{getVal(0) ?? 'Value 1'}</p>
         </div>
 
 
@@ -135,11 +144,12 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
             <Handle
                 type="target"
                 position={Position.Left}
-                id={'target-2-' + id} // Another unique id
+                // id={'target-2-' + id} // Another unique id
+                id={'1'} // Another unique id
                 style={{ background: 'orange', width: 15, height: 15 }}
             />
-            <p className='text-xs'>{'target-2-' + id}</p>
-            <p className="px-4">{inputes['target-2-' + id] ?? 'Value 2'}</p>
+            <p className='text-xs'>1</p>
+            <p className="px-4">{getVal(1) ?? 'Value 2'}</p>
         </div>
 
 
@@ -159,4 +169,4 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
 })
 
 
-export { ConditionNode, CustomNode, ValueNode, MathNode, IndicatorNode, HHLLNode }
+export { CoinNode, ConditionNode, CustomNode, ValueNode, MathNode, IndicatorNode, HHLLNode }

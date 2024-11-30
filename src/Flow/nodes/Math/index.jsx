@@ -3,7 +3,7 @@ import { Handle } from "@xyflow/react";
 const ValueNode = ({ data, id, updateNode }) => {
     // Handler for input changes
     const onInputChange = (event) => {
-        updateNode(id, event.target.value);
+        updateNode(id, [event.target.value]);
     };
 
     return (
@@ -11,11 +11,11 @@ const ValueNode = ({ data, id, updateNode }) => {
             <div>{data.label}</div>
             <input
                 type="number"
-                // value={data.value || ''}
+                // value={data.value[0]}
                 onChange={onInputChange}
                 placeholder="Number"
                 style={{ width: '100%' }}
-                id={'input-' + id}
+                id={'0'}
             />
             {/* Input Handles */}
             {/* <Handle
@@ -41,8 +41,9 @@ const ValueNode = ({ data, id, updateNode }) => {
             <Handle
                 type="source"
                 position="right"
-                id={'source-' + id} // Another unique id
-                style={{ background: 'green' }}
+                id={'0'} // Another unique id
+                style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10  }}
+
             />
 
         </div>
@@ -83,7 +84,7 @@ const MathNode = ({ data, id, updateNode }) => {
             type="target"
             position="left"
             id={'target-' + id} // Another unique id
-            style={{ background: 'orange' }}
+            style={{ background: 'gray', width: 15, height: 15 }}
 
         />
 
@@ -91,7 +92,7 @@ const MathNode = ({ data, id, updateNode }) => {
             type="target"
             position="left"
             id={'target-2-' + id} // Another unique id
-            style={{ background: 'orange', 'marginTop': 10 }}
+            style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10  }}
 
         />
 
@@ -100,7 +101,7 @@ const MathNode = ({ data, id, updateNode }) => {
             type="source"
             position="right"
             id={'source-' + id} // Another unique id
-            style={{ background: 'green' }}
+            style={{ background: 'red', width: 15, height: 15 }}
         />
 
 

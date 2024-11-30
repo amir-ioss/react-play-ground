@@ -2,16 +2,16 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, CustomNode, IndicatorNode, HHLLNode } from './nodes'
+import { ValueNode, MathNode, ConditionNode, CustomNode, IndicatorNode, HHLLNode, CoinNode } from './nodes'
 import { queriesMaker } from './queriesMaker';
 
 const initialNodes = [
-    {
-        id: '1',
-        type: 'HHLLNode',
-        data: { label: 'Value', value: 'SMA', outputType: 'number' },
-        position: { x: 50, y: 50 },
-    },
+    // {
+    //     id: '1',
+    //     type: 'HHLLNode',
+    //     data: { label: 'Value', value: 'SMA', outputType: 'number', type: "hhll" },
+    //     position: { x: 50, y: 50 },
+    // },
     // {
     //     id: '1',
     //     type: 'IndicatorNode',
@@ -33,7 +33,7 @@ const initialNodes = [
 ];
 
 const initialEdges = [
-    { id: 'e1-2', source: '1', target: '2', reconnectable: 'target', animated: false, targetHandle: "talib.EMA(close,15)" },
+    // { id: 'e1-2', source: '1', target: '2', reconnectable: 'target', animated: false, targetHandle: "talib.EMA(close,15)" },
     // { id: 'e2-3', source: '2', target: '3' },
 ];
 
@@ -78,6 +78,8 @@ function FlowExample() {
         CustomNode: (props) => <CustomNode {...props} updateNode={updateNodeValue} />,
         ConditionNode: (props) => <ConditionNode {...props} updateNode={updateNodeValue} />,
         HHLLNode: (props) => <HHLLNode {...props} updateNode={updateNodeValue} />,
+        CoinNode: (props) => <CoinNode {...props} updateNode={updateNodeValue} />,
+
     }), []);
 
 
@@ -139,7 +141,7 @@ function FlowExample() {
             id: `${nodes.length + 1}`, // Unique ID for the new node
             // type: 'default',
             type: node,
-            data: { label: `${node} ${nodes.length + 1}`, ...data },
+            data: { label: `${node} ${nodes.length + 1}`, value: [], ...data },
             position: {
                 x: Math.random() * 500, // Random x position
                 y: Math.random() * 500, // Random y position
@@ -147,6 +149,7 @@ function FlowExample() {
         };
         setNodes((nds) => [...nds, newNode]);
     };
+
 
 
 
@@ -226,44 +229,25 @@ function FlowExample() {
                 <Background />
             </ReactFlow>
 
-            <div className='absolute top-0'>
-
-                <button onClick={() => addNode('IndicatorNode')}
-                    className='ml-2 border-2 border-black px-2' >
-                    Indicator +
-                </button>
-
-
-                <button
-                    onClick={() => addNode('ValueNode')}
-                    className='ml-2 border-2 border-black px-2'
-                >
-                    Value +
-                </button>
-
-
-                <button
-                    onClick={() => addNode('MathNode', { type: 'math' })}
-                    className='ml-2 border-2 border-black px-2'
-                >
-                    Math +
-                </button>
-
+            <div className='absolute top-2'>
+                {[
+                    { name: "Indicator", "add": () => addNode('IndicatorNode') },
+                    { name: "Value", "add": () => addNode('ValueNode') },
+                    { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
+                    { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
+                    { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
+                    { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
+                    // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
+                ].map((btn, idx) => <button onClick={btn.add} key={idx}
+                    className='ml-2 border rounded-lg border-black px-2' >
+                    {btn.name}
+                </button>)}
 
 
                 <button
-                    onClick={() => addNode('ConditionNode', { type: 'check' })}
-                    className='ml-2 border-2 border-black px-2'
-                >
-                    Cond +
-                </button>
-
-
-
-                <button
-                    className='ml-2 border-2 border-black px-10 bg-gray-200'
+                    className='ml-2 border border-black px-10 bg-gray-200'
                     onClick={() => {
-                        console.log(nodes, edges);
+                        console.log({ nodes, edges });
                         let data = getExecutionOrder()
                         console.log("nodes : ", data);
                         let query = queriesMaker(data)
