@@ -7,6 +7,7 @@ import {
     useHandleConnections,
     useNodesData,
 } from '@xyflow/react';
+import useNodeValue from './useNodeValue';
 
 
 const OPTIONS = [
@@ -15,37 +16,49 @@ const OPTIONS = [
     { value: "MIN", name: "lowest low" }]
 
 
+const fields = [
+    {
+        name: "source",
+        type: "text",
+        // value: 'close',
+        placeholder: "Source",
+        target: true
+    },
+    {
+        name: "macdLine",
+        type: "number",
+        value: 12,
+        placeholder: "Period",
+    },
+]
+
 
 const HHLLNode = memo(({ data, id, updateNode }) => {
-    const [state, setState] = useState({ fun: 'MAX', source: 'close', 'period': 5 })
+    // 0 = HH/LL 
+    // 1+ = Params
+    const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
-    // SOURCES 
-    const edges = useEdges().filter(_ => _.target == id)
-    const nodesData = useNodesData(
-        edges.map((connection) => connection.source),
-    );
-
-    useEffect(() => {
-        const params = Object.values(state).slice(1).join(',')
-        updateNode(id, `talib.${state.fun}(${params})`)
-    }, [state])
-
-
-    let inputes = {}
-    nodesData.forEach(_ => {
-        edges.forEach(e => {
-            if (e.source == _.id) {
-                Object.assign(inputes, { [e.targetHandle]: _.data.value })
-            }
-        })
-    })
+    // Handler for input changes
+    const onInputChange = (event) => {
+        const params = fields.map(_ => _.value) || [];
+        const rest = [event.target.value, ...params]
+        updateNode(id, rest);
+    };
 
     useEffect(() => {
-        const newPeriod = inputes['period-' + id];
-        if (newPeriod && newPeriod !== state.period) {
-            setState(prevState => ({ ...prevState, period: newPeriod }));
+        const val1 = getVal(1) ?? null;
+        const val2 = getVal(2) ?? null;
+
+
+        if (data.value[1] !== val1) {
+            updateNode(id, setVal(data.value, 1, val1));
         }
-    }, [inputes, id]);
+
+        // if (data.value[2] !== val2) {
+        //     updateNode(id, setVal(data.value, 2, val2));
+        // }
+
+    }, [edges])
 
 
     return <div
@@ -54,10 +67,8 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
         <div className="mx-4">high/low</div>
         <select
             type="text"
-            value={state?.indicator}
-            onChange={e => {
-                setState({ 'fun': e.target.value, ...state })
-            }}
+            value={data.value?.[0] ?? ''}
+            onChange={onInputChange}
             placeholder="Indicator"
             className={'bg-white border p-2 mx-2 rounded-xl'}
 
@@ -74,35 +85,35 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
         {/* INPUT*/}
         <label className="px-4">{data.label}</label>
 
-        <div className="relative flex mt-2">
-            <label for={'period-' + id} className="mx-2">Period</label>
-            <input
-                type="text"
-                value={inputes?.['period-' + id] || state.value}
-                onChange={_ => setState(prev => ({ ...prev, 'period': _.target.value }))}
-                placeholder="Number"
-                className="flex-1 p-1 border mx-2 rounded-xl"
-                id={'period-' + id}
-            />
-            <Handle
-                type="target"
-                position={Position.Left}
-                id={'period-' + id} // Another unique id
-                style={{ background: 'gray', width: 15, height: 15 }}
-                reconnectable="target"
-                markerEnd={{
-                    type: MarkerType.Arrow,
-                }}
-            />
-        </div>
+        {fields?.map((field, idx) => {
+            const ID = idx + 1 // offset
+            return <div className="relative flex mt-2" key={ID}>
+                <label for={ID} className="mx-2">{field.placeholder}  </label>
+                <input
+                    type="text"
+                    value={data.value[ID] ?? field.value}
+                    onChange={_ => updateNode(id, setVal(data.value, ID, _.target.value))}
+                    placeholder={field.type}
+                    className="flex-1 p-1 border mx-2 rounded-xl"
+                    id={ID}
+                />
 
+                {field?.target && <Handle
+                    type="target"
+                    position="left"
+                    id={ID}
+                    style={{ background: 'gray', width: 15, height: 15 }}
+                />}
+
+            </div>
+        })}
 
         {/* OUTPUT */}
         <div className="relative  items-center">
             <Handle
                 type="source"
                 position={Position.Right}
-                id={'hh_ll_' + id} // Another unique id
+                id={'0'} // Another unique id
                 style={{ background: 'orange', width: 15, height: 15 }}
                 label='default arrow'
             />

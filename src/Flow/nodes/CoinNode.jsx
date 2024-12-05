@@ -7,12 +7,18 @@ import {
     useHandleConnections,
     useNodesData,
 } from '@xyflow/react';
+import useNodeValue from './useNodeValue';
 
 
 const OPTIONS = [
     { value: null, name: "SELECT" },
-    { value: "MAX", name: "highest high" },
-    { value: "MIN", name: "lowest low" }]
+    { value: "1m", name: "1 Minutes" },
+    { value: "3m", name: "3 Minutes" },
+    { value: "5m", name: "5 Minutes" },
+    { value: "10m", name: "10 Minutes" },
+    { value: "15m", name: "15 Minutes" },
+    { value: "30m", name: "30 Minutes" },
+    { value: "1H", name: "1 Hour" }]
 
 
 
@@ -57,34 +63,35 @@ const fields = [
 
 
 const CoinNode = memo(({ data, id, updateNode }) => {
+    // Inputs = 7
+    const PeriodID = 6
+    const TimeFrameID = 7
+    const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
-    // SOURCES 
-    const edges = useEdges().filter(_ => _.target == id)
-    const nodesData = useNodesData(
-        edges.map((connection) => connection.source),
-    );
+
+    // Handler for input changes
+    const onInputChange = (event) => {
+        if (data.value[TimeFrameID] !== event.target.value) {
+            updateNode(id, setVal(data.value, TimeFrameID, event.target.value));
+        }
+    };
 
 
     useEffect(() => {
-        updateNode(id, fields.map(_ => (_.value)))
-    }, [])
-
-
-
-    const getVal = (INPUT_ID = 1) => {
-        const edge = edges.filter(e => e.targetHandle == INPUT_ID)?.[0]
-        const val = nodesData.filter(e => e.id == edge?.source)?.[0]
-        if (!val?.data) return
-        return val.data.value[edge.sourceHandle]
-    }
-
-    function setVal(array, index, value) {
-        if (index < 0) {
-            throw new Error("Negative index not allowed");
+        // PeriodID
+        const period = (getVal(PeriodID) || data.value[PeriodID]) ?? null;
+        if (data.value[PeriodID] !== period) {
+            updateNode(id, setVal(data.value, PeriodID, period));
         }
-        array[index] = value; // Automatically fills gaps with `undefined` if needed
-        return array;
-    }
+    }, [edges])
+
+
+    // Initial values
+    useEffect(() => {
+        const params = fields.map(_ => _.value) || [];
+        const rest = [...params, data.value[PeriodID], data.value[TimeFrameID]]
+        updateNode(id, rest);
+    }, [])
 
 
 
@@ -92,12 +99,11 @@ const CoinNode = memo(({ data, id, updateNode }) => {
         className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
 
         <div className="mx-4">Coin Data</div>
+        <label for={TimeFrameID} className="w-full mx-4 mt-4">Time Frame</label>
         <select
             type="text"
-            // value={state?.indicator}
-            // onChange={e => {
-            //     setState({ 'fun': e.target.value, ...state })
-            // }}
+            value={getVal(7)}
+            onChange={onInputChange}
             placeholder="Indicator"
             className={'bg-white border p-2 mx-2 rounded-xl'}
 
@@ -111,10 +117,10 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
 
-
+        {/* T-OHLCV */}
         {fields?.map((field, idx) => {
             return <div className="relative flex mt-2">
-                <label for={'input-' + idx} className="mx-4 w-full text-right">{field.placeholder}  </label>
+                <label for={idx} className="mx-4 w-full text-right">{field.placeholder}  </label>
                 {/* <input key={idx}
                     type="text"
                     value={state[field.name]}
@@ -144,19 +150,22 @@ const CoinNode = memo(({ data, id, updateNode }) => {
         <label className="px-4">{data.label}</label>
 
         <div className="relative flex mt-2">
-            <label for={'period-' + id} className="mx-2">Period</label>
+            <label for={'0'} className="mx-2">PeriodID</label>
             <input
                 type="text"
-                value={getVal(6) || data.value?.[6]}
-                onChange={_ => updateNode(id, setVal(data.value, 6, _.target.value))}
+                value={getVal(PeriodID) || data.value?.[PeriodID]}
+                onChange={_ => {
+                    let newData = setVal(data.value, PeriodID, _.target.value)
+                    updateNode(id, newData)
+                }}
                 placeholder="Number"
                 className="flex-1 p-1 border mx-2 rounded-xl"
-                id={6}
+                id={PeriodID}
             />
             <Handle
                 type="target"
                 position={Position.Left}
-                id={6} // Another unique id
+                id={PeriodID} // Another unique id
                 style={{ background: 'gray', width: 15, height: 15 }}
                 reconnectable="target"
                 markerEnd={{
@@ -167,15 +176,15 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
         {/* OUTPUT */}
-        <div className="relative  items-center">
+        {/* <div className="relative  items-center">
             <Handle
                 type="source"
                 position={Position.Right}
-                id={'hh_ll_' + id} // Another unique id
+                id={'0'} // Another unique id
                 style={{ background: 'orange', width: 15, height: 15 }}
                 label='default arrow'
             />
-        </div>
+        </div> */}
 
 
 

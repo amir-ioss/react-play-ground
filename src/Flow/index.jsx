@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, CustomNode, IndicatorNode, HHLLNode, CoinNode } from './nodes'
+import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode } from './nodes'
 import { queriesMaker } from './queriesMaker';
 
 const initialNodes = [
@@ -11,24 +11,6 @@ const initialNodes = [
     //     type: 'HHLLNode',
     //     data: { label: 'Value', value: 'SMA', outputType: 'number', type: "hhll" },
     //     position: { x: 50, y: 50 },
-    // },
-    // {
-    //     id: '1',
-    //     type: 'IndicatorNode',
-    //     data: { label: 'Value', value: 'SMA', outputType: 'number' },
-    //     position: { x: 50, y: 50 },
-    // },
-    // {
-    //     id: '2',
-    //     type: 'ConditionNode',
-    //     data: { label: 'Operator', value: '', inputType: 'string', type: 'check' },
-    //     position: { x: 350, y: 50 },
-    // },
-    // {
-    //     id: '2',
-    //     type: 'customNode',
-    //     data: { label: 'EMA', value: 'talib.EMA(close, 5)' },
-    //     position: { x: 300, y: 50 },
     // },
 ];
 
@@ -41,8 +23,6 @@ const initialEdges = [
 function FlowExample() {
 
     const edgeReconnectSuccessful = useRef(true);
-    // const [nodes, setNodes] = useState(initialNodes);
-    // const [edges, setEdges] = useState(initialEdges);
     const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
 
@@ -75,14 +55,14 @@ function FlowExample() {
         ValueNode: (props) => <ValueNode {...props} updateNode={updateNodeValue} />,
         IndicatorNode: (props) => <IndicatorNode {...props} updateNode={updateNodeValue} />,
         MathNode: (props) => <MathNode {...props} updateNode={updateNodeValue} />,
-        CustomNode: (props) => <CustomNode {...props} updateNode={updateNodeValue} />,
         ConditionNode: (props) => <ConditionNode {...props} updateNode={updateNodeValue} />,
         HHLLNode: (props) => <HHLLNode {...props} updateNode={updateNodeValue} />,
         CoinNode: (props) => <CoinNode {...props} updateNode={updateNodeValue} />,
-
+        TradeNode: (props) => <TradeNode {...props} updateNode={updateNodeValue} />,
+        LogicalNode: (props) => <LogicalNode {...props} updateNode={updateNodeValue} />,
     }), []);
 
-
+    
     const onNodesChange = (changes) =>
         setNodes((nds) => applyNodeChanges(changes, nds));
 
@@ -231,12 +211,17 @@ function FlowExample() {
 
             <div className='absolute top-2'>
                 {[
-                    { name: "Indicator", "add": () => addNode('IndicatorNode') },
+                    { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
+                    { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
                     { name: "Value", "add": () => addNode('ValueNode') },
                     { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
                     { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
                     { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
-                    { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
+                    { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
+                    { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
+
+
+                    
                     // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
                 ].map((btn, idx) => <button onClick={btn.add} key={idx}
                     className='ml-2 border rounded-lg border-black px-2' >
