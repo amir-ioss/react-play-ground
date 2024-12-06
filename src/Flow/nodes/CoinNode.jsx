@@ -117,7 +117,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
 
-        {/* T-OHLCV */}
+        {/* OUTPUT T-OHLCV */}
         {fields?.map((field, idx) => {
             return <div className="relative flex mt-2">
                 <label for={idx} className="mx-4 w-full text-right">{field.placeholder}  </label>

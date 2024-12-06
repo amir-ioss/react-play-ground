@@ -34,7 +34,7 @@ var _obj = [
 
 const isNum = (_) => !isNaN(Number(_));
 const isSource = (_) =>
-  ["time", "open", "high", "low", "close", "volume"].includes(_);
+  ["time", "open", "high", "low", "close", "volume", "AMIR", "TEST"].includes(_);
 
 const queriesMaker = (obj) => {
   // Validate the input object
@@ -65,7 +65,7 @@ const queriesMaker = (obj) => {
           if (node.value.includes(val2)) {
             inputs[1] = find_id(node.id); // Store the index of val2
           }
-        });
+        }); 
         return inputs;
       }
 
@@ -79,8 +79,6 @@ const queriesMaker = (obj) => {
       /////////////  COIN  /////////////
       if ($.type == "coin_data") {
         const [t, o, h, l, c, v, period, timeFrame] = $.value;
-        console.log({timeFrame});
-        
 
         let symbol = "BTC/USDT";
         let timeframe = timeFrame ?? "1m";
@@ -92,6 +90,8 @@ const queriesMaker = (obj) => {
       if ($.type == "check") {
         // 10, >, 20
         const [val1, val2, condition] = $.value;
+        console.log({val1, val2});
+        
 
         if (isNum(val1) && isNum(val2)) {
           // both are numbers

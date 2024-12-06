@@ -64,22 +64,18 @@ const Types = {
             type: "number",
             value: 12,
             placeholder: "macd line",
-            source: true
         },
         {
             name: "signalLine",
             type: "number",
             value: 26,
             placeholder: "signal line",
-            source: true
-
         },
         {
             name: "histLine",
             type: "number",
             value: 9,
             placeholder: "hist line",
-            source: true
 
         }
     ]
@@ -91,41 +87,43 @@ const Types = {
 const IndicatorNode = memo(({ data, id, updateNode }) => {
     // 0 = Indicator 
     // 1+ = Params
-    const { setVal, edges, nodesData } = useNodeValue(id);
+    const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
 
-    const getVal = (INPUT_ID = 1) => {
-        const edge = edges.filter(e => e.targetHandle == INPUT_ID)?.[0]
-        const val = nodesData.filter(e => e.id == edge?.source)?.[0]
+    // const getVal = (INPUT_ID = 1) => {
+    //     const edge = edges.filter(e => e.targetHandle == INPUT_ID)?.[0]
+    //     const val = nodesData.filter(e => e.id == edge?.source)?.[0]
 
-        if (!val?.data) return null
-        return val.data.value[edge.sourceHandle]
-    }
+    //     if (!val?.data) return null
+    //     return val.data.value[edge.sourceHandle]
+    // }
 
+    const outs = ["AMIR", "ABBASY", "TEST"]
 
     // Handler for input changes
     const onInputChange = (event) => {
         const params = Types[event.target.value]?.map(_ => _.value) || [];
-        const rest = [event.target.value, ...params]
+        const rest = [event.target.value, ...outs, ...params]
         updateNode(id, rest);
     };
 
     useEffect(() => {
-        const val1 = getVal(1) ?? null;
-        const val2 = getVal(2) ?? null;
+        const val1 = getVal(5) ?? null;
+        // const val2 = getVal(2) ?? null;
+        
 
 
-        if (data.value[1] !== val1) {
-            updateNode(id, setVal(data.value, 1, val1));
+        if (data.value[5] !== val1) {
+            updateNode(id, setVal(data.value, 5, val1));
         }
 
         // if (data.value[2] !== val2) {
         //     updateNode(id, setVal(data.value, 2, val2));
         // }
-        console.log(data.value);
 
     }, [edges])
 
+console.log({data});
 
 
 
@@ -149,7 +147,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
 
         {/* INPUT*/}
         {Types[data.value[0]]?.map((field, idx) => {
-            const ID = idx + 1 // offset
+            const ID = idx + 4 // offset
             return <div className="relative flex mt-2" key={ID}>
                 <label for={ID} className="mx-2">{field.placeholder}  </label>
                 <input
@@ -168,38 +166,34 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
                     style={{ background: 'gray', width: 15, height: 15 }}
                 />}
 
-
-
-                {field?.source && <Handle
-                    type="source"
-                    position={Position.Right}
-                    id={"source" + ID}
-                    style={{ background: 'orange', width: 15, height: 15 }}
-                    reconnectable="target"
-                // markerEnd={{
-                //     type: MarkerType.Arrow,
-                // }}
-                // label='default arrow'
-                />}
-
-
             </div>
         })}
 
         {/* OUTPUT */}
-         <Handle
+
+        <Handle
             type="source"
             position={Position.Right}
-            id={'indcOut'}
-            style={{ background: 'green', width: 15, height: 15 }}
+            id={'1'}
+            style={{ background: 'green', width: 15, height: 15, top: 30 }}
             reconnectable="target"
-            markerEnd={{
-                type: MarkerType.Arrow,
-            }}
-            label='default arrow'
+        />
 
-        // className="size-12 border border-black"
-        /> 
+        <Handle
+            type="source"
+            position={Position.Right}
+            id={'2'}
+            style={{ background: 'green', width: 15, height: 15, top: 60 }}
+            reconnectable="target"
+        />
+        
+        <Handle
+            type="source"
+            position={Position.Right}
+            id={'3'}
+            style={{ background: 'green', width: 15, height: 15, top: 80 }}
+            reconnectable="target"
+        />
 
 
 
