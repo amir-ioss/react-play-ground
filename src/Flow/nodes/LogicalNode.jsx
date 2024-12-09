@@ -20,7 +20,7 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
 
     // Handler for input changes
     const onInputChange = (event) => {
-        updateNode(id, setVal(data.value, 2, event.target.value));
+        updateNode(id, {value: setVal(data.value, 2, event.target.value)});
     };
 
     useEffect(() => {
@@ -28,11 +28,11 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
         const val2 = getVal(1) ?? null;
 
         if (data.value[0] !== val1) {
-            updateNode(id, setVal(data.value, 0, val1));
+            updateNode(id, {value: setVal(data.value, 0, val1)});
         }
 
         if (data.value[1] !== val2) {
-            updateNode(id, setVal(data.value, 1, val2));
+            updateNode(id, {value: setVal(data.value, 1, val2)});
         }
     }, [edges])
 

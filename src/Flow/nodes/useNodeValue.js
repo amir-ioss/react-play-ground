@@ -9,6 +9,8 @@ const useNodeValue = (id) => {
     const edge = edges.find((e) => e.targetHandle == INPUT_ID)
     const val = nodesData.find((e) => e.id == edge?.source)
     if (!val?.data) return;
+    
+    if(val.data?.returns) return val.data.returns[edge.sourceHandle];
     return val.data.value[edge.sourceHandle];
   };
 
@@ -19,6 +21,7 @@ const useNodeValue = (id) => {
     array[index] = value; // Automatically fills gaps with `undefined` if needed
     return array;
   };
+  
 
   return { getVal, setVal, edges, nodesData };
 };

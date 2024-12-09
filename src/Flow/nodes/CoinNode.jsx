@@ -72,7 +72,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     // Handler for input changes
     const onInputChange = (event) => {
         if (data.value[TimeFrameID] !== event.target.value) {
-            updateNode(id, setVal(data.value, TimeFrameID, event.target.value));
+            updateNode(id, {value: setVal(data.value, TimeFrameID, event.target.value)});
         }
     };
 
@@ -81,7 +81,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
         // PeriodID
         const period = (getVal(PeriodID) || data.value[PeriodID]) ?? null;
         if (data.value[PeriodID] !== period) {
-            updateNode(id, setVal(data.value, PeriodID, period));
+            updateNode(id, {value: setVal(data.value, PeriodID, period)});
         }
     }, [edges])
 
@@ -90,7 +90,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     useEffect(() => {
         const params = fields.map(_ => _.value) || [];
         const rest = [...params, data.value[PeriodID], data.value[TimeFrameID]]
-        updateNode(id, rest);
+        updateNode(id, {value: rest});
     }, [])
 
 

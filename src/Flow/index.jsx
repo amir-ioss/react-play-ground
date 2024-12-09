@@ -27,9 +27,9 @@ function FlowExample() {
     const [edges, setEdges] = useEdgesState(initialEdges);
 
 
-    const updateNodeValue = (nodeId, newValue) => {
+    const updateNodeValue = (nodeId, newData) => {
         setNodes((nds) =>
-            nds.map((node) => (node.id === nodeId ? { ...node, data: { ...node.data, value: newValue } } : node))
+            nds.map((node) => (node.id === nodeId ? { ...node, data: { ...node.data, ...newData } } : node))
         );
     };
 

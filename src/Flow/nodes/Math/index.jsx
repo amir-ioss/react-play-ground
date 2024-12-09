@@ -3,7 +3,7 @@ import { Handle } from "@xyflow/react";
 const ValueNode = ({ data, id, updateNode }) => {
     // Handler for input changes
     const onInputChange = (event) => {
-        updateNode(id, [event.target.value]);
+        updateNode(id, { value: [event.target.value] });
     };
 
     return (
@@ -42,7 +42,7 @@ const ValueNode = ({ data, id, updateNode }) => {
                 type="source"
                 position="right"
                 id={'0'} // Another unique id
-                style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10  }}
+                style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10 }}
 
             />
 
@@ -57,7 +57,7 @@ const MathNode = ({ data, id, updateNode }) => {
 
     // Handler for input changes
     const onInputChange = (event) => {
-        updateNode(id, event.target.value);
+        updateNode(id, { value: [event.target.value] });
     };
 
     return <div style={{ padding: '10px', border: '1px solid black', borderRadius: '5px', width: '200px', backgroundColor: '#eeeeee' }}>
@@ -92,7 +92,7 @@ const MathNode = ({ data, id, updateNode }) => {
             type="target"
             position="left"
             id={'target-2-' + id} // Another unique id
-            style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10  }}
+            style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10 }}
 
         />
 
@@ -111,4 +111,4 @@ const MathNode = ({ data, id, updateNode }) => {
 
 
 
-export {ValueNode, MathNode}
+export { ValueNode, MathNode }

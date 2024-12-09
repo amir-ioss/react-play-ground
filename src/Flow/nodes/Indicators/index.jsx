@@ -103,18 +103,18 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
     // Handler for input changes
     const onInputChange = (event) => {
         const params = Types[event.target.value]?.map(_ => _.value) || [];
-        const rest = [event.target.value, ...outs, ...params]
-        updateNode(id, rest);
+        const rest = [event.target.value, ...params]
+        updateNode(id, { value: rest, returns: outs });
     };
+    
+    
 
     useEffect(() => {
-        const val1 = getVal(5) ?? null;
+        const val1 = getVal(1) ?? null;
         // const val2 = getVal(2) ?? null;
-        
 
-
-        if (data.value[5] !== val1) {
-            updateNode(id, setVal(data.value, 5, val1));
+        if (data.value[1] !== val1) {
+            updateNode(id, { value: setVal(data.value, 1, val1) });
         }
 
         // if (data.value[2] !== val2) {
@@ -122,9 +122,6 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
         // }
 
     }, [edges])
-
-console.log({data});
-
 
 
     return <div
@@ -147,7 +144,7 @@ console.log({data});
 
         {/* INPUT*/}
         {Types[data.value[0]]?.map((field, idx) => {
-            const ID = idx + 4 // offset
+            const ID = idx + 1 // offset
             return <div className="relative flex mt-2" key={ID}>
                 <label for={ID} className="mx-2">{field.placeholder}  </label>
                 <input
@@ -174,7 +171,7 @@ console.log({data});
         <Handle
             type="source"
             position={Position.Right}
-            id={'1'}
+            id={'0'}
             style={{ background: 'green', width: 15, height: 15, top: 30 }}
             reconnectable="target"
         />
@@ -182,15 +179,15 @@ console.log({data});
         <Handle
             type="source"
             position={Position.Right}
-            id={'2'}
+            id={'1'}
             style={{ background: 'green', width: 15, height: 15, top: 60 }}
             reconnectable="target"
         />
-        
+
         <Handle
             type="source"
             position={Position.Right}
-            id={'3'}
+            id={'2'}
             style={{ background: 'green', width: 15, height: 15, top: 80 }}
             reconnectable="target"
         />

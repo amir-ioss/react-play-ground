@@ -42,7 +42,7 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
     const onInputChange = (event) => {
         const params = fields.map(_ => _.value) || [];
         const rest = [event.target.value, ...params]
-        updateNode(id, rest);
+        updateNode(id, {value: rest});
     };
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
 
 
         if (data.value[1] !== val1) {
-            updateNode(id, setVal(data.value, 1, val1));
+            updateNode(id, {value: setVal(data.value, 1, val1)});
         }
 
         // if (data.value[2] !== val2) {

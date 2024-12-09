@@ -34,7 +34,17 @@ var _obj = [
 
 const isNum = (_) => !isNaN(Number(_));
 const isSource = (_) =>
-  ["time", "open", "high", "low", "close", "volume", "AMIR", "TEST"].includes(_);
+  [
+    "time",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "AMIR",
+    "ABBASY",
+    "TEST",
+  ].includes(_);
 
 const queriesMaker = (obj) => {
   // Validate the input object
@@ -55,24 +65,33 @@ const queriesMaker = (obj) => {
       const input = (INDEX) => find_id($.preNode[INDEX]?.["id"]);
 
       // Function to find the index of val1 and val2 in the nodes array
-      function findIds(prevNode, val1, val2) {
+      function findIds(prevNode, values) {
         const inputs = [];
         // Iterate over the nodes array
         prevNode.forEach((node, index) => {
+          // values.forEach((val, idx) => {
+          //   console.log(val, node);
+            
+          //   if (node?.returns && node.returns.includes(val)) {
+          //     inputs[idx] = find_id(node.id);
+          //   } else if(node.value.includes(val)){
+          //     inputs[idx] = find_id(node.id);
+          //   }
+          // });
           if (node.value.includes(val1)) {
             inputs[0] = find_id(node.id); // Store the index of val1
           }
           if (node.value.includes(val2)) {
             inputs[1] = find_id(node.id); // Store the index of val2
           }
-        }); 
+        });
         return inputs;
       }
 
       /////////////  MATH  /////////////
       if ($.type == "math") {
         const [val1, val2, operator] = $.value;
-        const inputs = findIds($.preNode, val1, val2);
+        const inputs = findIds($.preNode, [val1, val2]);
         query = `output['${inputs(0)}'] ${$.value} output['${inputs(1)}']`;
       }
 
@@ -90,15 +109,15 @@ const queriesMaker = (obj) => {
       if ($.type == "check") {
         // 10, >, 20
         const [val1, val2, condition] = $.value;
-        console.log({val1, val2});
-        
 
         if (isNum(val1) && isNum(val2)) {
           // both are numbers
           query = `${val1} ${condition} ${val2}`;
         } else {
           // const inputs = [input(0), input(1)];
-          const inputs = findIds($.preNode, val1, val2); // [0,1]
+          const inputs = findIds($.preNode, [val1, val2]); // [0,1]
+          console.log("----------", { inputs });
+
           query = buildCheckQuery(val1, val2, condition, inputs);
         }
       }
@@ -108,8 +127,7 @@ const queriesMaker = (obj) => {
         // 10, AND, 20
         // np.logical_and(array1, array2)
         const [val1, val2, condition] = $.value;
-        const inputs = findIds($.preNode, val1, val2);
-        // console.log($.preNode, val1, val2, { inputs });
+        // const inputs = findIds($.preNode, val1, val2);
 
         if (isNum(val1) && isNum(val2)) {
           // both are numbers
