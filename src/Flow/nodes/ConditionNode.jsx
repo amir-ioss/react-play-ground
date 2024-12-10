@@ -24,22 +24,22 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     // Handler for input changes
-    const onInputChange = (event) => {
-        updateNode(id, {value: setVal(data.value, 2, event.target.value)});
+    const onSelect = (event) => {
+        updateNode(id, { value: setVal(data.value, 2, event.target.value) });
     };
-    console.log(data);
-    
+
 
     useEffect(() => {
-        const val1 = getVal(0) ?? null;
-        const val2 = getVal(1) ?? null;
+
+        const val1 = getVal(0, 1) ?? null;
+        const val2 = getVal(1, 1) ?? null;
 
         if (data.value[0] !== val1) {
-            updateNode(id, {value: setVal(data.value, 0, val1)});
+            updateNode(id, { value: setVal(data.value, 0, val1) });
         }
 
         if (data.value[1] !== val2) {
-            updateNode(id, {value: setVal(data.value, 1, val2)});
+            updateNode(id, { value: setVal(data.value, 1, val2) });
         }
     }, [edges])
 
@@ -53,7 +53,7 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
         <select
             type="text"
             value={data.value[2] || ''}
-            onChange={onInputChange}
+            onChange={onSelect}
             placeholder="Enter value"
             className="bg-white p-2 mx-2 rounded-xl"
         >

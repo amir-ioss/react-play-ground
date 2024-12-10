@@ -1,4 +1,6 @@
-import { Handle } from "@xyflow/react";
+import { Handle, Position } from "@xyflow/react";
+import useNodeValue from "../useNodeValue";
+import { useEffect } from "react";
 
 const ValueNode = ({ data, id, updateNode }) => {
     // Handler for input changes
@@ -18,26 +20,6 @@ const ValueNode = ({ data, id, updateNode }) => {
                 id={'0'}
             />
             {/* Input Handles */}
-            {/* <Handle
-                type="target"
-                position="top"
-                id="input-1" // Unique id for this handle
-                style={{ background: 'blue' }}
-            /> */}
-            {/* <Handle
-                type="target"
-                position="left"
-                id={'target-' + id} // Another unique id
-                style={{ background: 'orange' }}
-            /> */}
-
-            {/* Output Handles */}
-            {/* <Handle
-                type="source"
-                position="bottom"
-                id="output-1" // Unique id for the output handle
-                style={{ background: 'red' }}
-            /> */}
             <Handle
                 type="source"
                 position="right"
@@ -45,7 +27,6 @@ const ValueNode = ({ data, id, updateNode }) => {
                 style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10 }}
 
             />
-
         </div>
     );
 };
@@ -54,11 +35,29 @@ const ValueNode = ({ data, id, updateNode }) => {
 
 
 const MathNode = ({ data, id, updateNode }) => {
+    const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     // Handler for input changes
-    const onInputChange = (event) => {
-        updateNode(id, { value: [event.target.value] });
+    const onSelect = (event) => {
+        updateNode(id, { value: setVal(data.value, 2, event.target.value) });
     };
+
+
+    useEffect(() => {
+
+        const val1 = getVal(0, 1) ?? null;
+        const val2 = getVal(1, 1) ?? null;
+
+        if (data.value[0] !== val1) {
+            updateNode(id, { value: setVal(data.value, 0, val1) });
+        }
+
+        if (data.value[1] !== val2) {
+            updateNode(id, { value: setVal(data.value, 1, val2) });
+        }
+    }, [edges])
+
+
 
     return <div style={{ padding: '10px', border: '1px solid black', borderRadius: '5px', width: '200px', backgroundColor: '#eeeeee' }}>
         <div>{data.label}</div>
@@ -66,7 +65,7 @@ const MathNode = ({ data, id, updateNode }) => {
         <select
             type="text"
             value={data.value || ''}
-            onChange={onInputChange}
+            onChange={onSelect}
             placeholder="Enter value"
             className={'w-full bg-white'}
 
@@ -80,27 +79,35 @@ const MathNode = ({ data, id, updateNode }) => {
 
         </select>
 
-        <Handle
-            type="target"
-            position="left"
-            id={'target-' + id} // Another unique id
-            style={{ background: 'gray', width: 15, height: 15 }}
 
-        />
+        <div className="relative  items-center m-2">
+            <Handle
+                type="target"
+                position={Position.Left}
+                id={"0"} // Another unique id
+                style={{ background: 'orange', width: 15, height: 15 }}
+            />
+            <p className='text-xs'>0</p>
+            <p className="px-4">{getVal(0) ?? 'Value 1'}</p>
+        </div>
 
-        <Handle
-            type="target"
-            position="left"
-            id={'target-2-' + id} // Another unique id
-            style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10 }}
 
-        />
+        <div className="relative  items-center m-2">
+            <Handle
+                type="target"
+                position={Position.Left}
+                id={"1"} // Another unique id
+                style={{ background: 'orange', width: 15, height: 15 }}
+            />
+            <p className='text-xs'>1</p>
+            <p className="px-4">{getVal(1) ?? 'Value 2'}</p>
+        </div>
 
 
         <Handle
             type="source"
             position="right"
-            id={'source-' + id} // Another unique id
+            id={'0'} // Another unique id
             style={{ background: 'red', width: 15, height: 15 }}
         />
 

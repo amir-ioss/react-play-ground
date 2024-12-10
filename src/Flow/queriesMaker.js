@@ -32,19 +32,9 @@ var _obj = [
   },
 ];
 
+const macd = ["macd_line", "signal_line", "macd_histogram"];
 const isNum = (_) => !isNaN(Number(_));
-const isSource = (_) =>
-  [
-    "time",
-    "open",
-    "high",
-    "low",
-    "close",
-    "volume",
-    "AMIR",
-    "ABBASY",
-    "TEST",
-  ].includes(_);
+const isSource = (_) => ["time", "open", "high", "low", "close", "volume", ...macd].includes(_);
 
 const queriesMaker = (obj) => {
   // Validate the input object
@@ -69,30 +59,35 @@ const queriesMaker = (obj) => {
         const inputs = [];
         // Iterate over the nodes array
         prevNode.forEach((node, index) => {
-          // values.forEach((val, idx) => {
-          //   console.log(val, node);
-            
-          //   if (node?.returns && node.returns.includes(val)) {
-          //     inputs[idx] = find_id(node.id);
-          //   } else if(node.value.includes(val)){
-          //     inputs[idx] = find_id(node.id);
-          //   }
-          // });
-          if (node.value.includes(val1)) {
-            inputs[0] = find_id(node.id); // Store the index of val1
-          }
-          if (node.value.includes(val2)) {
-            inputs[1] = find_id(node.id); // Store the index of val2
-          }
+          values.forEach((val, idx) => {
+            // values []
+            if (node.value.includes(val)) {
+              inputs[idx] = find_id(node.id);
+            }
+
+            // returns []
+            if (node?.returns && node.returns.includes(val)) {
+              inputs[idx] = find_id(node.id);
+            }
+          });
         });
         return inputs;
       }
 
       /////////////  MATH  /////////////
-      if ($.type == "math") {
+      if ($.type == "math_") {
         const [val1, val2, operator] = $.value;
-        const inputs = findIds($.preNode, [val1, val2]);
-        query = `output['${inputs(0)}'] ${$.value} output['${inputs(1)}']`;
+
+        const inputs = findIds($.preNode, [val1, val2]); // [0,1]
+        query = buildCheckQuery(val1, val2, operator, inputs);
+
+        // if (isNum(val1) && isNum(val2)) {
+        //   // both are numbers
+        //   query = `${val1} ${operator} ${val2}`;
+        // } else {
+        //   const inputs = findIds($.preNode, [val1, val2]); // [0,1]
+        //   query = buildCheckQuery(val1, val2, operator, inputs);
+        // }
       }
 
       /////////////  COIN  /////////////
@@ -106,20 +101,21 @@ const queriesMaker = (obj) => {
       }
 
       /////////////  CHECK  /////////////
-      if ($.type == "check") {
+      if ($.type == "check" || $.type == "math") {
         // 10, >, 20
         const [val1, val2, condition] = $.value;
 
-        if (isNum(val1) && isNum(val2)) {
-          // both are numbers
-          query = `${val1} ${condition} ${val2}`;
-        } else {
-          // const inputs = [input(0), input(1)];
-          const inputs = findIds($.preNode, [val1, val2]); // [0,1]
-          console.log("----------", { inputs });
+        // if (isNum(val1) && isNum(val2)) {
+        //   // both are numbers
+        //   query = `${val1} ${condition} ${val2}`;
+        // } else {
+        //   // const inputs = [input(0), input(1)];
+        //   const inputs = findIds($.preNode, [val1, val2]); // [0,1]
+        //   query = buildCheckQuery(val1, val2, condition, inputs);
+        // }
 
-          query = buildCheckQuery(val1, val2, condition, inputs);
-        }
+        const inputs = findIds($.preNode, [val1, val2]); // [0,1]
+        query = buildCheckQuery(val1, val2, condition, inputs);
       }
 
       /////////////  CHECK  /////////////
@@ -141,11 +137,12 @@ const queriesMaker = (obj) => {
       /////////////  INDICATOR  /////////////
       if ($.type == "indicator") {
         const [indicator, source, ...params] = $.value;
-        query = `talib.${indicator}(${value(
-          source,
-          input(0),
-          false
-        )},${params.join(",")})`;
+        query = `talib.${indicator}(${value(source, input(0), false)},${params.join(",")})`;
+
+        // RETURNS TO NAMED KEYS
+        if ($.returns && $.returns.length > 0) {
+          query += ` -> ${toSingleQuotes($.returns)}`;
+        }
       }
 
       /////////////  HH/LL  /////////////
@@ -174,13 +171,14 @@ const queriesMaker = (obj) => {
 export { queriesMaker };
 
 // Handle Value
-const value = (value, indices = 0, indexed = true) => {
+const value = (value, indices = 0, multi = true) => {
   if (isSource(value)) {
-    return `output['${indices}']['${value}']${indexed ? "[i]" : ""}`;
+    return `output['${indices}']['${value}']${multi ? "[i]" : ""}`;
   } else if (isNum(value)) {
-    return `${value}`;
+    // return `${value}`;
+    return `output['${indices}']`;
   } else {
-    return `output['${indices}']${indexed ? "[i]" : ""}`;
+    return `output['${indices}']${multi ? "[i]" : ""}`;
   }
 };
 
@@ -199,13 +197,17 @@ function buildCheckQuery(val1, val2, condition, inputs) {
   // Build expressions for val1 and val2
   const val1Expr = value(val1, inputs[0]);
   const val2Expr = value(val2, inputs[1]);
+  let query = "";
 
   // Build the query string
-  const query =
-    `[${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
-    (isNum(0) || isNum(1)
-      ? `]`
-      : `if (${val1Expr} is not None and ${val2Expr} is not None)]`);
-
+  if (isNum(val1) && isNum(val2)) {
+    query = `${val1Expr} ${condition} ${val2Expr}`;
+  } else {
+    query =
+      `[${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
+      (isNum(0) || isNum(1) ? `]` : `if (${val1Expr} is not None and ${val2Expr} is not None)]`);
+  }
   return query;
 }
+
+const toSingleQuotes = (data) => JSON.stringify(data).replace(/"/g, "'"); // Replace double quotes with single quotes

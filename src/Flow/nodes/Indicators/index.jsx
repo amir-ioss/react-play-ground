@@ -77,6 +77,24 @@ const Types = {
             value: 9,
             placeholder: "hist line",
 
+        },
+        {
+            name: "MACD Line",
+            type: "array",
+            value: 'macd_line',
+            source: true
+        },
+        {
+            name: "Signal Line",
+            type: "array",
+            value: 'signal_line',
+            source: true
+        },
+        {
+            name: "MACD Histogram",
+            type: "array",
+            value: 'macd_histogram',
+            source: true
         }
     ]
 }
@@ -86,28 +104,25 @@ const Types = {
 
 const IndicatorNode = memo(({ data, id, updateNode }) => {
     // 0 = Indicator 
+
     // 1+ = Params
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
+    const INPUTS = Types[data.value[0]]?.filter(_ => !_?.source) ?? []
+    const OUTPUTS = Types[data.value[0]]?.filter(_ => _.source) ?? []
 
-    // const getVal = (INPUT_ID = 1) => {
-    //     const edge = edges.filter(e => e.targetHandle == INPUT_ID)?.[0]
-    //     const val = nodesData.filter(e => e.id == edge?.source)?.[0]
-
-    //     if (!val?.data) return null
-    //     return val.data.value[edge.sourceHandle]
-    // }
-
-    const outs = ["AMIR", "ABBASY", "TEST"]
 
     // Handler for input changes
-    const onInputChange = (event) => {
-        const params = Types[event.target.value]?.map(_ => _.value) || [];
+    const onChangeIndicator = (event) => {
+        const inputs = Types[event.target.value]?.filter(_ => !_?.source)
+        const params = inputs?.map(_ => _.value) || [];
         const rest = [event.target.value, ...params]
-        updateNode(id, { value: rest, returns: outs });
+
+        const returns = Types[event.target.value].filter(_ => (_?.source)).map(_ => _.value)
+        updateNode(id, { value: rest, returns });
     };
-    
-    
+
+
 
     useEffect(() => {
         const val1 = getVal(1) ?? null;
@@ -124,6 +139,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
     }, [edges])
 
 
+
     return <div
         className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
         <div className="mx-4">Indicator</div>
@@ -131,7 +147,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
         <select
             type="text"
             value={data.value?.[0] ?? ''}
-            onChange={e => onInputChange(e)}
+            onChange={e => onChangeIndicator(e)}
             placeholder="Indicator"
             className={'bg-white border p-2 mx-2 rounded-xl'}
         >
@@ -142,8 +158,8 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
             ))}
         </select>
 
-        {/* INPUT*/}
-        {Types[data.value[0]]?.map((field, idx) => {
+        {/* INPUTS*/}
+        {INPUTS?.map((field, idx) => {
             const ID = idx + 1 // offset
             return <div className="relative flex mt-2" key={ID}>
                 <label for={ID} className="mx-2">{field.placeholder}  </label>
@@ -166,32 +182,28 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
             </div>
         })}
 
-        {/* OUTPUT */}
+        {/* OUTPUTS */}
+        {OUTPUTS.map((field, idx) => {
+            let ID = idx // offset
+            return <div className="relative flex mt-2 justify-end" key={ID}>
+                <label for={ID} className="mx-4">{field.name}</label>
+                <Handle
+                    type="source"
+                    position={Position.Right}
+                    id={`${ID}`}
+                    style={{ background: 'green', width: 15, height: 15, }}
+                    reconnectable="target"
+                />
+            </div>
+        })}
 
-        <Handle
+        {OUTPUTS.length == 0 && <Handle
             type="source"
             position={Position.Right}
             id={'0'}
-            style={{ background: 'green', width: 15, height: 15, top: 30 }}
+            style={{ background: 'green', width: 15, height: 15, }}
             reconnectable="target"
-        />
-
-        <Handle
-            type="source"
-            position={Position.Right}
-            id={'1'}
-            style={{ background: 'green', width: 15, height: 15, top: 60 }}
-            reconnectable="target"
-        />
-
-        <Handle
-            type="source"
-            position={Position.Right}
-            id={'2'}
-            style={{ background: 'green', width: 15, height: 15, top: 80 }}
-            reconnectable="target"
-        />
-
+        />}
 
 
     </div>

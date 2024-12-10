@@ -43,7 +43,7 @@ function FlowExample() {
         // Get the values of the predecessor nodes
         const previousNodeValues = predecessors.map((sourceId) => {
             const node = nodes.find((n) => n.id === sourceId);
-            return { id: sourceId, label: node?.data.label, value: node?.data.value };
+            return { id: sourceId, ...node?.data };
         });
 
         return previousNodeValues;
@@ -178,8 +178,6 @@ function FlowExample() {
         const orderedOutput = executionOrder.map((id) => {
             const node = nodes.find((n) => n.id === id);
             const preNode = getPreviousNodes(node.id);
-            console.log({ preNode });
-
 
             //   console.log(`Executing Node: ${currentNode?.data.label}`);
             //   console.log(`Previous Node Values:`, previousNodeValues);
