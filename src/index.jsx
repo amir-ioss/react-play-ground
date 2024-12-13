@@ -36,8 +36,8 @@ root.render(
     {/* <MyComponent text={"THIS IS TEST"} /> */}
     {/* <Canvas/> */}
     {/* <Form /> */}
-    {/* <Chart /> */}
-    <Flow />
+    <Chart />
+    {/* <Flow /> */}
     {/* <Navigation /> */}
   </React.StrictMode>
 );

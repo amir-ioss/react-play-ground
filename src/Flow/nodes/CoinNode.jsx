@@ -98,7 +98,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     return <div
         className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
 
-        <div className="mx-4">Coin Data</div>
+        <div className="mx-4">{data.label}</div>
         <label for={TimeFrameID} className="w-full mx-4 mt-4">Time Frame</label>
         <select
             type="text"
@@ -147,10 +147,8 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
         {/* INPUT*/}
-        <label className="px-4">{data.label}</label>
-
         <div className="relative flex mt-2">
-            <label for={'0'} className="mx-2">PeriodID</label>
+            <label for={'0'} className="mx-2">Candle Limit</label>
             <input
                 type="text"
                 value={getVal(PeriodID) || data.value?.[PeriodID]}

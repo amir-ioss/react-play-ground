@@ -3,6 +3,8 @@ import { useEdges, useNodesData } from "@xyflow/react";
 const useNodeValue = (id) => {
   const edges = useEdges().filter((edge) => edge.target == id);
   const nodesData = useNodesData(edges.map((connection) => connection.source));
+  console.log(edges);
+  
 
   const getVal = (INPUT_ID = 1, log = false) => {
     const edge = edges.find((e) => e.targetHandle == INPUT_ID);

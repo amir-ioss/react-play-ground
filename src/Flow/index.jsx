@@ -62,7 +62,7 @@ function FlowExample() {
         LogicalNode: (props) => <LogicalNode {...props} updateNode={updateNodeValue} />,
     }), []);
 
-    
+
     const onNodesChange = (changes) =>
         setNodes((nds) => applyNodeChanges(changes, nds));
 
@@ -188,6 +188,28 @@ function FlowExample() {
         return orderedOutput;
     };
 
+
+
+    const handleSubmit = async (query) => {
+        const postData = {
+            data: query
+        };
+
+        // Send the POST request
+        const response = await fetch('http://127.0.0.1:8000/process/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postData),
+        });
+
+        const result = await response.json();
+        console.log({result}); // Handle the response
+    };
+
+
+
     return (
         <div style={{ width: '100%', height: '100vh' }}>
             <ReactFlow
@@ -219,7 +241,7 @@ function FlowExample() {
                     { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
 
 
-                    
+
                     // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
                 ].map((btn, idx) => <button onClick={btn.add} key={idx}
                     className='ml-2 border rounded-lg border-black px-2' >
@@ -235,6 +257,7 @@ function FlowExample() {
                         console.log("nodes : ", data);
                         let query = queriesMaker(data)
                         console.log("query : ", query);
+                        handleSubmit(query)
                     }}
                 >
                     TEST
