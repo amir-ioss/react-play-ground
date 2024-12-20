@@ -1,0 +1,5340 @@
+{
+  "Select": {
+    "Name": "Select",
+    "Description": "",
+    "Type": "",
+    "Inputs": [],
+    "Parameters": [],
+    "Outputs": []
+  },
+  "ACOS": {
+    "Name": "ACOS",
+    "Description": "Vector Trigonometric ACos",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "AD": {
+    "Name": "AD",
+    "Description": "Chaikin A/D Line",
+    "Type": "Volume Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "volume",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ADD": {
+    "Name": "ADD",
+    "Description": "Vector Arithmetic Add",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ADOSC": {
+    "Name": "ADOSC",
+    "Description": "Chaikin A/D Oscillator",
+    "Type": "Volume Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "volume",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastperiod",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "name": "slowperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ADX": {
+    "Name": "ADX",
+    "Description": "Average Directional Movement Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ADXR": {
+    "Name": "ADXR",
+    "Description": "Average Directional Movement Index Rating",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "APO": {
+    "Name": "APO",
+    "Description": "Absolute Price Oscillator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastperiod",
+        "type": "number",
+        "value": 12
+      },
+      {
+        "name": "slowperiod",
+        "type": "number",
+        "value": 26
+      },
+      {
+        "name": "matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "AROON": {
+    "Name": "AROON",
+    "Description": "Aroon",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "aroondown",
+        "type": "number",
+        "source": true,
+        "value": "aroondown"
+      },
+      {
+        "name": "aroonup",
+        "type": "number",
+        "source": true,
+        "value": "aroonup"
+      }
+    ]
+  },
+  "AROONOSC": {
+    "Name": "AROONOSC",
+    "Description": "Aroon Oscillator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ASIN": {
+    "Name": "ASIN",
+    "Description": "Vector Trigonometric ASin",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ATAN": {
+    "Name": "ATAN",
+    "Description": "Vector Trigonometric ATan",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ATR": {
+    "Name": "ATR",
+    "Description": "Average True Range",
+    "Type": "Volatility Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "AVGPRICE": {
+    "Name": "AVGPRICE",
+    "Description": "Average Price",
+    "Type": "Price Transform",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "BBANDS": {
+    "Name": "BBANDS",
+    "Description": "Bollinger Bands",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "nbdevup",
+        "type": "number",
+        "value": 2
+      },
+      {
+        "name": "nbdevdn",
+        "type": "number",
+        "value": 2
+      },
+      {
+        "name": "matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "upperband",
+        "type": "number",
+        "source": true,
+        "value": "upperband"
+      },
+      {
+        "name": "middleband",
+        "type": "number",
+        "source": true,
+        "value": "middleband"
+      },
+      {
+        "name": "lowerband",
+        "type": "number",
+        "source": true,
+        "value": "lowerband"
+      }
+    ]
+  },
+  "BETA": {
+    "Name": "BETA",
+    "Description": "Beta",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 5
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "BOP": {
+    "Name": "BOP",
+    "Description": "Balance Of Power",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "CCI": {
+    "Name": "CCI",
+    "Description": "Commodity Channel Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "CDL2CROWS": {
+    "Name": "CDL2CROWS",
+    "Description": "Two Crows",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3BLACKCROWS": {
+    "Name": "CDL3BLACKCROWS",
+    "Description": "Three Black Crows",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3INSIDE": {
+    "Name": "CDL3INSIDE",
+    "Description": "Three Inside Up/Down",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3LINESTRIKE": {
+    "Name": "CDL3LINESTRIKE",
+    "Description": "Three-Line Strike",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3OUTSIDE": {
+    "Name": "CDL3OUTSIDE",
+    "Description": "Three Outside Up/Down",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3STARSINSOUTH": {
+    "Name": "CDL3STARSINSOUTH",
+    "Description": "Three Stars In The South",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDL3WHITESOLDIERS": {
+    "Name": "CDL3WHITESOLDIERS",
+    "Description": "Three Advancing White Soldiers",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLABANDONEDBABY": {
+    "Name": "CDLABANDONEDBABY",
+    "Description": "Abandoned Baby",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLADVANCEBLOCK": {
+    "Name": "CDLADVANCEBLOCK",
+    "Description": "Advance Block",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLBELTHOLD": {
+    "Name": "CDLBELTHOLD",
+    "Description": "Belt-hold",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLBREAKAWAY": {
+    "Name": "CDLBREAKAWAY",
+    "Description": "Breakaway",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLCLOSINGMARUBOZU": {
+    "Name": "CDLCLOSINGMARUBOZU",
+    "Description": "Closing Marubozu",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLCONCEALBABYSWALL": {
+    "Name": "CDLCONCEALBABYSWALL",
+    "Description": "Concealing Baby Swallow",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLCOUNTERATTACK": {
+    "Name": "CDLCOUNTERATTACK",
+    "Description": "Counterattack",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLDARKCLOUDCOVER": {
+    "Name": "CDLDARKCLOUDCOVER",
+    "Description": "Dark Cloud Cover",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLDOJI": {
+    "Name": "CDLDOJI",
+    "Description": "Doji",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLDOJISTAR": {
+    "Name": "CDLDOJISTAR",
+    "Description": "Doji Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLDRAGONFLYDOJI": {
+    "Name": "CDLDRAGONFLYDOJI",
+    "Description": "Dragonfly Doji",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLENGULFING": {
+    "Name": "CDLENGULFING",
+    "Description": "Engulfing Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLEVENINGDOJISTAR": {
+    "Name": "CDLEVENINGDOJISTAR",
+    "Description": "Evening Doji Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLEVENINGSTAR": {
+    "Name": "CDLEVENINGSTAR",
+    "Description": "Evening Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLGAPSIDESIDEWHITE": {
+    "Name": "CDLGAPSIDESIDEWHITE",
+    "Description": "Up/Down-gap side-by-side white lines",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLGRAVESTONEDOJI": {
+    "Name": "CDLGRAVESTONEDOJI",
+    "Description": "Gravestone Doji",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHAMMER": {
+    "Name": "CDLHAMMER",
+    "Description": "Hammer",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHANGINGMAN": {
+    "Name": "CDLHANGINGMAN",
+    "Description": "Hanging Man",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHARAMI": {
+    "Name": "CDLHARAMI",
+    "Description": "Harami Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHARAMICROSS": {
+    "Name": "CDLHARAMICROSS",
+    "Description": "Harami Cross Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHIGHWAVE": {
+    "Name": "CDLHIGHWAVE",
+    "Description": "High-Wave Candle",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHIKKAKE": {
+    "Name": "CDLHIKKAKE",
+    "Description": "Hikkake Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHIKKAKEMOD": {
+    "Name": "CDLHIKKAKEMOD",
+    "Description": "Modified Hikkake Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLHOMINGPIGEON": {
+    "Name": "CDLHOMINGPIGEON",
+    "Description": "Homing Pigeon",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLIDENTICAL3CROWS": {
+    "Name": "CDLIDENTICAL3CROWS",
+    "Description": "Identical Three Crows",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLINNECK": {
+    "Name": "CDLINNECK",
+    "Description": "In-Neck Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLINVERTEDHAMMER": {
+    "Name": "CDLINVERTEDHAMMER",
+    "Description": "Inverted Hammer",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLKICKING": {
+    "Name": "CDLKICKING",
+    "Description": "Kicking",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLKICKINGBYLENGTH": {
+    "Name": "CDLKICKINGBYLENGTH",
+    "Description": "Kicking - bull/bear determined by the longer marubozu",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLLADDERBOTTOM": {
+    "Name": "CDLLADDERBOTTOM",
+    "Description": "Ladder Bottom",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLLONGLEGGEDDOJI": {
+    "Name": "CDLLONGLEGGEDDOJI",
+    "Description": "Long Legged Doji",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLLONGLINE": {
+    "Name": "CDLLONGLINE",
+    "Description": "Long Line Candle",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLMARUBOZU": {
+    "Name": "CDLMARUBOZU",
+    "Description": "Marubozu",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLMATCHINGLOW": {
+    "Name": "CDLMATCHINGLOW",
+    "Description": "Matching Low",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLMATHOLD": {
+    "Name": "CDLMATHOLD",
+    "Description": "Mat Hold",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLMORNINGDOJISTAR": {
+    "Name": "CDLMORNINGDOJISTAR",
+    "Description": "Morning Doji Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLMORNINGSTAR": {
+    "Name": "CDLMORNINGSTAR",
+    "Description": "Morning Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "penetration",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLONNECK": {
+    "Name": "CDLONNECK",
+    "Description": "On-Neck Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLPIERCING": {
+    "Name": "CDLPIERCING",
+    "Description": "Piercing Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLRICKSHAWMAN": {
+    "Name": "CDLRICKSHAWMAN",
+    "Description": "Rickshaw Man",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLRISEFALL3METHODS": {
+    "Name": "CDLRISEFALL3METHODS",
+    "Description": "Rising/Falling Three Methods",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSEPARATINGLINES": {
+    "Name": "CDLSEPARATINGLINES",
+    "Description": "Separating Lines",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSHOOTINGSTAR": {
+    "Name": "CDLSHOOTINGSTAR",
+    "Description": "Shooting Star",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSHORTLINE": {
+    "Name": "CDLSHORTLINE",
+    "Description": "Short Line Candle",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSPINNINGTOP": {
+    "Name": "CDLSPINNINGTOP",
+    "Description": "Spinning Top",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSTALLEDPATTERN": {
+    "Name": "CDLSTALLEDPATTERN",
+    "Description": "Stalled Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLSTICKSANDWICH": {
+    "Name": "CDLSTICKSANDWICH",
+    "Description": "Stick Sandwich",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLTAKURI": {
+    "Name": "CDLTAKURI",
+    "Description": "Takuri ,Dragonfly Doji with very long lower shadow)",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLTASUKIGAP": {
+    "Name": "CDLTASUKIGAP",
+    "Description": "Tasuki Gap",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLTHRUSTING": {
+    "Name": "CDLTHRUSTING",
+    "Description": "Thrusting Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLTRISTAR": {
+    "Name": "CDLTRISTAR",
+    "Description": "Tristar Pattern",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLUNIQUE3RIVER": {
+    "Name": "CDLUNIQUE3RIVER",
+    "Description": "Unique 3 River",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLUPSIDEGAP2CROWS": {
+    "Name": "CDLUPSIDEGAP2CROWS",
+    "Description": "Upside Gap Two Crows",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CDLXSIDEGAP3METHODS": {
+    "Name": "CDLXSIDEGAP3METHODS",
+    "Description": "Upside/Downside Gap Three Methods",
+    "Type": "Pattern Recognition",
+    "Inputs": [
+      {
+        "name": "open",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "CEIL": {
+    "Name": "CEIL",
+    "Description": "Vector Ceil",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "CMO": {
+    "Name": "CMO",
+    "Description": "Chande Momentum Oscillator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "CORREL": {
+    "Name": "CORREL",
+    "Description": "Pearson's Correlation Coefficient ,r)",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "COS": {
+    "Name": "COS",
+    "Description": "Vector Trigonometric Cos",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "COSH": {
+    "Name": "COSH",
+    "Description": "Vector Trigonometric Cosh",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "DEMA": {
+    "Name": "DEMA",
+    "Description": "Double Exponential Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "DIV": {
+    "Name": "DIV",
+    "Description": "Vector Arithmetic Div",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "DX": {
+    "Name": "DX",
+    "Description": "Directional Movement Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "EMA": {
+    "Name": "EMA",
+    "Description": "Exponential Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "EXP": {
+    "Name": "EXP",
+    "Description": "Vector Arithmetic Exp",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "FLOOR": {
+    "Name": "FLOOR",
+    "Description": "Vector Floor",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "HT_DCPERIOD": {
+    "Name": "HT_DCPERIOD",
+    "Description": "Hilbert Transform - Dominant Cycle Period",
+    "Type": "Cycle Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "HT_DCPHASE": {
+    "Name": "HT_DCPHASE",
+    "Description": "Hilbert Transform - Dominant Cycle Phase",
+    "Type": "Cycle Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "HT_PHASOR": {
+    "Name": "HT_PHASOR",
+    "Description": "Hilbert Transform - Phasor Components",
+    "Type": "Cycle Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "inphase",
+        "type": "number",
+        "source": true,
+        "value": "inphase"
+      },
+      {
+        "name": "quadrature",
+        "type": "number",
+        "source": true,
+        "value": "quadrature"
+      }
+    ]
+  },
+  "HT_SINE": {
+    "Name": "HT_SINE",
+    "Description": "Hilbert Transform - SineWave",
+    "Type": "Cycle Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "sine",
+        "type": "number",
+        "source": true,
+        "value": "sine"
+      },
+      {
+        "name": "leadsine",
+        "type": "number",
+        "source": true,
+        "value": "leadsine"
+      }
+    ]
+  },
+  "HT_TRENDLINE": {
+    "Name": "HT_TRENDLINE",
+    "Description": "Hilbert Transform - Instantaneous Trendline",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "HT_TRENDMODE": {
+    "Name": "HT_TRENDMODE",
+    "Description": "Hilbert Transform - Trend vs Cycle Mode",
+    "Type": "Cycle Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "KAMA": {
+    "Name": "KAMA",
+    "Description": "Kaufman Adaptive Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LINEARREG": {
+    "Name": "LINEARREG",
+    "Description": "Linear Regression",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LINEARREG_ANGLE": {
+    "Name": "LINEARREG_ANGLE",
+    "Description": "Linear Regression Angle",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LINEARREG_INTERCEPT": {
+    "Name": "LINEARREG_INTERCEPT",
+    "Description": "Linear Regression Intercept",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LINEARREG_SLOPE": {
+    "Name": "LINEARREG_SLOPE",
+    "Description": "Linear Regression Slope",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LN": {
+    "Name": "LN",
+    "Description": "Vector Log Natural",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "LOG10": {
+    "Name": "LOG10",
+    "Description": "Vector Log10",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MA": {
+    "Name": "MA",
+    "Description": "Moving average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      },
+      {
+        "name": "matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MACD": {
+    "Name": "MACD",
+    "Description": "Moving Average Convergence/Divergence",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastperiod",
+        "type": "number",
+        "value": 12
+      },
+      {
+        "name": "slowperiod",
+        "type": "number",
+        "value": 26
+      },
+      {
+        "name": "signalperiod",
+        "type": "number",
+        "value": 9
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "macd",
+        "type": "number",
+        "source": true,
+        "value": "macd"
+      },
+      {
+        "name": "macdsignal",
+        "type": "number",
+        "source": true,
+        "value": "macdsignal"
+      },
+      {
+        "name": "macdhist",
+        "type": "number",
+        "source": true,
+        "value": "macdhist"
+      }
+    ]
+  },
+  "MACDEXT": {
+    "Name": "MACDEXT",
+    "Description": "MACD with controllable MA type",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastperiod",
+        "type": "number",
+        "value": 12
+      },
+      {
+        "name": "fastmatype",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "slowperiod",
+        "type": "number",
+        "value": 26
+      },
+      {
+        "name": "slowmatype",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "signalperiod",
+        "type": "number",
+        "value": 9
+      },
+      {
+        "name": "signalmatype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "macd",
+        "type": "number",
+        "source": true,
+        "value": "macd"
+      },
+      {
+        "name": "macdsignal",
+        "type": "number",
+        "source": true,
+        "value": "macdsignal"
+      },
+      {
+        "name": "macdhist",
+        "type": "number",
+        "source": true,
+        "value": "macdhist"
+      }
+    ]
+  },
+  "MACDFIX": {
+    "Name": "MACDFIX",
+    "Description": "Moving Average Convergence/Divergence Fix 12/26",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "signalperiod",
+        "type": "number",
+        "value": 9
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "macd",
+        "type": "number",
+        "source": true,
+        "value": "macd"
+      },
+      {
+        "name": "macdsignal",
+        "type": "number",
+        "source": true,
+        "value": "macdsignal"
+      },
+      {
+        "name": "macdhist",
+        "type": "number",
+        "source": true,
+        "value": "macdhist"
+      }
+    ]
+  },
+  "MAMA": {
+    "Name": "MAMA",
+    "Description": "MESA Adaptive Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastlimit",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "slowlimit",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "mama",
+        "type": "number",
+        "source": true,
+        "value": "mama"
+      },
+      {
+        "name": "fama",
+        "type": "number",
+        "source": true,
+        "value": "fama"
+      }
+    ]
+  },
+  "MAVP": {
+    "Name": "MAVP",
+    "Description": "Moving average with variable period",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "periods",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "minperiod",
+        "type": "number",
+        "value": 2
+      },
+      {
+        "name": "maxperiod",
+        "type": "number",
+        "value": 30
+      },
+      {
+        "name": "matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MAX": {
+    "Name": "MAX",
+    "Description": "Highest value over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MAXINDEX": {
+    "Name": "MAXINDEX",
+    "Description": "Index of highest value over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "MEDPRICE": {
+    "Name": "MEDPRICE",
+    "Description": "Median Price",
+    "Type": "Price Transform",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MFI": {
+    "Name": "MFI",
+    "Description": "Money Flow Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "volume",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MIDPOINT": {
+    "Name": "MIDPOINT",
+    "Description": "MidPoint over period",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MIDPRICE": {
+    "Name": "MIDPRICE",
+    "Description": "Midpoint Price over period",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MIN": {
+    "Name": "MIN",
+    "Description": "Lowest value over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MININDEX": {
+    "Name": "MININDEX",
+    "Description": "Index of lowest value over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "integer",
+        "type": "number",
+        "source": true,
+        "value": "integer",
+        "OutputRule": "values are -100, 0 or 100"
+      }
+    ]
+  },
+  "MINMAX": {
+    "Name": "MINMAX",
+    "Description": "Lowest and highest values over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "min",
+        "type": "number",
+        "source": true,
+        "value": "min"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "source": true,
+        "value": "max"
+      }
+    ]
+  },
+  "MINMAXINDEX": {
+    "Name": "MINMAXINDEX",
+    "Description": "Indexes of lowest and highest values over a specified period",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "minidx",
+        "type": "number",
+        "source": true,
+        "value": "minidx"
+      },
+      {
+        "name": "maxidx",
+        "type": "number",
+        "source": true,
+        "value": "maxidx"
+      }
+    ]
+  },
+  "MINUS_DI": {
+    "Name": "MINUS_DI",
+    "Description": "Minus Directional Indicator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MINUS_DM": {
+    "Name": "MINUS_DM",
+    "Description": "Minus Directional Movement",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MOM": {
+    "Name": "MOM",
+    "Description": "Momentum",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "MULT": {
+    "Name": "MULT",
+    "Description": "Vector Arithmetic Mult",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "NATR": {
+    "Name": "NATR",
+    "Description": "Normalized Average True Range",
+    "Type": "Volatility Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "OBV": {
+    "Name": "OBV",
+    "Description": "On Balance Volume",
+    "Type": "Volume Indicators",
+    "Inputs": [
+      {
+        "name": "volume",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "PLUS_DI": {
+    "Name": "PLUS_DI",
+    "Description": "Plus Directional Indicator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "PLUS_DM": {
+    "Name": "PLUS_DM",
+    "Description": "Plus Directional Movement",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "PPO": {
+    "Name": "PPO",
+    "Description": "Percentage Price Oscillator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastperiod",
+        "type": "number",
+        "value": 12
+      },
+      {
+        "name": "slowperiod",
+        "type": "number",
+        "value": 26
+      },
+      {
+        "name": "matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ROC": {
+    "Name": "ROC",
+    "Description": "Rate of change : ,,real/prevPrice)-1)*100",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ROCP": {
+    "Name": "ROCP",
+    "Description": "Rate of change Percentage: ,real-prevPrice)/prevPrice",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ROCR": {
+    "Name": "ROCR",
+    "Description": "Rate of change ratio: ,real/prevPrice)",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ROCR100": {
+    "Name": "ROCR100",
+    "Description": "Rate of change ratio 100 scale: ,real/prevPrice)*100",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 10
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "RSI": {
+    "Name": "RSI",
+    "Description": "Relative Strength Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SAR": {
+    "Name": "SAR",
+    "Description": "Parabolic SAR",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "acceleration",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "maximum",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SAREXT": {
+    "Name": "SAREXT",
+    "Description": "Parabolic SAR - Extended",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "startvalue",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "offsetonreverse",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationinitlong",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationlong",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationmaxlong",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationinitshort",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationshort",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "accelerationmaxshort",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SIN": {
+    "Name": "SIN",
+    "Description": "Vector Trigonometric Sin",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SINH": {
+    "Name": "SINH",
+    "Description": "Vector Trigonometric Sinh",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SMA": {
+    "Name": "SMA",
+    "Description": "Simple Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SQRT": {
+    "Name": "SQRT",
+    "Description": "Vector Square Root",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "STDDEV": {
+    "Name": "STDDEV",
+    "Description": "Standard Deviation",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "nbdev",
+        "type": "number",
+        "value": 1
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "STOCH": {
+    "Name": "STOCH",
+    "Description": "Stochastic",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastk_period",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "slowk_period",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "name": "slowk_matype",
+        "type": "number",
+        "value": 0
+      },
+      {
+        "name": "slowd_period",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "name": "slowd_matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "slowk",
+        "type": "number",
+        "source": true,
+        "value": "slowk"
+      },
+      {
+        "name": "slowd",
+        "type": "number",
+        "source": true,
+        "value": "slowd"
+      }
+    ]
+  },
+  "STOCHF": {
+    "Name": "STOCHF",
+    "Description": "Stochastic Fast",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "fastk_period",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "fastd_period",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "name": "fastd_matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "fastk",
+        "type": "number",
+        "source": true,
+        "value": "fastk"
+      },
+      {
+        "name": "fastd",
+        "type": "number",
+        "source": true,
+        "value": "fastd"
+      }
+    ]
+  },
+  "STOCHRSI": {
+    "Name": "STOCHRSI",
+    "Description": "Stochastic Relative Strength Index",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      },
+      {
+        "name": "fastk_period",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "fastd_period",
+        "type": "number",
+        "value": 3
+      },
+      {
+        "name": "fastd_matype",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "fastk",
+        "type": "number",
+        "source": true,
+        "value": "fastk"
+      },
+      {
+        "name": "fastd",
+        "type": "number",
+        "source": true,
+        "value": "fastd"
+      }
+    ]
+  },
+  "SUB": {
+    "Name": "SUB",
+    "Description": "Vector Arithmetic Subtraction",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real0",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "real1",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "SUM": {
+    "Name": "SUM",
+    "Description": "Summation",
+    "Type": "Math Operators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "T3": {
+    "Name": "T3",
+    "Description": "Triple Exponential Moving Average ,T3)",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "vfactor",
+        "type": "number",
+        "value": 0
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TAN": {
+    "Name": "TAN",
+    "Description": "Vector Trigonometric Tan",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TANH": {
+    "Name": "TANH",
+    "Description": "Vector Trigonometric Tanh",
+    "Type": "Math Transform",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TEMA": {
+    "Name": "TEMA",
+    "Description": "Triple Exponential Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TRANGE": {
+    "Name": "TRANGE",
+    "Description": "True Range",
+    "Type": "Volatility Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TRIMA": {
+    "Name": "TRIMA",
+    "Description": "Triangular Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TRIX": {
+    "Name": "TRIX",
+    "Description": "1-day Rate-Of-Change ,ROC) of a Triple Smooth EMA",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TSF": {
+    "Name": "TSF",
+    "Description": "Time Series Forecast",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "TYPPRICE": {
+    "Name": "TYPPRICE",
+    "Description": "Typical Price",
+    "Type": "Price Transform",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "ULTOSC": {
+    "Name": "ULTOSC",
+    "Description": "Ultimate Oscillator",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod1",
+        "type": "number",
+        "value": 7
+      },
+      {
+        "name": "timeperiod2",
+        "type": "number",
+        "value": 14
+      },
+      {
+        "name": "timeperiod3",
+        "type": "number",
+        "value": 28
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "VAR": {
+    "Name": "VAR",
+    "Description": "Variance",
+    "Type": "Statistic Functions",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "nbdev",
+        "type": "number",
+        "value": 1
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "WCLPRICE": {
+    "Name": "WCLPRICE",
+    "Description": "Weighted Close Price",
+    "Type": "Price Transform",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "WILLR": {
+    "Name": "WILLR",
+    "Description": "Williams' %R",
+    "Type": "Momentum Indicators",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "close",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 14
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  },
+  "WMA": {
+    "Name": "WMA",
+    "Description": "Weighted Moving Average",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "timeperiod",
+        "type": "number",
+        "value": 30
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  }
+}

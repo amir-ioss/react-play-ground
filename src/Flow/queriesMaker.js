@@ -37,7 +37,7 @@ const isNum = (_) => !isNaN(Number(_));
 const isSource = (_) => ["time", "open", "high", "low", "close", "volume", ...macd].includes(_);
 
 const queriesMaker = (obj) => {
-  var ohlcvIndex = 0
+  var ohlcvIndex = 0;
   // Validate the input object
   // if (typeof obj !== 'object' || obj === null) {
   //   throw new Error('Invalid input: Expected an object.');
@@ -52,28 +52,8 @@ const queriesMaker = (obj) => {
       var $ = obj[key];
       let query = $.value[0];
 
-      const find_id = (ID) => obj.findIndex((_) => _.id == ID);
-      const input = (INDEX) => find_id($.preNode[INDEX]?.["id"]);
-
-      // Function to find the index of val1 and val2 in the nodes array
-      function findIds(prevNode, values) {
-        const inputs = [];
-        // Iterate over the nodes array
-        prevNode.forEach((node, index) => {
-          values.forEach((val, idx) => {
-            // values []
-            if (node.value.includes(val)) {
-              inputs[idx] = find_id(node.id);
-            }
-
-            // returns []
-            if (node?.returns && node.returns.includes(val)) {
-              inputs[idx] = find_id(node.id);
-            }
-          });
-        });
-        return inputs;
-      }
+      const store_id = (ID) => obj.findIndex((_) => _.id == ID);
+      const input = (INDEX) => store_id($.preNode[INDEX]?.["id"]);
 
       /////////////  COIN  /////////////
       if ($.type == "coin_data") {
@@ -81,20 +61,28 @@ const queriesMaker = (obj) => {
 
         let symbol = "BTC/USDT";
         let timeframe = timeFrame ?? "1m";
-        let limit = period ?? 50;
+        let limit = period ?? 300;
         query = `fetch_ohlcv('${symbol}', '${timeframe}', ${value(limit, input(0), false)})`;
 
-        ohlcvIndex = key
+        ohlcvIndex = key;
       }
 
       /////////////  MATH  /////////////
       /////////////  CHECK  /////////////
       if ($.type == "check" || $.type == "math") {
-        // 10 >,+ 20
-        const [val1, val2, condition] = $.value;
+        // 10 (>,+) 20
+        let [val1, val2, condition] = $.value;
+        let vals = [val1, val2];
 
-        const inputs = findIds($.preNode, [val1, val2]); // [0,1]
-        query = buildCheckQuery(val1, val2, condition, inputs);
+        const inputs = $.preNode.map((_, k) => {
+          if (!["coin_data", "indicator"].includes(_?.type)) {
+            if (isSource(vals[k])) {
+              vals[k] = vals[k] + "_";
+            }
+          }
+          return store_id(_.id);
+        });
+        query = buildCheckQuery(vals[0], vals[1], condition, inputs);
       }
 
       /////////////  CHECK  /////////////
@@ -108,8 +96,26 @@ const queriesMaker = (obj) => {
 
       /////////////  INDICATOR  /////////////
       if ($.type == "indicator") {
-        const [indicator, source, ...params] = $.value;
-        query = `talib.${indicator}(${value(source, input(0), false)},${params.join(",")})`;
+        const [indicator, ...rest] = $.value;
+        // let sources = ${value(source, input(0), false)}
+        
+        const source_length = $.preNode.length
+        let vals = rest.slice(0, source_length);
+        let params = rest.slice(source_length);
+
+        const inputs = $.preNode.map((_, k) => {
+          var ID = store_id(_.id);
+          if (!["coin_data", "indicator"].includes(_?.type)) {
+            if (isSource(vals[k])) {
+              vals[k] = value(vals[k] + "_", ID, false);
+            }
+          } else {
+            vals[k] = value(vals[k], ID, false);
+          }
+          return ID;
+        });
+
+        query = `talib.${indicator}(${vals.join(",")},${params.join(",")})`;
 
         // RETURNS TO NAMED KEYS
         if ($.returns && $.returns.length > 0) {
@@ -123,12 +129,15 @@ const queriesMaker = (obj) => {
         query = `talib.${fun}(${value(source, input(0), false)}, ${period})`;
       }
 
-
       /////////////  TRADE  /////////////
       if ($.type == "trade") {
         const [signals, source, balance, size, fee] = $.value;
         console.log(signals, value(signals, input(0), false));
-        query = `paper_trading(${value(signals, input(0), false)}, output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
+        query = `paper_trading(${value(
+          signals,
+          input(0),
+          false
+        )}, output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
       }
 
       /////////////  DEFAULT  /////////////
@@ -145,14 +154,19 @@ export { queriesMaker };
 
 // Handle Value
 const value = (value, indices = 0, multi = true) => {
+  let result = value;
+  if (indices < 0) return result;
   if (isSource(value)) {
-    return `output['${indices}']['${value}']${multi ? "[i]" : ""}`;
+    result = `output['${indices}']['${value}']${multi ? "[i]" : ""}`;
   } else if (isNum(value)) {
     // return `${value}`;
-    return `output['${indices}']`;
+    result = `output['${indices}']`;
   } else {
-    return `output['${indices}']${multi ? "[i]" : ""}`;
+    result = `output['${indices}']${multi ? "[i]" : ""}`;
   }
+
+  if (multi) return `non_num(${result})`;
+  return result;
 };
 
 function buildCheckQuery(val1, val2, condition, inputs) {
@@ -177,8 +191,8 @@ function buildCheckQuery(val1, val2, condition, inputs) {
     query = `${val1Expr} ${condition} ${val2Expr}`;
   } else {
     query =
-      `[${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
-      (isNum(0) || isNum(1) ? `]` : `if (${val1Expr} is not None and ${val2Expr} is not None)]`);
+      `np.array([${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
+      (isNum(0) || isNum(1) ? `])` : `if (${val1Expr} is not None and ${val2Expr} is not None)])`);
   }
   return query;
 }

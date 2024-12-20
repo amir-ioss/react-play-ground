@@ -13,12 +13,12 @@ const OPTIONS = [
     { value: null, name: "SELECT" },
     { value: ">", name: "crossover" },
     { value: "<", name: "crossdown" },
-    { value: ">", name: "> Greater Than" },
-    { value: "<", name: "< Less Than" },
-    { value: ">=", name: ">= Greater Than or Equal To" },
-    { value: "<=", name: "<= Less Than or Equal To" },
-    { value: "==", name: "== Equal" },
-    { value: "!=", name: "!= Not Equal" }]
+    { value: ">", name: "Greater Than" },
+    { value: "<", name: "Less Than" },
+    { value: ">=", name: "Greater Than or Equal To" },
+    { value: "<=", name: "Less Than or Equal To" },
+    { value: "==", name: "Equal" },
+    { value: "!=", name: "Not Equal" }]
 
 const ConditionNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
@@ -31,8 +31,8 @@ const ConditionNode = memo(({ data, id, updateNode }) => {
 
     useEffect(() => {
 
-        const val1 = getVal(0, 1) ?? null;
-        const val2 = getVal(1, 1) ?? null;
+        const val1 = getVal(0) ?? null;
+        const val2 = getVal(1) ?? null;
 
         if (data.value[0] !== val1) {
             updateNode(id, { value: setVal(data.value, 0, val1) });

@@ -1,148 +1,56 @@
 import { memo, useEffect, useState } from "react";
 import { Handle, MarkerType, Position, useEdges, useNodesData } from "@xyflow/react";
 import useNodeValue from "../useNodeValue";
-
-const Types = {
-    MA: [
-        {
-            name: "source",
-            type: "text",
-            // value: 'close',
-            placeholder: "Source",
-            target: true
-
-        },
-        {
-            name: "period",
-            type: "text",
-            value: 5,
-            placeholder: "Period",
-        }
-    ],
-    SMA: [
-        {
-            name: "source",
-            type: "text",
-            // value: 'close',
-            placeholder: "Source",
-            target: true
-
-        },
-        {
-            name: "period",
-            type: "text",
-            value: 10,
-            placeholder: "Period",
-        }
-    ],
-    EMA: [
-        {
-            name: "source",
-            type: "text",
-            // value: 'close',
-            placeholder: "Source",
-            target: true
-
-        },
-        {
-            name: "period",
-            type: "text",
-            value: 15,
-            placeholder: "Period",
-        }
-    ],
-    MACD: [
-        {
-            name: "source",
-            type: "text",
-            // value: 'close',
-            placeholder: "Source",
-            target: true
-        },
-        {
-            name: "macdLine",
-            type: "number",
-            value: 12,
-            placeholder: "macd line",
-        },
-        {
-            name: "signalLine",
-            type: "number",
-            value: 26,
-            placeholder: "signal line",
-        },
-        {
-            name: "histLine",
-            type: "number",
-            value: 9,
-            placeholder: "hist line",
-
-        },
-        {
-            name: "MACD Line",
-            type: "array",
-            value: 'macd_line',
-            source: true
-        },
-        {
-            name: "Signal Line",
-            type: "array",
-            value: 'signal_line',
-            source: true
-        },
-        {
-            name: "MACD Histogram",
-            type: "array",
-            value: 'macd_histogram',
-            source: true
-        }
-    ]
-}
-
-
+import Indicators from './indicators.json'
 
 
 const IndicatorNode = memo(({ data, id, updateNode }) => {
     // 0 = Indicator 
+    // Inputs 
+    // Parameters 
+    // Outputs 
 
-    // 1+ = Params
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
-
-    const INPUTS = Types[data.value[0]]?.filter(_ => !_?.source) ?? []
-    const OUTPUTS = Types[data.value[0]]?.filter(_ => _.source) ?? []
-
 
     // Handler for input changes
     const onChangeIndicator = (event) => {
-        const inputs = Types[event.target.value]?.filter(_ => !_?.source)
-        const params = inputs?.map(_ => _.value) || [];
-        const rest = [event.target.value, ...params]
+        const inputs = Indicators[event.target.value]?.Inputs.map(_ => _.value)
+        const params = Indicators[event.target.value]?.Parameters.map(_ => _.value)
 
-        const returns = Types[event.target.value].filter(_ => (_?.source)).map(_ => _.value)
-        updateNode(id, { value: rest, returns });
+        const rest = [event.target.value, ...inputs, ...params]
+
+        const returns = Indicators[event.target.value]?.Outputs.map(_ => _.value)
+        updateNode(id, { value: rest, returns, indicator: Indicators[event.target.value] });
     };
 
 
-
     useEffect(() => {
-        const val1 = getVal(1) ?? null;
-        // const val2 = getVal(2) ?? null;
+        const updatedValues = [...data.value];  // Clone the array to avoid direct mutation
 
-        if (data.value[1] !== val1) {
-            updateNode(id, { value: setVal(data.value, 1, val1) });
+        // Dynamically iterate over the indices you want to update (e.g., 1, 2, etc.)
+        let valuesChanged = false; // Flag to track if any change occurred
+
+        if (data?.indicator) {
+            for (let i = 1; i <= data?.indicator.Inputs.length; i++) {
+                const val = getVal(i) ?? null;
+                // Only update if the value has changed
+                if (updatedValues[i] !== val) {
+                    updatedValues[i] = val;
+                    valuesChanged = true;  // Mark that a value has changed
+                }
+            }
         }
 
-        // if (data.value[2] !== val2) {
-        //     updateNode(id, setVal(data.value, 2, val2));
-        // }
-
-    }, [edges])
-
+        // Only call updateNode if a value was actually changed
+        if (valuesChanged) {
+            updateNode(id, { value: updatedValues });
+        }
+    }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
 
     return <div
         className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
-        <div className="mx-4">Indicator</div>
+        <div className="mx-4">{data.label}</div>
 
         <select
             type="text"
@@ -151,15 +59,20 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
             placeholder="Indicator"
             className={'bg-white border p-2 mx-2 rounded-xl'}
         >
-            {Object.keys(Types)?.map((option, optIndex) => (
+            {Object.keys(Indicators)?.map((option, optIndex) => (
                 <option key={optIndex} value={option}>
                     {option}
                 </option>
             ))}
         </select>
 
+        <div className="mx-4 my-2">
+            <p className="text-xl">{data?.indicator?.Description}</p>
+            <p className="text-xs">{data?.indicator?.Type}</p>
+        </div>
+
         {/* INPUTS*/}
-        {INPUTS?.map((field, idx) => {
+        {data?.indicator && [...data?.indicator.Inputs, ...data?.indicator.Parameters]?.map((field, idx) => {
             const ID = idx + 1 // offset
             return <div className="relative flex mt-2" key={ID}>
                 <label for={ID} className="mx-2">{field.placeholder}  </label>
@@ -167,7 +80,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
                     type="text"
                     value={data.value[ID] ?? field.value}
                     onChange={_ => updateNode(id, setVal(data.value, ID, _.target.value))}
-                    placeholder={field.type}
+                    placeholder={field.name}
                     className="flex-1 p-1 border mx-2 rounded-xl"
                     id={ID}
                 />
@@ -183,10 +96,13 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
         })}
 
         {/* OUTPUTS */}
-        {OUTPUTS.map((field, idx) => {
+        {data?.indicator && data.indicator.Outputs.map((field, idx) => {
             let ID = idx // offset
             return <div className="relative flex mt-2 justify-end" key={ID}>
-                <label for={ID} className="mx-4">{field.name}</label>
+                <div className="text-right mx-4">
+                    <label for={ID}>{field.name}</label>
+                    <p className="text-xs">{field?.OutputRule}</p>
+                </div>
                 <Handle
                     type="source"
                     position={Position.Right}
@@ -194,10 +110,11 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
                     style={{ background: 'green', width: 15, height: 15, }}
                     reconnectable="target"
                 />
+
             </div>
         })}
 
-        {OUTPUTS.length == 0 && <Handle
+        {data?.indicator && data.indicator.Outputs.length == 0 && <Handle
             type="source"
             position={Position.Right}
             id={'0'}

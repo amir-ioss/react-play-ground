@@ -1,0 +1,60 @@
+Here are all the available marker shapes in Lightweight Charts. The shapes can be set via the `shape` property in marker options:
+
+1. `circle` - Default circular marker
+2. `square` - Square marker
+3. `arrowUp` - Upward-pointing arrow
+4. `arrowDown` - Downward-pointing arrow
+5. `triangle` - Triangle marker
+
+Example usage:
+
+```javascript
+const markers = [
+    {
+        time: '2024-01-01',
+        position: 'aboveBar',  // or 'belowBar', 'inBar'
+        color: '#2196F3',
+        shape: 'circle',
+        text: 'Circle Marker'
+    },
+    {
+        time: '2024-01-02',
+        position: 'belowBar',
+        color: '#e91e63',
+        shape: 'arrowUp',
+        text: 'Arrow Up'
+    },
+    {
+        time: '2024-01-03',
+        position: 'aboveBar',
+        color: '#4caf50',
+        shape: 'arrowDown',
+        text: 'Arrow Down'
+    },
+    {
+        time: '2024-01-04',
+        position: 'inBar',
+        color: '#ff9800',
+        shape: 'square',
+        text: 'Square'
+    },
+    {
+        time: '2024-01-05',
+        position: 'belowBar',
+        color: '#9c27b0',
+        shape: 'triangle',
+        text: 'Triangle'
+    }
+];
+vertical-line
+
+series.setMarkers(markers);
+```
+
+Each marker can be customized with:
+- `time`: The time point where marker should appear
+- `position`: 'aboveBar', 'belowBar', or 'inBar'
+- `color`: Color of the marker
+- `shape`: One of the above shapes
+- `text`: Text label for the marker
+- `size`: Optional size of the marker (default is 1)

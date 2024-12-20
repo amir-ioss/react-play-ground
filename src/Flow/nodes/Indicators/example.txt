@@ -1,0 +1,189 @@
+
+// """ ULTOSC(high, low, close[, timeperiod1=?, timeperiod2=?, timeperiod3=?])
+
+//     Ultimate Oscillator (Momentum Indicators)
+
+//     Inputs:
+//         prices: ['high', 'low', 'close']
+//     Parameters:
+//         timeperiod1: 7
+//         timeperiod2: 14
+//         timeperiod3: 28
+//     Outputs:
+//         real
+//     """
+
+ var ULTOSC =  {
+        Name: 'ULTOSC',
+        Description: 'Ultimate Oscillator',
+        Type: 'Momentum Indicators',
+        Inputs: [{
+            name: "high",
+            type: "number",
+            target: true
+        }, {
+            name: "low",
+            type: "number",
+            target: true
+        }, {
+            name: "high",
+            type: "text",
+            target: true
+        }],
+        Parameters: [{
+            name: "timeperiod1",
+            type: "number",
+            value: 7
+        },
+        {
+            name: "timeperiod2",
+            type: "number",
+            value: 14
+        },
+        {
+            name: "timeperiod3",
+            type: "number",
+            value: 28
+        }],
+        Outputs: [{
+            name: "real",
+            type: "number",
+            source: true,
+            value: 'real',
+        }]
+
+    }
+
+
+// """ MAMA(real[, fastlimit=?, slowlimit=?])
+
+//     MESA Adaptive Moving Average (Overlap Studies)
+
+//     Inputs:
+//         real: (any ndarray)
+//     Parameters:
+//         fastlimit: 0.5
+//         slowlimit: 0.05
+//     Outputs:
+//         mama
+//         fama
+//     ""
+
+ var MAMA =  {
+        Name: 'MAMA',
+        Description: 'MESA Adaptive Moving Average',
+        Type: 'Overlap Studies',
+        Inputs: [{
+            name: "real",
+            type: "number",
+            target: true
+        }],
+        Parameters: [{
+            name: "fastlimit",
+            type: "number",
+            value: 0.5
+        },
+        {
+            name: "slowlimit",
+            type: "number",
+            value: 0.05
+        }],
+        Outputs: [{
+            name: "mama",
+            type: "number",
+            source: true,
+            value: 'mama',
+        }, {
+            name: "fama",
+            type: "number",
+            source: true,
+            value: 'fama',
+        }]
+
+    }
+
+
+
+    // """ CDLPIERCING(open, high, low, close)
+
+    // Piercing Pattern (Pattern Recognition)
+
+    // Inputs:
+    //     prices: ['open', 'high', 'low', 'close']
+    // Outputs:
+    //     integer (values are -100, 0 or 100)
+    // """
+
+
+ var CDLPIERCING =  {
+    Name: 'CDLPIERCING',
+    Description: 'Piercing Pattern',
+    Type: 'Pattern Recognition',
+    Inputs: [{
+        name: "open",
+        type: "number",
+        target: true
+    }, {
+        name: "high",
+        type: "text",
+        target: true
+    },
+    {
+        name: "low",
+        type: "number",
+        target: true
+    },
+    {
+        name: "close",
+        type: "number",
+        target: true
+    }],
+    Parameters: [],
+    Outputs: [{
+        name: "integer",
+        type: "number",
+        source: true,
+        value: 'integer',
+    }],
+    OutputDetail: "values are -100, 0 or 100"
+
+}
+
+
+
+
+    // """ MULT(real0, real1)
+
+    // Vector Arithmetic Mult (Math Operators)
+
+    // Inputs:
+    //     real0: (any ndarray)
+    //     real1: (any ndarray)
+    // Outputs:
+    //     real
+    // """
+
+
+ var MULT =  {
+    Name: 'MULT',
+    Description: 'Vector Arithmetic Mult',
+    Type: 'Math Operators',
+    Inputs: [{
+        name: "real0",
+        type: "number",
+        target: true
+    }, {
+        name: "real1",
+        type: "number",
+        target: true
+    }],
+    Parameters: [],
+    Outputs: [{
+        name: "real",
+        type: "number",
+        source: true,
+        value: 'real',
+    }]
+
+}
+    

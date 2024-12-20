@@ -9,6 +9,7 @@ import Form from "./Form/Test";
 import Navigation from "./Navigation";
 import Chart from "./Chart";
 import Flow from "./Flow";
+import ChartTest from "./Chart/test";
 import reportWebVitals from "./reportWebVitals";
 // import { Input,Button } from "pkg_gpt";
 // import { Button } from "my-react-ui-ioss-test";
@@ -36,8 +37,9 @@ root.render(
     {/* <MyComponent text={"THIS IS TEST"} /> */}
     {/* <Canvas/> */}
     {/* <Form /> */}
-    <Chart />
-    {/* <Flow /> */}
+    {/* <Chart /> */}
+    {/* <ChartTest /> */}
+    <Flow />
     {/* <Navigation /> */}
   </React.StrictMode>
 );

@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
-
+import Plot from './chart'
 import '@xyflow/react/dist/style.css';
 import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode } from './nodes'
 import { queriesMaker } from './queriesMaker';
+import { twMerge } from 'tailwind-merge';
+import mock_data from './chart/data.json'
 
 const initialNodes = [
     // {
@@ -25,6 +27,7 @@ function FlowExample() {
     const edgeReconnectSuccessful = useRef(true);
     const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
+    const [results, setResults] = useEdgesState();
 
 
     const updateNodeValue = (nodeId, newData) => {
@@ -38,7 +41,11 @@ function FlowExample() {
     const getPreviousNodes = (nodeId) => {
         const predecessors = edges
             .filter((edge) => edge.target === nodeId) // Find edges where this node is the target
-            .map((edge) => edge.source); // Get source node IDs
+            .map((edge) => edge.source).sort((a, b) => {
+                if (a.targetHandle > b.targetHandle) return 1;
+                if (a.targetHandle < b.targetHandle) return -1;
+                return 0;
+            });
 
         // Get the values of the predecessor nodes
         const previousNodeValues = predecessors.map((sourceId) => {
@@ -190,7 +197,7 @@ function FlowExample() {
 
 
 
-    const handleSubmit = async (query) => {
+    const handleSubmit = async (query, kahn_nodes) => {
         const postData = {
             data: query
         };
@@ -205,65 +212,78 @@ function FlowExample() {
         });
 
         const result = await response.json();
-        console.log({result}); // Handle the response
+        // console.log({ result }); // Handle the response
+        setResults({ kahn_nodes, ...result })
+        // console.log(result.outputs);
+        
     };
 
 
 
     return (
-        <div style={{ width: '100%', height: '100vh' }}>
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onConnect={onConnect}
-                nodeTypes={nodeTypes}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onReconnect={onReconnect}
-                onReconnectStart={onReconnectStart}
-                onReconnectEnd={onReconnectEnd}
-                // fitView
-                edgesSelectable={true} // Enables edge selection
+        <div className='h-screen w-screen'>
 
-            >
-                <Background />
-            </ReactFlow>
+            <div className={twMerge("w-screen overflow-hidden", results ? 'h-1/2 ' : 'h-full')}>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onConnect={onConnect}
+                    nodeTypes={nodeTypes}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    onReconnect={onReconnect}
+                    onReconnectStart={onReconnectStart}
+                    onReconnectEnd={onReconnectEnd}
+                    // fitView
+                    edgesSelectable={true} // Enables edge selection
 
-            <div className='absolute top-2'>
-                {[
-                    { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
-                    { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
-                    { name: "Value", "add": () => addNode('ValueNode') },
-                    { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
-                    { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
-                    { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
-                    { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
-                    { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
-
-
-
-                    // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
-                ].map((btn, idx) => <button onClick={btn.add} key={idx}
-                    className='ml-2 border rounded-lg border-black px-2' >
-                    {btn.name}
-                </button>)}
-
-
-                <button
-                    className='ml-2 border border-black px-10 bg-gray-200'
-                    onClick={() => {
-                        console.log({ nodes, edges });
-                        let data = getExecutionOrder()
-                        console.log("nodes : ", data);
-                        let query = queriesMaker(data)
-                        console.log("query : ", query);
-                        handleSubmit(query)
-                    }}
                 >
-                    TEST
-                </button>
+                    <Background />
+                </ReactFlow>
+
+                <div className='absolute top-2'>
+                    {[
+                        { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
+                        { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
+                        { name: "Value", "add": () => addNode('ValueNode') },
+                        { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
+                        { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
+                        { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
+                        { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
+                        { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
+
+
+
+                        // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
+                    ].map((btn, idx) => <button onClick={btn.add} key={idx}
+                        className='ml-2 border rounded-lg border-black px-2' >
+                        {btn.name}
+                    </button>)}
+
+
+                    <button
+                        className='ml-2 border border-black px-10 bg-gray-200'
+                        onClick={() => {
+                            setResults()
+                            // console.log({ nodes, edges });
+                            let kahn_nodes = getExecutionOrder()
+                            console.log("nodes : ", kahn_nodes);
+                            let query = queriesMaker(kahn_nodes)
+                            console.log("query : ", query);
+                            // handleSubmit(query, kahn_nodes)
+                        }}
+                    >
+                        TEST
+                    </button>
+                </div>
             </div>
+
+
+            {results && <div className='h-1/2 w-screen'>
+                <Plot data={results} />
+            </div>}
         </div>
+
     );
 }
 
