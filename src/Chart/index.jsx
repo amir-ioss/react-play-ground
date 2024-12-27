@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { createChart } from 'lightweight-charts';
-import data from './data.json'
+import data from './data/data.json'
 
 
 

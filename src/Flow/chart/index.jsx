@@ -87,8 +87,12 @@ const LightweightChart = ({ data: results }) => {
 
             // DYNAMIC
             // if(!results?.outputs)return
-            const outputs = JSON.parse(results.outputs)
+            const outputs = JSON.parse(results?.outputs)
             var candleStickData = []
+            var candlestickSeries = null
+            var contentBot = 0
+            var contentTop = 0
+
             if (outputs) {
                 Object.entries(outputs).forEach(([id, out]) => {
                     const node = results.kahn_nodes[id]
@@ -98,7 +102,7 @@ const LightweightChart = ({ data: results }) => {
                     if (node?.type == 'coin_data') {
 
                         // Add candlestick series with TradingView-like colors
-                        const candlestickSeries = chart.addCandlestickSeries({
+                        candlestickSeries = chart.addCandlestickSeries({
                             upColor: '#4CAF50', // Green for upward candles
                             downColor: '#F44336', // Red for downward candles
                             borderUpColor: '#4CAF50', // Green for upward candle borders
@@ -109,10 +113,14 @@ const LightweightChart = ({ data: results }) => {
                         });
                         candleStickData = out['time'].map((_, idx) => ({ time: out['time'][idx], open: out['open'][idx], high: out['high'][idx], low: out['low'][idx], close: out['close'][idx] }))
                         candlestickSeries.setData(candleStickData)
+
+                        contentTop = Math.max(...out['high'])
+                        contentBot = Math.min(...out['low'])
+
                     }
 
                     /////////// Indicator ///////////
-                    if (node?.type == 'indicator' || node?.type ==  'hhll') {
+                    if (node?.type == 'indicator' || node?.type == 'hhll') {
                         const lineData = prepareLineChartData(candleStickData, out)
                         // L I N E
 
@@ -122,6 +130,7 @@ const LightweightChart = ({ data: results }) => {
                             color: getRandomColor(), // Set random color
                             lastValueVisible: false, // hide the last value marker for this series
                             crosshairMarkerVisible: false, // hide the crosshair marker for this series
+                            priceLineVisible: false
                             // lineColor: 'transparent', // hide the line
                             // topColor: 'rgba(56, 33, 110,0.6)',
                             // bottomColor: 'rgba(56, 33, 110, 0.1)',
@@ -129,13 +138,109 @@ const LightweightChart = ({ data: results }) => {
                         lineSeries.setData(lineData)
 
 
+                        if (out['macd']) {
+                            const macdLineData = prepareLineChartData(candleStickData, out['macd'], contentBot)
+                            const signalLineData = prepareLineChartData(candleStickData, out['macdsignal'], contentBot)
+                            const histogramData = prepareLineChartData(candleStickData, out['macdhist'])
+
+                            const macdLineSeries = chart.addLineSeries({
+                                color: getRandomColor(),
+                                lineWidth: 1,
+                                title: 'MACD Line',
+                                lineStyle: LineStyle.Dashed
+
+                            });
+                            macdLineSeries.setData(macdLineData);
+
+                            const signalLineSeries = chart.addLineSeries({
+                                color: getRandomColor(),
+                                lineWidth: 1,
+                                title: 'Signal Line',
+                                priceLineVisible: false,
+                                lineStyle: LineStyle.Dashed
+
+
+                            });
+                            signalLineSeries.setData(signalLineData);
+
+
+                            const histogramSeries = chart.addHistogramSeries({
+                                color: 'green',
+                                title: 'MACD Histogram',
+                                lineWidth: 1,
+                                priceLineVisible: false,
+
+                            });
+                            // histogramSeries.setData(histogramData);
+
+
+
+
+
+                        }
+
+
 
                     }
 
                     /////////// Indicator ///////////
                     if (node?.type == 'hhll') {
-                    // console.log("--------", out)
-                    // const hhll = prepareLineChartData(candleStickData, out)
+                        // console.log("--------", out)
+                        // const hhll = prepareLineChartData(candleStickData, out)
+                    }
+
+
+                    if (node?.type == 'check') {
+                        // console.log("--------", out)
+                        const booleanData = prepareLineChartData(candleStickData, out)
+
+                        // Add a line series
+                        const lineSeries = chart.addLineSeries({
+                            color: 'blue',
+                            lineWidth: 2,
+                        });
+
+
+                        const chartData = booleanData
+                            .filter(point => point.value) // Exclude points where value is `false`
+                            .map((point, index) => ({
+                                time: point.time,
+                                value: point.value ? index + 1 : NaN, // Use NaN for false to create a gap
+
+                            }));
+
+                        console.log({ chartData });
+
+
+                        // Set the data to the line series
+                        // lineSeries.setData(chartData);
+
+
+                        // Convert boolean data to markers
+                        // const markers = booleanData
+                        //     .filter(item => item.value) // Only include points with `true`
+                        //     .map(item => ({
+                        //         time: item.time,
+                        //         position: 'aboveBar', // Position of the marker
+                        //         shape: 'circle', // Shape of the marker
+                        //         color: 'green', // Color of the circle
+                        //         size: 1, // Small size for the circle,
+                        //         value: contentBot
+                        //     }));
+
+                        // candlestickSeries.createPriceLine({
+                        //     price: contentBot,
+                        //     color: 'pink',
+                        //     lineWidth: 2,
+                        //     lineStyle: LineStyle.Dashed,
+                        //     axisLabelVisible: true,
+                        //     title: 'Resistance Level',
+                        // });
+
+
+                        // Add markers to the chart
+                        // candlestickSeries.setMarkers(markers);
+
                     }
 
 
@@ -210,10 +315,9 @@ const LightweightChart = ({ data: results }) => {
 
                     }
 
-
-
                 })
             }
+
 
 
             // const markers = [

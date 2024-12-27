@@ -32,7 +32,7 @@ var _obj = [
   },
 ];
 
-const macd = ["macd_line", "signal_line", "macd_histogram"];
+const macd = ["macd", "macdsignal", "macdhist"];
 const isNum = (_) => !isNaN(Number(_));
 const isSource = (_) => ["time", "open", "high", "low", "close", "volume", ...macd].includes(_);
 
@@ -74,14 +74,16 @@ const queriesMaker = (obj) => {
         let [val1, val2, condition] = $.value;
         let vals = [val1, val2];
 
-        const inputs = $.preNode.map((_, k) => {
-          if (!["coin_data", "indicator"].includes(_?.type)) {
-            if (isSource(vals[k])) {
-              vals[k] = vals[k] + "_";
-            }
-          }
-          return store_id(_.id);
-        });
+        // const inputs = $.preNode.map((_, k) => {
+        //   if (!["coin_data", "indicator"].includes(_?.type)) {
+        //     if (isSource(vals[k])) {
+        //       vals[k] = vals[k] + "_";
+        //     }
+        //   }
+        //   return store_id(_.id);
+        // });
+
+        const inputs = $.preNode.map((_, k) =>  store_id(_.id));
         query = buildCheckQuery(vals[0], vals[1], condition, inputs);
       }
 
@@ -97,25 +99,24 @@ const queriesMaker = (obj) => {
       /////////////  INDICATOR  /////////////
       if ($.type == "indicator") {
         const [indicator, ...rest] = $.value;
-        // let sources = ${value(source, input(0), false)}
-        
-        const source_length = $.preNode.length
+
+        const source_length = $.preNode.length;
         let vals = rest.slice(0, source_length);
         let params = rest.slice(source_length);
 
         const inputs = $.preNode.map((_, k) => {
           var ID = store_id(_.id);
-          if (!["coin_data", "indicator"].includes(_?.type)) {
-            if (isSource(vals[k])) {
-              vals[k] = value(vals[k] + "_", ID, false);
-            }
-          } else {
-            vals[k] = value(vals[k], ID, false);
-          }
+          // if (!["coin_data", "indicator"].includes(_?.type)) {
+          //   if (isSource(vals[k])) {
+          //     vals[k] = value(vals[k] + "_", ID, false);
+          //   }
+          // } else {
+          vals[k] = value(vals[k], ID, false);
+          // }
           return ID;
         });
 
-        query = `talib.${indicator}(${vals.join(",")},${params.join(",")})`;
+        query = `talib.${indicator}(${[...vals, ...params].join(",")})`;
 
         // RETURNS TO NAMED KEYS
         if ($.returns && $.returns.length > 0) {

@@ -214,7 +214,7 @@ function FlowExample() {
         const result = await response.json();
         // console.log({ result }); // Handle the response
         setResults({ kahn_nodes, ...result })
-        // console.log(result.outputs);
+        console.log("outputs", result.outputs);
         
     };
 
@@ -270,7 +270,7 @@ function FlowExample() {
                             console.log("nodes : ", kahn_nodes);
                             let query = queriesMaker(kahn_nodes)
                             console.log("query : ", query);
-                            // handleSubmit(query, kahn_nodes)
+                            handleSubmit(query, kahn_nodes)
                         }}
                     >
                         TEST

@@ -19,7 +19,10 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
 
         const rest = [event.target.value, ...inputs, ...params]
 
-        const returns = Indicators[event.target.value]?.Outputs.map(_ => _.value)
+        let returns = Indicators[event.target.value]?.Outputs.map(_ => _.value)
+        console.log("----------------", returns.length);
+        
+        if (returns.length == 1) returns = []
         updateNode(id, { value: rest, returns, indicator: Indicators[event.target.value] });
     };
 

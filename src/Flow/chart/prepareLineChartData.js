@@ -1,10 +1,12 @@
-function prepareLineChartData(candleStickData, indicatorData) {
+function prepareLineChartData(candleStickData, indicatorData, offset=0) {
+  console.log({offset});
+  
   const lineData = [];
   for (let idx = 0; idx < candleStickData.length; idx++) {
     if (indicatorData[idx] !== null && indicatorData[idx] !== undefined) {
       lineData.push({
         time: candleStickData[idx].time,
-        value: indicatorData[idx],
+        value: offset+indicatorData[idx],
       });
     }
   }
