@@ -1,11 +1,15 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, applyNodeChanges, applyEdgeChanges, reconnectEdge } from '@xyflow/react';
-import Plot from './chart'
+// import Plot from './chart'
+import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
 import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode } from './nodes'
 import { queriesMaker } from './queriesMaker';
 import { twMerge } from 'tailwind-merge';
 import mock_data from './chart/data.json'
+// import { getCandlestickData } from '../Chart/data/dataProcessor';
+// const candleStickData = getCandlestickData();
+
 
 const initialNodes = [
     // {
@@ -28,6 +32,8 @@ function FlowExample() {
     const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
     const [results, setResults] = useEdgesState();
+    const [menu, setMenu] = useNodesState({ visible: false, x: 0, y: 0, data: null });
+    const [paneMenu, setPaneMenu] = useNodesState({ visible: false, x: 0, y: 0 });
 
 
     const updateNodeValue = (nodeId, newData) => {
@@ -135,6 +141,7 @@ function FlowExample() {
             },
         };
         setNodes((nds) => [...nds, newNode]);
+        closePaneMenu()
     };
 
 
@@ -215,13 +222,60 @@ function FlowExample() {
         // console.log({ result }); // Handle the response
         setResults({ kahn_nodes, ...result })
         console.log("outputs", result.outputs);
-        
+
     };
 
+
+    // Open context menu
+    const onNodeContextMenu = (event, node) => {
+        event.preventDefault(); // Prevent default browser context menu
+        setMenu({ visible: true, x: event.clientX, y: event.clientY, data: node });
+    };
+
+    // Close context menu
+    const closeNodeMenu = () => setMenu({ visible: false, x: 0, y: 0, data: null });
+
+    // Example action: Delete node
+    const deleteNode = () => {
+        setNodes((nds) => nds.filter((n) => n.id !== menu.data.id));
+        closeNodeMenu();
+    };
+
+    // Open context menu on background
+    const onPaneContextMenu = (event) => {
+        event.preventDefault(); // Prevent default browser context menu
+        setPaneMenu({ visible: true, x: event.clientX, y: event.clientY });
+    };
+
+    // Close the context menu
+    const closePaneMenu = () => setPaneMenu({ visible: false, x: 0, y: 0 });
 
 
     return (
         <div className='h-screen w-screen'>
+
+            {menu.visible && (
+                <div
+                    style={{
+                        top: menu.y,
+                        left: menu.x,
+                    }}
+                    className='absolute z-10 border bg-white p-2 min-w-44 rounded-lg'
+                >
+
+                    <div className='flex items-center justify-between border-b'>
+                        <p className='font-bold'>Node: {menu.data.data.label}</p>
+                        <button className='mx-2 text-xl'
+                            onClick={closeNodeMenu}
+                        >x</button>
+                    </div>
+                    <button onClick={deleteNode} className='text-red-400'>Delete Node</button>
+
+                </div>
+            )}
+
+
+
 
             <div className={twMerge("w-screen overflow-hidden", results ? 'h-1/2 ' : 'h-full')}>
                 <ReactFlow
@@ -236,52 +290,78 @@ function FlowExample() {
                     onReconnectEnd={onReconnectEnd}
                     // fitView
                     edgesSelectable={true} // Enables edge selection
+                    onNodeContextMenu={onNodeContextMenu}
+                    onPaneContextMenu={onPaneContextMenu}
+
+
 
                 >
                     <Background />
                 </ReactFlow>
 
-                <div className='absolute top-2'>
-                    {[
-                        { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
-                        { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
-                        { name: "Value", "add": () => addNode('ValueNode') },
-                        { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
-                        { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
-                        { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
-                        { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
-                        { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
 
 
 
-                        // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
-                    ].map((btn, idx) => <button onClick={btn.add} key={idx}
-                        className='ml-2 border rounded-lg border-black px-2' >
-                        {btn.name}
-                    </button>)}
-
-
-                    <button
-                        className='ml-2 border border-black px-10 bg-gray-200'
-                        onClick={() => {
-                            setResults()
-                            // console.log({ nodes, edges });
-                            let kahn_nodes = getExecutionOrder()
-                            console.log("nodes : ", kahn_nodes);
-                            let query = queriesMaker(kahn_nodes)
-                            console.log("query : ", query);
-                            handleSubmit(query, kahn_nodes)
+                {paneMenu.visible && (
+                    <div
+                        style={{
+                            top: paneMenu.y,
+                            left: paneMenu.x,
                         }}
+                        className='absolute z-10 border bg-white p-2 min-w-64 rounded-lg'
                     >
-                        TEST
-                    </button>
-                </div>
+                        <div className='flex items-center justify-between border-b'>
+                            <p className='ml-4 font-bold'>Context Menu</p>
+                            <button className='mx-2 text-xl'
+                                onClick={closePaneMenu}
+                            >x</button>
+                        </div>
+                        <div className='flex flex-col'>
+                            {[
+                                { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
+                                { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
+                                { name: "Value", "add": () => addNode('ValueNode') },
+                                { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
+                                { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
+                                { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
+                                { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
+                                { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
+                                // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
+                            ].map((btn, idx) => <button onClick={btn.add} key={idx}
+                                className='m-2 b px-2 text-left' >
+                                {btn.name}
+                            </button>)}
+                        </div>
+                    </div>
+                )}
+
+
+
+                <button
+                    className='m-2  bg-black p-2 px-10 text-gray-200 absolute top-0 right-0 rounded-lg'
+                    onClick={() => {
+                        setResults()
+                        // console.log({ nodes, edges });
+                        let kahn_nodes = getExecutionOrder()
+                        console.log("nodes : ", kahn_nodes);
+                        let query = queriesMaker(kahn_nodes)
+                        console.log("query : ", query);
+                        handleSubmit(query, kahn_nodes)
+                        
+                    }}
+                >
+                    TEST
+                </button>
+
             </div>
 
 
             {results && <div className='h-1/2 w-screen'>
                 <Plot data={results} />
             </div>}
+            {/* <div className='h-1/2 w-screen'>
+                <Plot data={candleStickData} />
+            </div> */}
         </div>
 
     );

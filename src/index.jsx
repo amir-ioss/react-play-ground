@@ -40,8 +40,8 @@ root.render(
     {/* <Form /> */}
     {/* <Chart /> */}
     {/* <ChartTest /> */}
-    {/* <Flow /> */}
-    <TradingChart/>
+    <Flow />
+    {/* <TradingChart/> */}
     {/* <Navigation /> */}
   </React.StrictMode>
 );

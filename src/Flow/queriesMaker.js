@@ -60,8 +60,8 @@ const queriesMaker = (obj) => {
         const [t, o, h, l, c, v, period, timeFrame] = $.value;
 
         let symbol = "BTC/USDT";
-        let timeframe = timeFrame ?? "1m";
-        let limit = period ?? 300;
+        let timeframe = timeFrame ?? "5m";
+        let limit = period ?? 500;
         query = `fetch_ohlcv('${symbol}', '${timeframe}', ${value(limit, input(0), false)})`;
 
         ohlcvIndex = key;
