@@ -4,11 +4,12 @@ import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, a
 import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
 import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode } from './nodes'
-import { queriesMaker } from './queriesMaker';
+import { queriesMaker } from './utils/queriesMaker';
 import { twMerge } from 'tailwind-merge';
 import mock_data from './chart/data.json'
 // import { getCandlestickData } from '../Chart/data/dataProcessor';
 // const candleStickData = getCandlestickData();
+import PaneMenu from './components/PaneMenu'
 
 
 const initialNodes = [
@@ -34,6 +35,7 @@ function FlowExample() {
     const [results, setResults] = useEdgesState();
     const [menu, setMenu] = useNodesState({ visible: false, x: 0, y: 0, data: null });
     const [paneMenu, setPaneMenu] = useNodesState({ visible: false, x: 0, y: 0 });
+    const [state, setState] = useNodesState({ chart: true });
 
 
     const updateNodeValue = (nodeId, newData) => {
@@ -134,7 +136,7 @@ function FlowExample() {
             id: `${nodes.length + 1}`, // Unique ID for the new node
             // type: 'default',
             type: node,
-            data: { label: `${node} ${nodes.length + 1}`, value: [], ...data },
+            data: { label: `${data.name} ${nodes.length + 1}`, value: [], ...data },
             position: {
                 x: Math.random() * 500, // Random x position
                 y: Math.random() * 500, // Random y position
@@ -221,7 +223,7 @@ function FlowExample() {
         const result = await response.json();
         // console.log({ result }); // Handle the response
         setResults({ kahn_nodes, ...result })
-        console.log("outputs", result.outputs);
+        // console.log("outputs", result.outputs);
 
     };
 
@@ -277,7 +279,7 @@ function FlowExample() {
 
 
 
-            <div className={twMerge("w-screen overflow-hidden", results ? 'h-1/2 ' : 'h-full')}>
+            <div className={twMerge("w-screen overflow-hidden", (results && state.chart) ? 'h-1/2 ' : 'h-full')}>
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -302,66 +304,40 @@ function FlowExample() {
 
 
 
-                {paneMenu.visible && (
-                    <div
-                        style={{
-                            top: paneMenu.y,
-                            left: paneMenu.x,
-                        }}
-                        className='absolute z-10 border bg-white p-2 min-w-64 rounded-lg'
+                <PaneMenu paneMenu={paneMenu} addNode={addNode} closePaneMenu={closePaneMenu} />
+
+                <div className='absolute top-0 right-0'>
+                    <button
+                        className='m-2  bg-black p-2 px-10 text-gray-200 rounded-lg'
+                        onClick={() => setState({ ...state, chart: !state.chart })}
                     >
-                        <div className='flex items-center justify-between border-b'>
-                            <p className='ml-4 font-bold'>Context Menu</p>
-                            <button className='mx-2 text-xl'
-                                onClick={closePaneMenu}
-                            >x</button>
-                        </div>
-                        <div className='flex flex-col'>
-                            {[
-                                { name: "Coin", "add": () => addNode('CoinNode', { type: 'coin_data' }) },
-                                { name: "Indicator", "add": () => addNode('IndicatorNode', { type: 'indicator' }) },
-                                { name: "Value", "add": () => addNode('ValueNode') },
-                                { name: "Math", "add": () => addNode('MathNode', { type: 'math' }) },
-                                { name: "Cond", "add": () => addNode('ConditionNode', { type: 'check' }) },
-                                { name: "HHLL", "add": () => addNode('HHLLNode', { type: 'hhll' }) },
-                                { name: "TradeNode", "add": () => addNode('TradeNode', { type: 'trade' }) },
-                                { name: "LogicalNode", "add": () => addNode('LogicalNode', { type: 'logic' }) },
-                                // { name: "Coin", "add": addNode('IndicatorNode', { type: 'coin_data' }) },
-                            ].map((btn, idx) => <button onClick={btn.add} key={idx}
-                                className='m-2 b px-2 text-left' >
-                                {btn.name}
-                            </button>)}
-                        </div>
-                    </div>
-                )}
+                        {state.chart ? "On" : "Off"}
+                    </button>
 
+                    <button
+                        className='m-2  bg-black p-2 px-10 text-gray-200  rounded-lg'
+                        onClick={() => {
+                            setResults()
+                            // console.log({ nodes, edges });
+                            let kahn_nodes = getExecutionOrder()
+                            console.log("nodes : ", kahn_nodes);
+                            let query = queriesMaker(kahn_nodes)
+                            console.log("query : ", query);
+                            handleSubmit(query, kahn_nodes)
 
-
-                <button
-                    className='m-2  bg-black p-2 px-10 text-gray-200 absolute top-0 right-0 rounded-lg'
-                    onClick={() => {
-                        setResults()
-                        // console.log({ nodes, edges });
-                        let kahn_nodes = getExecutionOrder()
-                        console.log("nodes : ", kahn_nodes);
-                        let query = queriesMaker(kahn_nodes)
-                        console.log("query : ", query);
-                        handleSubmit(query, kahn_nodes)
-                        
-                    }}
-                >
-                    TEST
-                </button>
+                        }}
+                    >
+                        TEST
+                    </button>
+                </div>
 
             </div>
 
 
-            {results && <div className='h-1/2 w-screen'>
+            {results && state.chart && <div className='h-1/2 w-screen'>
                 <Plot data={results} />
             </div>}
-            {/* <div className='h-1/2 w-screen'>
-                <Plot data={candleStickData} />
-            </div> */}
+
         </div>
 
     );

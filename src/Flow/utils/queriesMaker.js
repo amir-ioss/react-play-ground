@@ -1,36 +1,4 @@
-var _obj = [
-  {
-    id: "1",
-    label: "IndicatorNode 1",
-    value: ["talib.talib.EMA(close,15)(close,5)"],
-    preNode: [],
-  },
-  {
-    id: "3",
-    label: "CoinNode 3",
-    value: ["time", "open", "high", "low", "close", "volume"],
-    type: "coin_data",
-    preNode: [],
-  },
-  {
-    id: "2",
-    label: "ConditionNode 2",
-    value: ">",
-    type: "check",
-    preNode: [
-      {
-        id: "1",
-        label: "IndicatorNode 1",
-        value: ["talib.talib.EMA(close,15)(close,5)"],
-      },
-      {
-        id: "3",
-        label: "CoinNode 3",
-        value: ["time", "open", "high", "low", "close", "volume"],
-      },
-    ],
-  },
-];
+
 
 const macd = ["macd", "macdsignal", "macdhist"];
 const isNum = (_) => !isNaN(Number(_));
@@ -83,7 +51,7 @@ const queriesMaker = (obj) => {
         //   return store_id(_.id);
         // });
 
-        const inputs = $.preNode.map((_, k) =>  store_id(_.id));
+        const inputs = $.preNode.map((_, k) => store_id(_.id));
         query = buildCheckQuery(vals[0], vals[1], condition, inputs);
       }
 
@@ -175,12 +143,12 @@ function buildCheckQuery(val1, val2, condition, inputs) {
   const rangeExpr = isSource(val1)
     ? `len(output['${inputs[0]}']['${val1}'])`
     : isSource(val2)
-    ? `len(output['${inputs[1]}']['${val2}'])`
-    : isNum(val1)
-    ? `len(output['${inputs[1]}'])`
-    : isNum(val2)
-    ? `len(output['${inputs[0]}'])`
-    : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
+      ? `len(output['${inputs[1]}']['${val2}'])`
+      : isNum(val1)
+        ? `len(output['${inputs[1]}'])`
+        : isNum(val2)
+          ? `len(output['${inputs[0]}'])`
+          : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
 
   // Build expressions for val1 and val2
   const val1Expr = value(val1, inputs[0]);

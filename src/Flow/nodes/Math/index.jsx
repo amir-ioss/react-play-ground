@@ -14,24 +14,29 @@ const ValueNode = ({ data, id, updateNode }) => {
     };
 
     return (
-        <div style={{ padding: '10px', border: '1px solid black', borderRadius: '5px', width: '200px', backgroundColor: '#eeeeee' }}>
-            <div>{data.label}</div>
-            <input
-                type="number"
-                // value={data.value[0]}
-                onChange={onInputChange}
-                placeholder="Number"
-                style={{ width: '100%' }}
-                id={'0'}
-            />
-            {/* Input Handles */}
-            <Handle
-                type="source"
-                position="right"
-                id={'0'} // Another unique id
-                style={{ background: 'gray', width: 15, height: 15, 'marginTop': 10 }}
+        <div className="bg-gray-200 min-w-64 border border-blue-600  border-black flex flex-col justify-center pb-2">
+            <div className="bg-gradient-to-r  from-blue-600 to-blue-400 p-2 text-white px-4 mb-2">
+                <h3 className="text-2xl">{data.name}</h3>
+            </div>
 
-            />
+            <div className="relative  ">
+                <input
+                    type="number"
+                    // value={data.value[0]}
+                    onChange={onInputChange}
+                    placeholder="Number"
+                    id={'0'}
+                    className="px-2 p-1 mx-4 my-2 rounded-full w-fit"
+                />
+                {/* Input Handles */}
+                <Handle
+                    type="source"
+                    position="right"
+                    id={'0'} // Another unique id
+                    style={{ background: 'orange', width: 15, height: 15, }}
+                />
+            </div>
+
         </div>
     );
 };
@@ -64,15 +69,18 @@ const MathNode = ({ data, id, updateNode }) => {
 
 
 
-    return <div className="bg-gray-200 min-w-48 border rounded-xl py-2 border-black flex flex-col justify-center">
-        <div className="mx-2">{data.label}</div>
+    return <div className="bg-gray-200 min-w-64 border border-blue-600  border-black flex flex-col justify-center pb-4">
+        <div className="bg-gradient-to-r  from-blue-600 to-blue-400 p-2 text-white px-4 mb-4">
+            <h3 className="text-2xl">{data.name}</h3>
+        </div>
+
 
         <select
             type="text"
             value={data.value[2] || ''}
             onChange={onSelect}
             placeholder="Enter value"
-            className={'bg-white border p-2 mx-2 rounded-xl'}
+            className={'bg-white border p-2 mx-4 rounded-xl mb-4'}
         >
 
             {FIELDS?.map((option, optIndex) => (
@@ -85,14 +93,15 @@ const MathNode = ({ data, id, updateNode }) => {
         </select>
 
 
-        <div className="relative  items-center">
+        <div className="relative  ">
 
             <input
                 // type="number"
                 value={getVal(0)}
                 onChange={() => null}
                 placeholder="Number"
-                className="w-48 p-1 border m-2 rounded-xl"
+                className="px-2 p-1 mx-4 my-2 rounded-full w-fit"
+
             />
 
             <Handle
@@ -106,13 +115,13 @@ const MathNode = ({ data, id, updateNode }) => {
         </div>
 
 
-        <div className="relative  items-center">
+        <div className="relative">
             <input
                 // type="number"
                 value={getVal(1)}
                 onChange={() => null}
                 placeholder="Number"
-                className="w-48 p-1 border m-2 rounded-xl"
+                className="px-2 p-1 mx-4 my-2 rounded-full w-fit"
             />
 
             <Handle
@@ -128,11 +137,12 @@ const MathNode = ({ data, id, updateNode }) => {
             type="source"
             position="right"
             id={'0'} // Another unique id
-            style={{ background: 'red', width: 15, height: 15 }}
+            style={{ background: 'gray', width: 15, height: 15 }}
         />
 
 
-
+        {/* purposes */}
+        <p className="text-xs opacity-70 m-4 my-2 w-44">{data.purposes}</p>
     </div>
 }
 

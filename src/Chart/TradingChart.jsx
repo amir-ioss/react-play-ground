@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { convertTimestampToDate, getRandomColor , getColor} from './utils/helpers';
+import { convertTimestampToDate, getRandomColor, getColor, isObject, Text } from './utils/helpers';
 
 
 var initialCandleWidth = 5
@@ -276,6 +276,9 @@ const Chart = ({ data: results }) => {
 
     // PLOT
     const outputs = JSON.parse(results?.outputs)
+    var component_layer = 1
+    var line_layer = 1
+
     if (outputs) {
       Object.entries(outputs).forEach(([id, out]) => {
         const node = results.kahn_nodes[id]
@@ -293,7 +296,7 @@ const Chart = ({ data: results }) => {
 
           highPrice = Math.max(...visibleData.map((d) => d.high));
           lowPrice = Math.min(...visibleData.map((d) => d.low));
-          priceRange = (highPrice - lowPrice) * 1.1; // Add 10% padding
+          priceRange = (highPrice - lowPrice) * 1.2; // Add 10% padding
 
           // Draw price axis (Y-axis)
           ctx.beginPath();
@@ -374,12 +377,16 @@ const Chart = ({ data: results }) => {
         } // END CANDLES
 
 
-        // INDICATORS
-        if (node?.type == 'indicator') {
-          // Draw EMA line
+
+
+
+        // PLOT LINE ON CHART
+        function plotLineOnChart(name, out, color = '#000') {
+          if (!name || !out) return
           ctx.beginPath();
-          ctx.strokeStyle = getColor(id)
+          ctx.strokeStyle = color
           ctx.lineWidth = 1;
+          let hasDrawName = false
 
           const line = out.reverse()
 
@@ -387,8 +394,8 @@ const Chart = ({ data: results }) => {
             const dataIndex = index + startIndex;
             if (dataIndex < 0 || dataIndex >= candleStickData.length || !line[dataIndex]) continue;
 
-            const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
-            if (x < padding.left || x > canvasWidth - padding.right) continue;
+            const x = chartWidth - (dataIndex * totalCandleWidth) + chartOffsetX;
+            if (x < padding.left || x > chartWidth - padding.right) continue;
 
             const y = padding.top + ((highPrice - line[dataIndex]) / priceRange) * chartHeight;
 
@@ -397,9 +404,97 @@ const Chart = ({ data: results }) => {
             } else {
               ctx.lineTo(x, y);
             }
+
+            // NAME
+            if (!hasDrawName) {
+              Text(ctx, name, x, y, color);
+              hasDrawName = true
+            }
+
           }
           ctx.stroke();
           ctx.lineWidth = 1;
+
+        }
+
+        // BOOLEAN
+        function plotBooleans(name = "", out, color = '#000') {
+          if (!name || !out) return
+
+          const data = out.reverse()
+          let hasDrawName = false
+
+          for (let index = 0; index < maxVisibleCandles; index++) {
+
+            const dataIndex = index + startIndex;
+            if (dataIndex < 0 || dataIndex >= candleStickData.length || !data[dataIndex]) continue;
+
+            const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
+            if (x < padding.left || x > canvasWidth - padding.right) continue;
+            const y = padding.top + (20 * line_layer);
+
+            ctx.beginPath();
+            ctx.arc(x + (candleWidth / 2), y, 2, 0, 2 * Math.PI); // Circle with radius 5
+            // ctx.fillStyle = color; // Red color
+            // ctx.fill();
+            ctx.strokeStyle = color; // Black border
+            ctx.stroke();
+
+            // NAME
+            if (!hasDrawName) {
+              Text(ctx, name, x, y, color);
+              hasDrawName = true
+            }
+          }
+
+        }
+
+
+
+        if (node?.type == "check") {
+          // console.log(node, out);
+          plotBooleans(node.name, out, getColor(id))
+          line_layer += 1
+        }
+
+        // INDICATORS
+        if (node?.type == 'indicator') {
+          // var lineComponents = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX"]
+
+
+          if (Array.isArray(out)) { // []
+            const lastVal = out.at(-1)
+            const dataType = typeof out.at(-1)
+            const isOverlay = lastVal < (highPrice * 1.2) && lastVal > lowPrice - (lowPrice * .2)
+
+            // console.log("ARRAY", { dataType, out });
+            if (dataType == 'number' && isOverlay) {
+              plotLineOnChart(node.label, out, getColor(id))
+            } else if (dataType == 'boolean') {
+              plotBooleans(node.label, out, getColor(id))
+            }
+
+          } else if (isObject(out)) {  // {[],[],[]}
+            Object.entries(out).map((_, key) => {
+              let name = _[0]
+              let named_out = _[1]
+              const lastVal = named_out.at(-1)
+              const dataType = typeof named_out.at(-1)
+              const isOverlay = lastVal < (highPrice * 1.2) && lastVal > lowPrice - (lowPrice * .2)
+
+              if (dataType == 'number' && isOverlay) {
+                // console.log(name, named_out);
+                plotLineOnChart(`${node.label} (${name})`, named_out, getColor(id + key))
+              } else {
+                // console.log("MULTI ARRAY", named_out);
+
+              }
+            })
+          } else {
+            console.log("OTHER TYPE", { out });
+          }
+
+
         }
 
 

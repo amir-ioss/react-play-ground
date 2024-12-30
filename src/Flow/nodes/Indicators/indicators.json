@@ -15,7 +15,8 @@
       {
         "name": "real",
         "type": "number",
-        "target": true
+        "target": true,
+        "InputFormat": "-1 and 1"
       }
     ],
     "Parameters": [],
@@ -24,7 +25,8 @@
         "name": "real",
         "type": "number",
         "source": true,
-        "value": "real"
+        "value": "real",
+        "OutputFormat": "number"
       }
     ]
   },
@@ -3687,12 +3689,12 @@
       {
         "name": "fastlimit",
         "type": "number",
-        "value": 0
+        "value": 0.2
       },
       {
         "name": "slowlimit",
         "type": "number",
-        "value": 0
+        "value": 0.1
       }
     ],
     "Outputs": [

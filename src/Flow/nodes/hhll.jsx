@@ -42,7 +42,7 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
     const onInputChange = (event) => {
         const params = fields.map(_ => _.value) || [];
         const rest = [event.target.value, ...params]
-        updateNode(id, {value: rest});
+        updateNode(id, { value: rest });
     };
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
 
 
         if (data.value[1] !== val1) {
-            updateNode(id, {value: setVal(data.value, 1, val1)});
+            updateNode(id, { value: setVal(data.value, 1, val1) });
         }
 
         // if (data.value[2] !== val2) {
@@ -61,16 +61,18 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
     }, [edges])
 
 
-    return <div
-        className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
+    return <div className="bg-gray-200 min-w-64 border border-yellow-600  border-black flex flex-col justify-center pb-4">
+        <div className="bg-gradient-to-r  from-yellow-600 to-yellow-400 p-2 text-white px-4 mb-4">
+            <h3 className="text-2xl">{data.name}</h3>
+            <p className="text-xs opacity-70">{data.purposes}</p>
+        </div>
 
-        <div className="mx-4">high/low</div>
         <select
             type="text"
             value={data.value?.[0] ?? ''}
             onChange={onInputChange}
             placeholder="Indicator"
-            className={'bg-white border p-2 mx-2 rounded-xl'}
+            className={'bg-white border p-2 mx-2 rounded-xl mb-4'}
 
         >
             {OPTIONS.map((option, optIndex) => (
@@ -83,8 +85,6 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
 
 
         {/* INPUT*/}
-        <label className="px-4">{data.label}</label>
-
         {fields?.map((field, idx) => {
             const ID = idx + 1 // offset
             return <div className="relative flex mt-2" key={ID}>

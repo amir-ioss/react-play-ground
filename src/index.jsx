@@ -10,7 +10,7 @@ import Navigation from "./Navigation";
 import Chart from "./Chart";
 import Flow from "./Flow";
 import ChartTest from "./Chart/test";
-import TradingChart from "./Chart/TradingChart";
+import TradingChart from "./Chart/test";
 import reportWebVitals from "./reportWebVitals";
 // import { Input,Button } from "pkg_gpt";
 // import { Button } from "my-react-ui-ioss-test";

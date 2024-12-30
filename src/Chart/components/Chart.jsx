@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { convertTimestampToDate, calculateSMA } from '../utils/helpers';
+import { convertTimestampToDate, calculateSMA, calculateRSI } from '../utils/helpers';
 import { sma, ema } from '../data/dataProcessor'
 
 
@@ -174,36 +174,6 @@ const Chart = ({ data = [] }) => {
 
 
 
-        // Draw SMA line
-        ctx.beginPath();
-        ctx.strokeStyle = '#2196F3';
-        ctx.lineWidth = 1;
-
-        for (let index = 0; index < maxVisibleCandles; index++) {
-            const dataIndex = index + startIndex;
-            if (dataIndex < 0 || dataIndex >= data.length || !sma[dataIndex]) continue;
-
-            const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
-            if (x < padding.left || x > canvasWidth - padding.right) continue;
-
-            const y = padding.top + ((highPrice - sma[dataIndex]) / priceRange) * chartHeight;
-
-            if (index === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-        ctx.stroke();
-        ctx.lineWidth = 1;
-
-
-
-
-
-
-
-
         // Draw EMA line
         ctx.beginPath();
         ctx.strokeStyle = '#219600';
@@ -213,7 +183,7 @@ const Chart = ({ data = [] }) => {
             const dataIndex = index + startIndex;
             if (dataIndex < 0 || dataIndex >= data.length || !ema[dataIndex]) continue;
 
-            const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
+            const x = chartWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
             if (x < padding.left || x > canvasWidth - padding.right) continue;
 
             const y = padding.top + ((highPrice - ema[dataIndex]) / priceRange) * chartHeight;
@@ -230,136 +200,59 @@ const Chart = ({ data = [] }) => {
 
 
 
-        // Draw circle
-        const index_circle = 10
-        const firstCandle = data[index_circle]; // The first visible candle
 
-        if (firstCandle) {
-            const CircleX = (canvasWidth - ((index_circle) * totalCandleWidth) + chartOffsetX) + (totalCandleWidth / 2)
-            const CircleY = padding.top + ((highPrice - firstCandle.close) / priceRange) * chartHeight; // Y-position based on price
-            // Ensure CircleX is within the visible chart area
-            if (CircleX >= padding.left && CircleX <= canvasWidth - padding.right) {
-                ctx.beginPath();
-                ctx.arc(CircleX, CircleY, 5, 0, 2 * Math.PI); // Circle with radius 5
-                ctx.fillStyle = "#FF0000"; // Red color
-                ctx.fill();
-                ctx.strokeStyle = "#000000"; // Black border
-                ctx.stroke();
+
+
+
+
+
+        // Calculate and Draw RSI below the price chart
+        const rsi = calculateRSI(data)
+        const rsiHeight = 100; // height of RSI chart below the main chart
+        var rsiPaddingTop = canvasHeight - rsiHeight - padding.bottom
+        // rsiPaddingTop = rsiPaddingTop - (rsiHeight*4);
+
+        // Draw RSI axis
+        ctx.beginPath();
+        ctx.strokeStyle = '#00000050';
+        ctx.lineWidth = '0.5';
+
+        const rsiLines = 5;
+        for (let i = 0; i <= rsiLines; i++) {
+            const y = rsiPaddingTop + (i * rsiHeight) / rsiLines;
+            const value = 100 - (i * 100) / rsiLines;
+
+            ctx.moveTo(padding.left, y);
+            ctx.lineTo(canvasWidth - padding.right, y);
+
+            ctx.fillStyle = '#444';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(value.toFixed(0), canvasWidth - padding.right-100, y + 4);
+        }
+        ctx.stroke();
+
+
+        // Draw RSI line
+        ctx.beginPath();
+        ctx.strokeStyle = '#ff9800';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < rsi.length; i++) {
+            if (i < startIndex || i >= startIndex + maxVisibleCandles) continue;
+
+            const x = chartWidth - ((i) * totalCandleWidth) + chartOffsetX;
+            const y = rsiPaddingTop + ((100 - rsi[i]) / 100) * rsiHeight;
+
+            if (i === startIndex) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
             }
         }
+        ctx.stroke();
 
 
 
-
-        // Draw Rectangle
-        const index_1 = 200
-        const index_2 = 250
-        const candle1 = data[data.length - index_1]; // The first visible candle
-        const candle2 = data[data.length - index_2]; // The first visible candle
-
-
-        if (candle1 && candle2) {
-            const X1 = (chartWidth - ((data.length - index_1) * totalCandleWidth) + chartOffsetX)
-            const X2 = (chartWidth - ((data.length - index_2) * totalCandleWidth) + chartOffsetX)
-
-            const Y1 = padding.top + ((highPrice - candle1.close) / priceRange) * chartHeight;
-            const Y2 = padding.top + ((highPrice - candle2.close) / priceRange) * chartHeight;
-
-            // Ensure CircleX is within the visible chart area
-            if (X1 >= padding.left && X1 <= canvasWidth - padding.right) {
-                ctx.beginPath();
-                ctx.rect(X1, Y1, X2 - X1, Y2 - Y1);
-                ctx.fillStyle = '#ef5350';
-                ctx.fill();
-            }
-        }
-
-
-
-        const renderCrosshair = (ctx, mouseX, mouseY) => {
-            if (mouseX === null || mouseY === null) return; // No crosshair if mouse is outside canvas
-
-            // Draw vertical line
-            ctx.beginPath();
-            ctx.moveTo(mouseX, padding.top);
-            ctx.lineTo(mouseX, canvasHeight - padding.bottom);
-            ctx.strokeStyle = "#44444490"; // Crosshair line color
-            ctx.setLineDash([6, 6]); // Set dashed line pattern
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // Draw horizontal line
-            ctx.beginPath();
-            ctx.moveTo(padding.left, mouseY);
-            ctx.lineTo(canvasWidth - padding.right, mouseY);
-            ctx.stroke();
-
-
-            // Display price label (Y-axis)
-
-            // Calculate the price based on the mouse position
-            const price = highPrice - ((mouseY - padding.top) / chartHeight) * priceRange;
-            // Set font and alignment for text
-            ctx.font = "12px Arial";
-            ctx.textAlign = "right";
-
-            // Measure the text to determine the width for the background
-            const text = price.toFixed(2);
-            const textWidth = ctx.measureText(text).width;
-            const textHeight = 30; // Approximate height for a 12px font
-
-            // Set background position and dimensions
-            const bgX = canvasWidth - textWidth - 10; // Padding of 5 on both sides
-            const bgY = mouseY - textHeight / 1.5;
-            const bgWidth = textWidth + 10; // Padding for background
-            const bgHeight = textHeight;
-
-            // Draw the black background rectangle
-            ctx.fillStyle = "#000";
-            ctx.fillRect(bgX, bgY, bgWidth, bgHeight);
-
-            // Draw the white text on top
-            ctx.fillStyle = "#FFF";
-            ctx.fillText(text, canvasWidth - 5, mouseY);
-
-            // Display time label (X-axis)
-            const candleIndex = Math.floor(((mouseX - padding.left)) / totalCandleWidth); // Adjust chartOffsetX logic
-            const dataIndex = candleIndex + startIndex;
-
-            if (candleIndex >= 0 && candleIndex < visibleData.length) {
-                // const timeLabel = convertTimestampToDate(data[dataIndex].time);
-                const timeLabel = convertTimestampToDate(visibleData.at(-(candleIndex))?.time)
-
-                // Set font and alignment for text
-                ctx.font = "12px Arial";
-                ctx.textAlign = "center";
-
-                // Measure the text to determine the width for the background
-                const text = `${timeLabel['date']} ${timeLabel['time']}`;
-                const textWidth = ctx.measureText(text).width;
-                const textHeight = 30; // Approximate height for a 12px font
-
-                // Set background position and dimensions
-                const bgX = mouseX - textWidth / 2 - 5; // Center the rectangle around the text
-                const bgY = canvasHeight - padding.bottom; // Position slightly above the text
-                const bgWidth = textWidth + 10; // Padding for background
-                const bgHeight = textHeight;
-
-                // Draw the black background rectangle
-                ctx.fillStyle = "#000";
-                ctx.fillRect(bgX, bgY, bgWidth, bgHeight);
-
-                // Draw the white text on top
-                ctx.fillStyle = "#FFF";
-                ctx.fillText(text, mouseX, canvasHeight - padding.bottom + 20);
-            }
-
-
-            ctx.setLineDash([]); // Reset to solid lines for other elements
-        };
-
-        // Draw the crosshair
-        renderCrosshair(ctx, mousePos.x, mousePos.y);
 
 
         // Draw chart border
@@ -425,7 +318,7 @@ const Chart = ({ data = [] }) => {
             canvas.removeEventListener('wheel', handleWheel);
         };
     }, [isDragging, chartOffsetX]);
-    
+
     return (
         <canvas
             ref={canvasRef}

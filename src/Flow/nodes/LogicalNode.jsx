@@ -20,7 +20,7 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
 
     // Handler for input changes
     const onInputChange = (event) => {
-        updateNode(id, {value: setVal(data.value, 2, event.target.value)});
+        updateNode(id, { value: setVal(data.value, 2, event.target.value) });
     };
 
     useEffect(() => {
@@ -28,25 +28,26 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
         const val2 = getVal(1) ?? null;
 
         if (data.value[0] !== val1) {
-            updateNode(id, {value: setVal(data.value, 0, val1)});
+            updateNode(id, { value: setVal(data.value, 0, val1) });
         }
 
         if (data.value[1] !== val2) {
-            updateNode(id, {value: setVal(data.value, 1, val2)});
+            updateNode(id, { value: setVal(data.value, 1, val2) });
         }
     }, [edges])
 
 
-    return <div
-        className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
-        <label className="px-4">{data.label}</label>
+    return <div className="bg-gray-200 min-w-64 border border-purple-600  border-black flex flex-col justify-center pb-4 w-44">
+        <div className="bg-gradient-to-r  from-purple-600 to-purple-400 p-2 text-white px-4 mb-4">
+            <h3 className="text-2xl">{data.name}</h3>
+        </div>
 
         <select
             type="text"
             value={data.value[2] || ''}
             onChange={onInputChange}
             placeholder="Enter value"
-            className="bg-white p-2 mx-2 rounded-xl"
+            className="bg-white p-2 mx-2 rounded-xl mb-4"
         >
             {OPTIONS?.map((option, optIndex) => (
                 <option key={optIndex} value={option.value}>
@@ -58,19 +59,18 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
 
         {/* INPUT*/}
 
-        <div className="relative  items-center m-2">
+        <div className="relative  items-center my-2">
             <Handle
                 type="target"
                 position={Position.Left}
                 id={"0"} // Another unique id
                 style={{ background: 'violet', width: 15, height: 15 }}
             />
-            <p className='text-xs'>0</p>
             <p className="px-4">{getVal(0) ?? 'Value 1'}</p>
         </div>
 
 
-        <div className="relative  items-center m-2">
+        <div className="relative  items-center my-2">
             <Handle
                 type="target"
                 position={Position.Left}
@@ -78,7 +78,6 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
                 id={'1'} // Another unique id
                 style={{ background: 'violet', width: 15, height: 15 }}
             />
-            <p className='text-xs'>1</p>
             <p className="px-4">{getVal(1) ?? 'Value 2'}</p>
         </div>
 
@@ -90,11 +89,12 @@ const LogicalNode = memo(({ data, id, updateNode }) => {
             type="source"
             position={Position.Right}
             id={'0'} // Another unique id
-            style={{ background: 'red', width: 15, height: 15 }}
+            style={{ background: '#14b8a6', width: 15, height: 15 }}
         />
 
 
-
+        {/* purposes */}
+        <p className="text-xs opacity-70 m-4 my-2">{data.purposes}</p>
     </div>
 })
 

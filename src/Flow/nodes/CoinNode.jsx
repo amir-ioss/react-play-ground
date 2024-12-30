@@ -72,7 +72,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     // Handler for input changes
     const onInputChange = (event) => {
         if (data.value[TimeFrameID] !== event.target.value) {
-            updateNode(id, {value: setVal(data.value, TimeFrameID, event.target.value)});
+            updateNode(id, { value: setVal(data.value, TimeFrameID, event.target.value) });
         }
     };
 
@@ -81,7 +81,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
         // PeriodID
         const period = (getVal(PeriodID) || data.value[PeriodID]) ?? null;
         if (data.value[PeriodID] !== period) {
-            updateNode(id, {value: setVal(data.value, PeriodID, period)});
+            updateNode(id, { value: setVal(data.value, PeriodID, period) });
         }
     }, [edges])
 
@@ -90,15 +90,17 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     useEffect(() => {
         const params = fields.map(_ => _.value) || [];
         const rest = [...params, data.value[PeriodID], data.value[TimeFrameID]]
-        updateNode(id, {value: rest});
+        updateNode(id, { value: rest });
     }, [])
 
 
 
-    return <div
-        className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
+    return <div  className="bg-gray-200 min-w-64 border border-amber-600  border-black flex flex-col justify-center pb-4">
+        <div className="bg-gradient-to-r  from-amber-600 to-amber-400 p-2 text-white px-4">
+            <h3 className="text-2xl">{data.name}</h3>
+            <p className="text-xs opacity-70">{data.purposes}</p>
+        </div>
 
-        <div className="mx-4">{data.label}</div>
         <label for={TimeFrameID} className="w-full mx-4 mt-4">Time Frame</label>
         <select
             type="text"
@@ -147,8 +149,8 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
         {/* INPUT*/}
-        <div className="relative flex mt-2">
-            <label for={'0'} className="mx-2">Candle Limit</label>
+        <div className="relative flex mt-2 items-center">
+            <label for={'0'} className="mx-4">Candle Limit</label>
             <input
                 type="text"
                 value={getVal(PeriodID) || data.value?.[PeriodID]}
@@ -164,7 +166,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
                 type="target"
                 position={Position.Left}
                 id={PeriodID} // Another unique id
-                style={{ background: 'gray', width: 15, height: 15 }}
+                style={{ background: 'orange', width: 15, height: 15 }}
                 reconnectable="target"
                 markerEnd={{
                     type: MarkerType.Arrow,

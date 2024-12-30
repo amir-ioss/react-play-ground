@@ -41,7 +41,7 @@ const TradeNode = memo(({ data, id, updateNode }) => {
         const val1 = getVal(1) ?? null;
         // const val2 = getVal(2) ?? null;
         if (data.value[1] !== val1) {
-            updateNode(id, {value: setVal(data.value, 1, val1)});
+            updateNode(id, { value: setVal(data.value, 1, val1) });
         }
 
         // if (data.value[2] !== val2) {
@@ -55,20 +55,22 @@ const TradeNode = memo(({ data, id, updateNode }) => {
     useEffect(() => {
         const params = INPUTS.map(_ => _.value) || [];
         const rest = ['paper_trading_node', null, ...params]
-        updateNode(id, {value: rest});
+        updateNode(id, { value: rest });
     }, [])
 
 
 
 
-    return <div className="bg-gray-200 min-w-64 border rounded-xl py-2 border-black flex flex-col justify-center">
-        <div className="mx-4">Paper Trade</div>
+    return <div className="bg-gray-200 min-w-64 border border-blue-600  border-black flex flex-col justify-center pb-4">
+        <div className="bg-gradient-to-r  from-green-600 to-blue-400 p-2 text-white px-4 mb-4">
+            <h3 className="text-2xl">{data.name}</h3>
+        </div>
 
         <Handle
             type="target"
             position="left"
             id={'1'}
-            style={{ background: 'blue', width: 15, height: 15, top: 30 }}
+            style={{ background: '#14b8a6', width: 15, height: 15, top: 70 }}
         />
 
         {/* INPUTS*/}
@@ -94,6 +96,10 @@ const TradeNode = memo(({ data, id, updateNode }) => {
 
             </div>
         })}
+
+        
+        {/* purposes */}
+        <p className="text-xs opacity-70 m-4 my-2">{data.purposes}</p>
 
     </div>
 })
