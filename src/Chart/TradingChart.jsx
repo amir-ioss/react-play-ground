@@ -1,9 +1,11 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { convertTimestampToDate, getRandomColor, getColor, isObject, Text } from './utils/helpers';
+import { convertTimestampToDate, getRandomColor, getColor, isObject, Text, Box, calculatePercentageChange } from './utils/helpers';
 
 
-var initialCandleWidth = 5
+const initialCandleWidth = 5
+const RED = "#f04042"
+const GREEN = "#1dda9e"
 
 const Chart = ({ data: results }) => {
   const canvasRef = useRef(null);
@@ -76,118 +78,11 @@ const Chart = ({ data: results }) => {
     const maxVisibleCandles = Math.ceil(chartWidth / totalCandleWidth);
 
 
-
-
-
-    // // Draw SMA line
-    // ctx.beginPath();
-    // ctx.strokeStyle = '#2196F3';
-    // ctx.lineWidth = 1;
-
-    // for (let index = 0; index < maxVisibleCandles; index++) {
-    //   const dataIndex = index + startIndex;
-    //   if (dataIndex < 0 || dataIndex >= candleStickData.length || !sma[dataIndex]) continue;
-
-    //   const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
-    //   if (x < padding.left || x > canvasWidth - padding.right) continue;
-
-    //   const y = padding.top + ((highPrice - sma[dataIndex]) / priceRange) * chartHeight;
-
-    //   if (index === 0) {
-    //     ctx.moveTo(x, y);
-    //   } else {
-    //     ctx.lineTo(x, y);
-    //   }
-    // }
-    // ctx.stroke();
-    // ctx.lineWidth = 1;
-
-
-
-
-
-
-
-
-    // // Draw EMA line
-    // ctx.beginPath();
-    // ctx.strokeStyle = '#219600';
-    // ctx.lineWidth = 1;
-
-    // for (let index = 0; index < maxVisibleCandles; index++) {
-    //   const dataIndex = index + startIndex;
-    //   if (dataIndex < 0 || dataIndex >= candleStickData.length || !ema[dataIndex]) continue;
-
-    //   const x = canvasWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
-    //   if (x < padding.left || x > canvasWidth - padding.right) continue;
-
-    //   const y = padding.top + ((highPrice - ema[dataIndex]) / priceRange) * chartHeight;
-
-    //   if (index === 0) {
-    //     ctx.moveTo(x, y);
-    //   } else {
-    //     ctx.lineTo(x, y);
-    //   }
-    // }
-    // ctx.stroke();
-    // ctx.lineWidth = 1;
-
-
-
-
-    // // Draw circle
-    // const index_circle = 10
-    // const firstCandle = candleStickData[index_circle]; // The first visible candle
-
-    // if (firstCandle) {
-    //   const CircleX = (canvasWidth - ((index_circle) * totalCandleWidth) + chartOffsetX) + (totalCandleWidth / 2)
-    //   const CircleY = padding.top + ((highPrice - firstCandle.close) / priceRange) * chartHeight; // Y-position based on price
-    //   // Ensure CircleX is within the visible chart area
-    //   if (CircleX >= padding.left && CircleX <= canvasWidth - padding.right) {
-    //     ctx.beginPath();
-    //     ctx.arc(CircleX, CircleY, 5, 0, 2 * Math.PI); // Circle with radius 5
-    //     ctx.fillStyle = "#FF0000"; // Red color
-    //     ctx.fill();
-    //     ctx.strokeStyle = "#000000"; // Black border
-    //     ctx.stroke();
-    //   }
-    // }
-
-
-
-
-    // // Draw Rectangle
-    // const index_1 = 200
-    // const index_2 = 250
-    // const candle1 = candleStickData[candleStickData.length - index_1]; // The first visible candle
-    // const candle2 = candleStickData[candleStickData.length - index_2]; // The first visible candle
-
-
-    // if (candle1 && candle2) {
-    //   const X1 = (chartWidth - ((candleStickData.length - index_1) * totalCandleWidth) + chartOffsetX)
-    //   const X2 = (chartWidth - ((candleStickData.length - index_2) * totalCandleWidth) + chartOffsetX)
-
-    //   const Y1 = padding.top + ((highPrice - candle1.close) / priceRange) * chartHeight;
-    //   const Y2 = padding.top + ((highPrice - candle2.close) / priceRange) * chartHeight;
-
-    //   // Ensure CircleX is within the visible chart area
-    //   if (X1 >= padding.left && X1 <= canvasWidth - padding.right) {
-    //     ctx.beginPath();
-    //     ctx.rect(X1, Y1, X2 - X1, Y2 - Y1);
-    //     ctx.fillStyle = '#ef5350';
-    //     ctx.fill();
-    //   }
-    // }
-
-
-
-
     var candleStickData = []
     var visibleData = []
     var highPrice = 0
     var lowPrice = 0
     var priceRange = (highPrice - lowPrice) * 1.1; // Add 10% padding
-
 
 
 
@@ -200,7 +95,7 @@ const Chart = ({ data: results }) => {
       ctx.lineTo(mouseX, canvasHeight - padding.bottom);
       ctx.strokeStyle = "#44444490"; // Crosshair line color
       ctx.setLineDash([6, 6]); // Set dashed line pattern
-      ctx.lineWidth = 1;
+      // ctx.lineWidth = 1;
       ctx.stroke();
 
       // Draw horizontal line
@@ -276,8 +171,8 @@ const Chart = ({ data: results }) => {
 
     // PLOT
     const outputs = JSON.parse(results?.outputs)
-    var component_layer = 1
-    var line_layer = 1
+    var component_layer = 0
+    var line_layer = 0
 
     if (outputs) {
       Object.entries(outputs).forEach(([id, out]) => {
@@ -377,9 +272,6 @@ const Chart = ({ data: results }) => {
         } // END CANDLES
 
 
-
-
-
         // PLOT LINE ON CHART
         function plotLineOnChart(name, out, color = '#000') {
           if (!name || !out) return
@@ -399,22 +291,18 @@ const Chart = ({ data: results }) => {
 
             const y = padding.top + ((highPrice - line[dataIndex]) / priceRange) * chartHeight;
 
-            if (index === 0) {
-              ctx.moveTo(x, y);
-            } else {
-              ctx.lineTo(x, y);
-            }
+            if (index === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+
 
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color);
+              Text(ctx, name, x, y, color, undefined, true);
               hasDrawName = true
             }
 
           }
           ctx.stroke();
-          ctx.lineWidth = 1;
-
         }
 
         // BOOLEAN
@@ -442,54 +330,306 @@ const Chart = ({ data: results }) => {
 
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color);
+              Text(ctx, name, x, y, color, undefined, true);
               hasDrawName = true
             }
           }
 
         }
 
+        // 0 - 100 Bounded  COMPONENTS
+        var boundedAxisDraw = false
+        function plotBoundedComponent(name = "", out, color = '#000') {
+          if (!name || !out) return
+
+          const rsi = out.reverse()
+          let hasDrawName = false
+
+          const rsiHeight = chartHeight / 4; // height of RSI chart below the main chart
+          var rsiPaddingTop = canvasHeight - rsiHeight - padding.bottom
+          rsiPaddingTop = rsiPaddingTop - (rsiHeight * component_layer);
+
+          if (!boundedAxisDraw) {
+
+            // Draw RSI axis
+            const rsiLines = 4;
+            for (let i = 0; i <= rsiLines; i++) {
+              const y = rsiPaddingTop + (i * rsiHeight) / rsiLines;
+              const value = 100 - (i * 100) / rsiLines;
+
+              ctx.fillStyle = color
+              ctx.font = '9px Arial';
+              ctx.textAlign = 'right';
+              ctx.fillText(value.toFixed(0), canvasWidth - padding.right - 70, y + 4);
+            }
+
+            Box(ctx, 0, rsiPaddingTop, chartWidth, rsiHeight, color + 10)
+            boundedAxisDraw = true
+          }
 
 
+
+          // Draw RSI line
+          ctx.beginPath();
+          ctx.strokeStyle = color
+          ctx.lineWidth = 1;
+          for (let i = 0; i < rsi.length; i++) {
+            if (i < startIndex || i >= startIndex + maxVisibleCandles) continue;
+
+            const x = chartWidth - ((i) * totalCandleWidth) + chartOffsetX;
+            var value = rsi[i]
+            if (value < 0) value = rsi[i] * -1
+            const y = rsiPaddingTop + ((100 - value) / 100) * (rsiHeight);
+
+            if (i === startIndex) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
+            }
+
+
+            // NAME
+            if (!hasDrawName) {
+              Text(ctx, name, x, y, color, undefined, true);
+              hasDrawName = true
+            }
+
+
+          }
+          ctx.stroke();
+
+
+
+        }
+
+        // 0 Centered COMPONENTS
+        var centeredAxisDraw = false
+        function plotCenteredComponent(name = "", out, color = '#000', maxValue, minValue) {
+
+          if (!name || !out) return
+
+          const rsi = out.reverse()
+          let hasDrawName = false
+
+          const indicatorHeight = 100; // height of RSI chart below the main chart
+          var indicatorPaddingTop = canvasHeight - indicatorHeight - padding.bottom
+          indicatorPaddingTop = indicatorPaddingTop - (indicatorHeight * component_layer);
+          const range = maxValue - minValue;
+          const zeroPosition = indicatorPaddingTop + (indicatorHeight * (maxValue / range)); // Zero line position
+
+
+          if (!centeredAxisDraw) {
+
+            // Draw 0-line
+            ctx.beginPath();
+            const zeroY = indicatorPaddingTop + (indicatorHeight * (maxValue / range)); // Y-coordinate for 0 value
+            ctx.moveTo(padding.left, zeroY);
+            ctx.lineTo(chartWidth - padding.right, zeroY);
+            ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = color
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+
+
+            // Draw 0-centered axis
+            const numLines = 4; // Number of divisions above and below the zero line
+            for (let i = -numLines; i <= numLines; i++) {
+              const value = (i / numLines) * maxValue; // Calculate value for this division
+              const y = zeroPosition - (i * indicatorHeight) / (2 * numLines);
+
+              ctx.fillStyle = color;
+              ctx.font = '9px Arial';
+              ctx.textAlign = 'right';
+              ctx.fillText(value.toFixed(4), canvasWidth - padding.right - 70, y + 4);
+            }
+
+            Box(ctx, 0, indicatorPaddingTop, chartWidth, indicatorHeight, color + 10)
+
+            centeredAxisDraw = true
+          }
+
+
+          // Draw RSI line
+
+          ctx.beginPath();
+          ctx.strokeStyle = color
+          for (let i = 0; i < rsi.length; i++) {
+            const x = chartWidth - (i * totalCandleWidth) + chartOffsetX;
+            if (x < padding.left || x > chartWidth - padding.right) continue; // Clip outside the chart
+            const y = indicatorPaddingTop + indicatorHeight - ((rsi[i] - minValue) / range) * indicatorHeight;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+
+            // NAME
+            if (!hasDrawName) {
+              Text(ctx, name, x, y, color, undefined, true);
+              hasDrawName = true
+            }
+
+
+
+          }
+          ctx.stroke();
+
+        }
+
+        // Draw Histogram
+        //  for (let i = 0; i < data.length; i++) {
+        //   const x = chartWidth - (i * totalCandleWidth) + chartOffsetX;
+        //   if (x < padding.left || x > chartWidth - padding.right) continue;
+        //   const barHeight = (histogramValues[i] / macdRange) * macdHeight;
+
+        //   const barY = zeroY - barHeight; // Start at 0-line
+        //   ctx.beginPath();
+        //   ctx.rect(x - (totalCandleWidth / 4), barHeight < 0 ? zeroY : barY, totalCandleWidth / 2, Math.abs(barHeight));
+        //   ctx.fillStyle = barHeight < 0 ? "#ef5350" : "#26a69a";
+        //   ctx.fill();
+        // }
+
+        ///////////  P O S I T I O N S  ///////////
+        if (node?.type == 'trade') {
+          const trades = results.result.trades
+          // console.log(trades);
+
+
+
+          trades.forEach((pos, id) => {
+            let entryIndex = pos.entry_index
+            let exitIndex = pos.exit_index
+            let entryPrice = pos.entry_price
+            let exitPrice = pos.exit_price
+
+            let color = pos.type == 'long' ? entryPrice < exitPrice ? GREEN : RED : entryPrice > exitPrice ? GREEN : RED
+
+
+            // Draw Rectangle
+            const index_1 = entryIndex
+            const index_2 = exitIndex
+            const candle1 = candleStickData[candleStickData.length - index_1];
+            const candle2 = candleStickData[candleStickData.length - index_2];
+
+
+            if (candle1 && candle2) {
+              const x1 = (chartWidth - ((candleStickData.length - index_1) * totalCandleWidth) + chartOffsetX)
+              const x2 = (chartWidth - ((candleStickData.length - index_2) * totalCandleWidth) + chartOffsetX)
+
+              const y1 = padding.top + ((highPrice - candle1.close) / priceRange) * chartHeight;
+              const y2 = padding.top + ((highPrice - candle2.close) / priceRange) * chartHeight;
+
+              // position area
+              // if (X1 >= padding.left && X1 <= canvasWidth - padding.right) {
+              Box(ctx, x1, y1, x2 - x1, y2 - y1, color + 20)
+              // }
+
+              // position type
+              Text(ctx, (pos.type).toUpperCase(), x1, y1, pos.type == 'long' ? GREEN : RED)
+              // Text(ctx, Math.abs(calculatePercentageChange(entryPrice, exitPrice)) + '%', x1 + ((x2 - x1) / 2), y1 + ((y2 - y1) / 2), '#fff', 'black')
+              Text(ctx, Math.abs(calculatePercentageChange(entryPrice, exitPrice)) + '%', x2 - 40, y1, '#fff', 'black')
+
+
+              // cross line
+              ctx.beginPath();
+              ctx.strokeStyle = color
+              ctx.moveTo(x1, y1);
+              ctx.lineTo(x2, y2);
+              ctx.setLineDash([6, 6]);
+              ctx.stroke();
+            }
+
+          }) // trades end
+        }
+
+        ///////////  C H E C K  ///////////
         if (node?.type == "check") {
           // console.log(node, out);
           plotBooleans(node.name, out, getColor(id))
           line_layer += 1
         }
 
-        // INDICATORS
-        if (node?.type == 'indicator') {
-          // var lineComponents = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX"]
+
+        ///////////  INDICATORS ///////////
+        if (node?.type == 'indicator' || node?.type == 'hhll') {
+
+
+          var BoundedType = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX", "STOCHRSI"]
+          var CenteredType = ["MACD", "MOM", "ROC", "AO", "TRIX"]
+          var UnboundeType = ["ATR", "OBV"]
+          // var Percentage = ["ROC", "WILLR"]
+
+          const isBounded = BoundedType.includes(node?.indicator?.Name)
+          const isCentered = CenteredType.includes(node?.indicator?.Name)
 
 
           if (Array.isArray(out)) { // []
             const lastVal = out.at(-1)
             const dataType = typeof out.at(-1)
             const isOverlay = lastVal < (highPrice * 1.2) && lastVal > lowPrice - (lowPrice * .2)
+            const maxValue = Math.max(...out);
+            const minValue = Math.min(...out);
+
 
             // console.log("ARRAY", { dataType, out });
-            if (dataType == 'number' && isOverlay) {
+            if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
               plotLineOnChart(node.label, out, getColor(id))
             } else if (dataType == 'boolean') {
               plotBooleans(node.label, out, getColor(id))
+            } else {
+              if (isBounded) {
+                plotBoundedComponent(node.label, out, getColor(id))
+              } else if (isCentered) {
+
+
+                plotCenteredComponent(`${node.label}`, out, getColor(id), maxValue, minValue)
+                component_layer += 1
+
+                // drawMACD(ctx, named_out, macdValues, signalValues, histogramValues, canvasWidth, chartHeight, padding, chartOffsetX, totalCandleWidth, highPrice, lowPrice);
+              } else {
+                console.log("SPECIAL", out);
+              }
             }
 
           } else if (isObject(out)) {  // {[],[],[]}
-            Object.entries(out).map((_, key) => {
+            const signals = Object.entries(out)
+            var mergedData = [] // for max and min height
+
+            signals.forEach((_, key) => {
+              mergedData = [...mergedData, ..._[1]]
+            })
+            // console.log(isBounded, signals.length);
+            const maxValue = Math.max(...mergedData);
+            const minValue = Math.min(...mergedData);
+
+            signals.map((_, key) => {
               let name = _[0]
               let named_out = _[1]
               const lastVal = named_out.at(-1)
               const dataType = typeof named_out.at(-1)
               const isOverlay = lastVal < (highPrice * 1.2) && lastVal > lowPrice - (lowPrice * .2)
 
-              if (dataType == 'number' && isOverlay) {
-                // console.log(name, named_out);
+
+              // console.log(name, named_out);
+
+              if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
                 plotLineOnChart(`${node.label} (${name})`, named_out, getColor(id + key))
               } else {
                 // console.log("MULTI ARRAY", named_out);
+                // drawMACD
+
+                if (isBounded) {
+                  plotBoundedComponent(`${node.label} (${name})`, named_out, getColor(id + key))
+                } else if (isCentered) {
+
+                  plotCenteredComponent(`${node.label} (${name})`, named_out, getColor(id + key), maxValue, minValue)
+                }
+
 
               }
             })
+
+            if (isCentered || isBounded) component_layer += 1
+
           } else {
             console.log("OTHER TYPE", { out });
           }

@@ -13,10 +13,12 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
             className='absolute z-10 border bg-white min-w-64 rounded-lg'
         >
             <div className='flex items-center justify-between border-b'>
-                <p className='ml-4 font-bold'>Context Menu</p>
+                <p className='m-2 font-bold'>+ New Node</p>
                 <button className='mx-2 text-xl'
                     onClick={closePaneMenu}
-                >x</button>
+                >  <span className="material-symbols-outlined mt-2 hover:font-bold">
+                        close
+                    </span></button>
             </div>
             <div className='flex flex-col'>
                 {[
@@ -77,7 +79,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                     <h3>{nd.name}</h3>
                     {/* Tooltip */}
                     <div
-                        className="absolute bottom-full left-0 bottom-0 transform translate-y-4 w-max px-2 py-1 bg-black text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                        className="absolute bottom-full left-0 bottom-1 transform translate-y-4 w-max px-2 py-1 bg-black text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
                     >
                         {nd.purposes}
                     </div>

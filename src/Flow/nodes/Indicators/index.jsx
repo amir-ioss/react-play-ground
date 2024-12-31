@@ -160,13 +160,10 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
 
 
         <Modal isOpen={state?.pickerOn}
-            className=" bg-white w-1/2 cursor-pointer py-0 rounded-lg p-4 md:p-0"
+            onClose={() => setState({ ...state, pickerOn: false })}
+            title="Indicators"
+            className=" bg-white xl:w-1/2 cursor-pointer py-0 rounded-lg p-4 md:p-0"
         >
-            <div className="flex justify-between">
-                <h1 className="text-2xl  m-4">Indicators</h1>
-                <a className="m-4" onClick={() => setState({ ...state, pickerOn: false })}>close</a>
-            </div>
-
             <div>
                 <input className="w-full border p-4 outline-none" placeholder="Search" onChange={(e) => {
                     setState((prev) => ({ ...prev, search: e.target.value }))

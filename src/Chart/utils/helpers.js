@@ -77,26 +77,41 @@ const calculateRSI = (data, period = 14) => {
   return rsi;
 };
 
-
-
-function Text(ctx, text, x, y, bgColor, textColor = "white") {
+function Text(ctx, text, x, y, bgColor, textColor = "white", isPriceLine) {
   // Set font and measure text
   ctx.font = "12px Arial";
   const padding = 5; // Padding around the text
   const textMetrics = ctx.measureText(text);
   const textWidth = textMetrics.width;
   const textHeight = 12; // Approx height for the font size
-
+  let _x = x;
+  if (isPriceLine) _x = _x - textWidth;
   // Draw background rectangle
   ctx.fillStyle = bgColor;
-  ctx.fillRect(x - padding, y - textHeight - padding, textWidth + padding * 2, textHeight + padding * 2);
+  ctx.fillRect(_x - padding, y - textHeight - padding, textWidth + padding * 2, textHeight + padding * 2);
 
   // Draw text
   ctx.fillStyle = textColor;
   ctx.textAlign = "left";
   ctx.textBaseline = "top";
-  ctx.fillText(text, x, y - textHeight);
+  ctx.fillText(text, _x, y - textHeight);
 }
 
+function Box(ctx, x1, y1, w, h, color = "red") {
+  ctx.beginPath();
+  ctx.rect(x1, y1, w, h);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
 
-export { calculateRSI,Text };
+function calculatePercentageChange(value1, value2) {
+  if (value1 === 0) {
+    console.error("Initial value (value1) cannot be zero.");
+    return null;
+  }
+  const change = value2 - value1;
+  const percentageChange = (change / value1) * 100;
+  return percentageChange.toFixed(2); // Round to 2 decimal places
+}
+
+export { calculateRSI, Text, Box, calculatePercentageChange };
