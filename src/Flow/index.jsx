@@ -259,7 +259,7 @@ function FlowExample() {
         <div className='flex h-screen w-screen'>
 
 
-            <div className={`${(results && state?.resultsOn) ? 'w-[80vw]' : 'w-screen'}`}>
+            <div className={`w-screen`}>
                 {menu.visible && (
                     <div
                         style={{
@@ -344,12 +344,12 @@ function FlowExample() {
                 </div>
 
 
-                {results && state.chart && <div className={`h-1/2 ${(results && state?.resultsOn) ? 'w-[80vw]' : 'w-screen'}}`}>
-                    <Plot data={results} />
+                {results && state.chart && <div className={`h-1/2 w-screen`}>
+                    <Plot data={results} state={state.resultsOn} />
                 </div>}
             </div>
 
-            {results && state.resultsOn && <div className='relative bg-white w-[20vw] h-screen overflow-y-scroll'>
+            {results && state.resultsOn && <div className='absolute right-0 bg-white w-[20vw] h-screen overflow-y-scroll'>
 
 
                 <div className='fixed bottom-0 bg-gradient-to-t from-white via-white p-4 w-full'>

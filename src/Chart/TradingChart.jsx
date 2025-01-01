@@ -7,7 +7,7 @@ const initialCandleWidth = 5
 const RED = "#f04042"
 const GREEN = "#1dda9e"
 
-const Chart = ({ data: results }) => {
+const Chart = ({ data: results, state }) => {
   const canvasRef = useRef(null);
   const [chartOffsetX, setChartOffsetX] = useState(0);
   const [zoomFactor, setZoomFactor] = useState(1);
@@ -680,7 +680,7 @@ const Chart = ({ data: results }) => {
 
   useEffect(() => {
     renderChart();
-  }, [mousePos, chartOffsetX, zoomFactor, canvasWidth, canvasHeight]);
+  }, [mousePos, chartOffsetX, zoomFactor, canvasWidth, canvasHeight, state]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
