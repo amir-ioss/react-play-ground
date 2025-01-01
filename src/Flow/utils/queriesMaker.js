@@ -1,5 +1,3 @@
-
-
 const macd = ["macd", "macdsignal", "macdhist"];
 const isNum = (_) => !isNaN(Number(_));
 const isSource = (_) => ["time", "open", "high", "low", "close", "volume", ...macd].includes(_);
@@ -100,13 +98,19 @@ const queriesMaker = (obj) => {
 
       /////////////  TRADE  /////////////
       if ($.type == "trade") {
-        const [signals, source, balance, size, fee] = $.value;
-        console.log(signals, value(signals, input(0), false));
-        query = `paper_trading(${value(
-          signals,
-          input(0),
-          false
-        )}, output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
+        // const source_length = $.preNode.length;
+        const source_length = 4;
+        let vals = $.value.slice(0, source_length);
+        let params = $.value.slice(source_length);
+        const [balance, size, fee] = params;
+
+        // $.preNode.map((_, k) => {
+        new Array(source_length).fill("None").map((_, k) => {
+          var ID = store_id($.preNode[k]?.id);
+          // vals[k] = value(vals[k], ID, false) ?? _;
+          vals[k] = ID >= 0 ? `output['${ID}']` : _;
+        });
+        query = `paper_trading(${vals.join(", ")}, ohlcv=output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
       }
 
       /////////////  DEFAULT  /////////////
@@ -143,12 +147,12 @@ function buildCheckQuery(val1, val2, condition, inputs) {
   const rangeExpr = isSource(val1)
     ? `len(output['${inputs[0]}']['${val1}'])`
     : isSource(val2)
-      ? `len(output['${inputs[1]}']['${val2}'])`
-      : isNum(val1)
-        ? `len(output['${inputs[1]}'])`
-        : isNum(val2)
-          ? `len(output['${inputs[0]}'])`
-          : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
+    ? `len(output['${inputs[1]}']['${val2}'])`
+    : isNum(val1)
+    ? `len(output['${inputs[1]}'])`
+    : isNum(val2)
+    ? `len(output['${inputs[0]}'])`
+    : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
 
   // Build expressions for val1 and val2
   const val1Expr = value(val1, inputs[0]);

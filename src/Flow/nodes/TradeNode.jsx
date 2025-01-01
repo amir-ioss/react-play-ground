@@ -8,14 +8,14 @@ import {
     useNodesData,
 } from '@xyflow/react';
 import useNodeValue from './useNodeValue';
-const INPUTS = [
+
+const Parameters = [
     {
         name: "starting_balance",
         type: "number",
         value: 10,
         placeholder: "Starting Balance",
         target: true
-
     },
     {
         name: "position_size",
@@ -34,30 +34,70 @@ const INPUTS = [
 
     }
 ]
+
+
+const Inputs = [{
+    "name": "Entry Long",
+    "type": "number",
+    "target": true,
+    "InputFormat": "[True False]"
+}, {
+    "name": "Exit Long",
+    "type": "number",
+    "target": true,
+    "InputFormat": "[True False]"
+
+}, {
+    "name": "Entry Short",
+    "type": "number",
+    "target": true,
+    "InputFormat": "[True False]"
+
+}, {
+    "name": "Exit Short",
+    "type": "number",
+    "target": true,
+    "InputFormat": "[True False]"
+}]
+
+const Outputs = []
+
 const TradeNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     useEffect(() => {
-        const val1 = getVal(1) ?? null;
-        // const val2 = getVal(2) ?? null;
-        if (data.value[1] !== val1) {
-            updateNode(id, { value: setVal(data.value, 1, val1) });
+        if (data.value.length > 0) {
+
+            const updatedValues = [...data.value];  // Clone the array to avoid direct mutation
+
+            // Dynamically iterate over the indices you want to update (e.g., 1, 2, etc.)
+            let valuesChanged = false; // Flag to track if any change occurred
+
+            for (let i = 0; i <= Inputs.length - 1; i++) {
+                const val = getVal(i) ?? null;
+                // Only update if the value has changed
+                if (updatedValues[i] !== val) {
+                    updatedValues[i] = val;
+                    valuesChanged = true;  // Mark that a value has changed
+                }
+            }
+
+            // Only call updateNode if a value was actually changed
+            if (valuesChanged) {
+                updateNode(id, { value: updatedValues });
+            }
         }
 
-        // if (data.value[2] !== val2) {
-        //     updateNode(id, setVal(data.value, 2, val2));
-        // }
+    }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
-    }, [edges])
 
 
     // Initial values
     useEffect(() => {
-        const params = INPUTS.map(_ => _.value) || [];
-        const rest = ['paper_trading_node', null, ...params]
+        const params = Parameters.map(_ => _.value) || [];
+        const rest = [null, null, null, null, ...params]
         updateNode(id, { value: rest });
     }, [])
-
 
 
 
@@ -66,16 +106,58 @@ const TradeNode = memo(({ data, id, updateNode }) => {
             <h3 className="text-2xl">{data.name}</h3>
         </div>
 
-        <Handle
-            type="target"
-            position="left"
-            id={'1'}
-            style={{ background: '#14b8a6', width: 15, height: 15, top: 70 }}
-        />
+        <h3 className='font-bold ml-8'>LONG</h3>
+        <div className="relative flex mt-2">
+            <label for={'0'} className="mx-2">{"Entry"}  </label>
+            <Handle
+                type="target"
+                position="left"
+                id={'0'}
+                style={{ background: '#14b8a6', width: 15, height: 15 }}
+            />
+
+        </div>
+
+        <div className="relative flex mt-2">
+            <label for={'1'} className="mx-2">{"Exit"}  </label>
+            <Handle
+                type="target"
+                position="left"
+                id={'1'}
+                style={{ background: 'red', width: 15, height: 15 }}
+            />
+        </div>
+
+
+        <h3 className='font-bold ml-8'>SHORT</h3>
+
+        <div>
+
+            <div className="relative flex mt-2">
+                <label for={'2'} className="mx-2">{"Entry"}  </label>
+                <Handle
+                    type="target"
+                    position="left"
+                    id={'2'}
+                    style={{ background: '#14b8a6', width: 15, height: 15 }}
+                />
+
+            </div>
+
+            <div className="relative flex mt-2">
+                <label for={'3'} className="mx-2">{"Exit"}  </label>
+                <Handle
+                    type="target"
+                    position="left"
+                    id={'3'}
+                    style={{ background: 'red', width: 15, height: 15 }}
+                />
+            </div>
+        </div>
 
         {/* INPUTS*/}
-        {INPUTS?.map((field, idx) => {
-            const ID = idx + 2 // offset
+        {Parameters?.map((field, idx) => {
+            const ID = idx + 4 // offset
             return <div className="relative flex mt-2" key={ID}>
                 <label for={ID} className="mx-2">{field.placeholder}  </label>
                 <input
@@ -97,7 +179,7 @@ const TradeNode = memo(({ data, id, updateNode }) => {
             </div>
         })}
 
-        
+
         {/* purposes */}
         <p className="text-xs opacity-70 m-4 my-2">{data.purposes}</p>
 

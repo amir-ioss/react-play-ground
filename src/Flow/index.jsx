@@ -10,6 +10,8 @@ import mock_data from './chart/data.json'
 // import { getCandlestickData } from '../Chart/data/dataProcessor';
 // const candleStickData = getCandlestickData();
 import PaneMenu from './components/PaneMenu'
+import Modal from './components/Modal';
+import { calculatePercentageChange } from '../Chart/utils/helpers';
 
 
 const initialNodes = [
@@ -35,8 +37,7 @@ function FlowExample() {
     const [results, setResults] = useEdgesState();
     const [menu, setMenu] = useNodesState({ visible: false, x: 0, y: 0, data: null });
     const [paneMenu, setPaneMenu] = useNodesState({ visible: false, x: 0, y: 0 });
-    const [state, setState] = useNodesState({ chart: true });
-
+    const [state, setState] = useNodesState({ chart: true, resultsOn: true });
 
     const updateNodeValue = (nodeId, newData) => {
         setNodes((nds) =>
@@ -223,6 +224,7 @@ function FlowExample() {
         const result = await response.json();
         // console.log({ result }); // Handle the response
         setResults({ kahn_nodes, ...result })
+        setState({ ...state, resultsOn: true })
         // console.log("outputs", result.outputs);
 
     };
@@ -254,89 +256,146 @@ function FlowExample() {
 
 
     return (
-        <div className='h-screen w-screen'>
-
-            {menu.visible && (
-                <div
-                    style={{
-                        top: menu.y,
-                        left: menu.x,
-                    }}
-                    className='absolute z-10 border bg-white p-2 min-w-44 rounded-lg'
-                >
-
-                    <div className='flex items-center justify-between border-b'>
-                        <p className='font-bold'>Node: {menu.data.data.label}</p>
-                        <button className='mx-2 text-xl'
-                            onClick={closeNodeMenu}
-                        >x</button>
-                    </div>
-                    <button onClick={deleteNode} className='text-red-400'>Delete Node</button>
-
-                </div>
-            )}
+        <div className='flex h-screen w-screen'>
 
 
-
-
-            <div className={twMerge("w-screen overflow-hidden", (results && state.chart) ? 'h-1/2 ' : 'h-full')}>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onConnect={onConnect}
-                    nodeTypes={nodeTypes}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onReconnect={onReconnect}
-                    onReconnectStart={onReconnectStart}
-                    onReconnectEnd={onReconnectEnd}
-                    // fitView
-                    edgesSelectable={true} // Enables edge selection
-                    onNodeContextMenu={onNodeContextMenu}
-                    onPaneContextMenu={onPaneContextMenu}
-
-
-
-                >
-                    <Background />
-                </ReactFlow>
-
-
-
-
-                <PaneMenu paneMenu={paneMenu} addNode={addNode} closePaneMenu={closePaneMenu} />
-
-                <div className='absolute top-0 right-0'>
-                    <button
-                        className='m-2  bg-black p-2 px-10 text-gray-200 rounded-lg'
-                        onClick={() => setState({ ...state, chart: !state.chart })}
-                    >
-                        {state.chart ? "On" : "Off"}
-                    </button>
-
-                    <button
-                        className='m-2  bg-black p-2 px-10 text-gray-200  rounded-lg'
-                        onClick={() => {
-                            setResults()
-                            // console.log({ nodes, edges });
-                            let kahn_nodes = getExecutionOrder()
-                            console.log("nodes : ", kahn_nodes);
-                            let query = queriesMaker(kahn_nodes)
-                            console.log("query : ", query);
-                            handleSubmit(query, kahn_nodes)
-
+            <div className={`${(results && state?.resultsOn) ? 'w-[80vw]' : 'w-screen'}`}>
+                {menu.visible && (
+                    <div
+                        style={{
+                            top: menu.y,
+                            left: menu.x,
                         }}
+                        className='absolute z-10 border bg-white p-2 min-w-44 rounded-lg'
                     >
-                        TEST
-                    </button>
+
+                        <div className='flex items-center justify-between border-b'>
+                            <p className='font-bold'>Node: {menu.data.data.label}</p>
+                            <button className='mx-2 text-xl'
+                                onClick={closeNodeMenu}
+                            >x</button>
+                        </div>
+                        <button onClick={deleteNode} className='text-red-400'>Delete Node</button>
+
+                    </div>
+                )}
+                <div className={twMerge("overflow-hidden ", (results && state.chart) ? 'h-1/2' : 'h-full')}>
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onConnect={onConnect}
+                        nodeTypes={nodeTypes}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onReconnect={onReconnect}
+                        onReconnectStart={onReconnectStart}
+                        onReconnectEnd={onReconnectEnd}
+                        // fitView
+                        edgesSelectable={true} // Enables edge selection
+                        onNodeContextMenu={onNodeContextMenu}
+                        onPaneContextMenu={onPaneContextMenu}
+
+
+
+                    >
+                        <Background />
+                    </ReactFlow>
+
+
+                    <PaneMenu paneMenu={paneMenu} addNode={addNode} closePaneMenu={closePaneMenu} />
+
+
+                    {/* HEADER */}
+                    <div className='absolute top-0 right-0 z-50'>
+
+                        <button
+                            className='m-2  bg-black p-2 px-10 text-gray-200 rounded-lg'
+                            onClick={() => setState({ ...state, resultsOn: !state.resultsOn })}
+                        >
+                            {state.resultsOn ? "Result On" : "Result Off"}
+                        </button>
+
+                        <button
+                            className='m-2  bg-black p-2 px-10 text-gray-200 rounded-lg'
+                            onClick={() => setState({ ...state, chart: !state.chart })}
+                        >
+                            {state.chart ? "Chart On" : "Chart Off"}
+                        </button>
+
+
+
+                        <button
+                            className='m-2  bg-black p-2 px-10 text-gray-200  rounded-lg'
+                            onClick={() => {
+                                setResults()
+                                // console.log({ nodes, edges });
+                                let kahn_nodes = getExecutionOrder()
+                                console.log("nodes : ", kahn_nodes);
+                                let query = queriesMaker(kahn_nodes)
+                                console.log("query : ", query);
+                                if (state.chart) handleSubmit(query, kahn_nodes)
+
+                            }}
+                        >
+                            TEST
+                        </button>
+                    </div>
+
                 </div>
 
+
+                {results && state.chart && <div className={`h-1/2 ${(results && state?.resultsOn) ? 'w-[80vw]' : 'w-screen'}}`}>
+                    <Plot data={results} />
+                </div>}
             </div>
 
+            {results && state.resultsOn && <div className='relative bg-white w-[20vw] h-screen overflow-y-scroll'>
 
-            {results && state.chart && <div className='h-1/2 w-screen'>
-                <Plot data={results} />
+
+                <div className='fixed bottom-0 bg-gradient-to-t from-white via-white p-4 w-full'>
+                    <h3>Results</h3>
+                    <p className='text-xl'>Balance : {(results.result?.final_balance).toFixed(2)}</p>
+                    <p>Total trades : {results.result.trades.length}</p>
+                </div>
+
+                <div>
+                    {results.result.trades.map((trade, count) => {
+                        const isLoss = trade.pnl < 0
+                        return <div className='border-b text-sm p-4 flex justify-between items-center' key={count}>
+                            <div>
+                                <p className={`${trade.type == 'long' ? 'bg-green-600' : 'bg-red-600'} w-fit px-3 py-1 text-white uppercase`}>{trade.type}</p>
+                                <p>Entry : {trade.entry_price}</p>
+                                <p>Exit : {trade.exit_price}</p>
+                            </div>
+                            <div className=''>
+                                <div>
+                                    <p className='border w-fit'>PNL : {trade.pnl.toFixed(2)}</p>
+                                    <p>Fee : {trade.fee.toFixed(2)}</p>
+                                </div>
+                            </div>
+                            <p className={`text-2xl ${isLoss ? 'text-red-500' : 'text-green-500'}`}>{calculatePercentageChange(trade.entry_price, trade.exit_price)}%</p>
+                        </div>
+                    })}
+                </div>
+
+                {/* CLOSE PANEL */}
+                <button className='fixed top-20 right-[20vw] p-1 pb-0 bg-black text-white'
+                    onClick={() => setState({ ...state, resultsOn: false })}
+                >
+                    <span className="material-symbols-outlined  hover:font-bold">
+                        close
+                    </span>
+                </button>
+
             </div>}
+
+
+            {/* <Modal isOpen={state?.resultsOn}
+                    onClose={() => setState({ ...state, resultsOn: false })}
+                    title="Trades"
+                    className=" bg-white xl:w-1/2 cursor-pointer py-0 rounded-lg p-4 md:p-0"
+                >
+                </Modal> */}
 
         </div>
 

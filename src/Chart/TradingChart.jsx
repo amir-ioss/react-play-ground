@@ -322,11 +322,11 @@ const Chart = ({ data: results }) => {
             const y = padding.top + (20 * line_layer);
 
             ctx.beginPath();
-            ctx.arc(x + (candleWidth / 2), y, 2, 0, 2 * Math.PI); // Circle with radius 5
-            // ctx.fillStyle = color; // Red color
-            // ctx.fill();
-            ctx.strokeStyle = color; // Black border
-            ctx.stroke();
+            ctx.arc(x + (candleWidth / 2), y, 1.5, 0, 2 * Math.PI); // Circle with radius 5
+            ctx.fillStyle = color; // Red color
+            ctx.fill();
+            // ctx.strokeStyle = color; // Black border
+            // ctx.stroke();
 
             // NAME
             if (!hasDrawName) {
@@ -350,7 +350,6 @@ const Chart = ({ data: results }) => {
           rsiPaddingTop = rsiPaddingTop - (rsiHeight * component_layer);
 
           if (!boundedAxisDraw) {
-
             // Draw RSI axis
             const rsiLines = 4;
             for (let i = 0; i <= rsiLines; i++) {
@@ -393,7 +392,6 @@ const Chart = ({ data: results }) => {
               Text(ctx, name, x, y, color, undefined, true);
               hasDrawName = true
             }
-
 
           }
           ctx.stroke();
@@ -579,12 +577,8 @@ const Chart = ({ data: results }) => {
               if (isBounded) {
                 plotBoundedComponent(node.label, out, getColor(id))
               } else if (isCentered) {
-
-
                 plotCenteredComponent(`${node.label}`, out, getColor(id), maxValue, minValue)
                 component_layer += 1
-
-                // drawMACD(ctx, named_out, macdValues, signalValues, histogramValues, canvasWidth, chartHeight, padding, chartOffsetX, totalCandleWidth, highPrice, lowPrice);
               } else {
                 console.log("SPECIAL", out);
               }
