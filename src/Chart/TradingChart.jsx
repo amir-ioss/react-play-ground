@@ -177,7 +177,7 @@ const Chart = ({ data: results, state }) => {
     if (outputs) {
       Object.entries(outputs).forEach(([id, out]) => {
         const node = results.kahn_nodes[id]
-        // console.log("--------", node?.type)
+        // console.log("--------", node?.type, out)
 
 
         if (node?.type == 'coin_data') {
@@ -473,6 +473,37 @@ const Chart = ({ data: results, state }) => {
 
         }
 
+
+
+        // Function to draw order blocks on canvas
+        function drawOrderBlock(orderBlock, endTime) {
+          // console.log(orderBlock);
+          
+
+          // Extract order block properties
+          const { top, bottom, startTime, obType } = orderBlock;
+
+          // Calculate start and end positions on the x-axis
+          const startX = chartWidth - ((candleStickData.length - 1 - startTime) * totalCandleWidth) + chartOffsetX;
+          const endX = chartWidth - ((candleStickData.length - 1 + endTime) * totalCandleWidth) + chartOffsetX;
+
+          // Make sure the x positions are within canvas bounds
+          // if (startX < padding.left || endX > canvasWidth - padding.right) return;
+
+          // Calculate the y-coordinates for the top and bottom of the order block
+          const topY = padding.top + ((highPrice - top) / priceRange) * chartHeight;
+          const bottomY = padding.top + ((highPrice - bottom) / priceRange) * chartHeight;
+
+          // Set the color for drawing the order block (e.g., green for Bullish, red for Bearish)
+          ctx.fillStyle = obType === 'Bull' ? GREEN + 90 : RED + 90;
+
+          // Draw the order block as a filled rectangle
+          // ctx.fillRect(startX, bottomY, endX - startX, topY - bottomY);
+          ctx.fillRect(startX, topY, startX - endX, bottomY - topY);
+        }
+
+
+
         // Draw Histogram
         //  for (let i = 0; i < data.length; i++) {
         //   const x = chartWidth - (i * totalCandleWidth) + chartOffsetX;
@@ -630,11 +661,28 @@ const Chart = ({ data: results, state }) => {
 
 
         }
+        else {
+          for (let i = 0; i < out.length; i++) {
+            // drawOrderBlock(out[i], out[i + 1]?.['startTime'] ?? 0)
+            console.log(out[i]);
 
+          }
+
+        }
 
 
       })
     }
+
+
+
+
+
+    // drawOrderBlock({ 'top': 93857.04, 'bottom': 93698.98, 'obVolume': 216.92406, 'obType': 'Bear', 'startTime': 162, 'endTime': 262, 'obLowVolume': 6.97252, 'obHighVolume': 54.89707, 'breaker': false, 'breakTime': null })
+
+
+
+
     // Draw chart border
     ctx.strokeStyle = '#dedede';
     ctx.strokeRect(padding.left, padding.top, chartWidth, chartHeight);

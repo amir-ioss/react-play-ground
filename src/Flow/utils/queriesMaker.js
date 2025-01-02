@@ -94,6 +94,16 @@ const queriesMaker = (obj) => {
       if ($.type == "hhll") {
         const [fun, source, period] = $.value;
         query = `talib.${fun}(${value(source, input(0), false)}, ${period})`;
+        if (fun == "support_resistance_levels") {
+          query = `support_resistance_levels(output['${ohlcvIndex}'], window=${period}) -> ['support1', 'support2', 'support3', 'resistance1', 'resistance2', 'resistance3']`;
+        }
+
+        if (fun == "support_resistance") {
+          query = `support_resistance(output['${ohlcvIndex}'], window=${period}) -> ['supports', 'resists']`;
+        }
+        if (fun == "luxalgo_support_resistance") {
+          query = `luxalgo_support_resistance(output['${ohlcvIndex}']) -> ['low_pivot', 'high_pivot']`;
+        }
       }
 
       /////////////  TRADE  /////////////

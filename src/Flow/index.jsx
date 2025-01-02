@@ -294,9 +294,6 @@ function FlowExample() {
                         edgesSelectable={true} // Enables edge selection
                         onNodeContextMenu={onNodeContextMenu}
                         onPaneContextMenu={onPaneContextMenu}
-
-
-
                     >
                         <Background />
                     </ReactFlow>
@@ -349,9 +346,8 @@ function FlowExample() {
                 </div>}
             </div>
 
-            {results && state.resultsOn && <div className='absolute right-0 bg-white w-[20vw] h-screen overflow-y-scroll'>
-
-
+            {/* RESULTS RIGHT MODAL */}
+            {results?.result && state.resultsOn && <div className='absolute right-0 bg-white w-[20vw] h-screen overflow-y-scroll'>
                 <div className='fixed bottom-0 bg-gradient-to-t from-white via-white p-4 w-full'>
                     <h3>Results</h3>
                     <p className='text-xl'>Balance : {(results.result?.final_balance).toFixed(2)}</p>

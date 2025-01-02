@@ -12,8 +12,12 @@ import useNodeValue from './useNodeValue';
 
 const OPTIONS = [
     { value: null, name: "SELECT" },
+    { value: "luxalgo_support_resistance", name: "Supports Resistances Luxalgo" },
+    { value: "support_resistance", name: "Supports Resistances" },
     { value: "MAX", name: "highest high" },
-    { value: "MIN", name: "lowest low" }]
+    { value: "MIN", name: "lowest low" },
+    { value: "support_resistance_levels", name: "Supports(3) Resistances(3)" }
+]
 
 
 const fields = [
