@@ -1,10 +1,13 @@
 import { memo, useEffect, useState } from "react";
 import { Handle, MarkerType, Position, useEdges, useNodesData } from "@xyflow/react";
 import useNodeValue from "../useNodeValue";
-import Funcs from './math.json'
+// import Funcs from './utils.json'
+import Utils from './np_all.json'
 import Modal from '../../components/Modal'
 
 // Object.values(Funcs).map(_=> console.log(_.Outputs))
+
+const Funcs = Utils.Array_Creation
 
 const MathNode = memo(({ data, id, updateNode }) => {
     const [state, setState] = useState({ pickerOn: true, option: null, type: 'Overlap Studies' })
@@ -18,7 +21,8 @@ const MathNode = memo(({ data, id, updateNode }) => {
         const func = Funcs[option]
 
         const Name = func?.Name
-        const inputs = func?.Inputs.map(_ => 0)
+        // const inputs = func?.Inputs.map(_ => 0)
+        const inputs = func?.Inputs.map(_ => null)
         // const params = func?.Parameters.map(_ => _.value)
 
         const rest = [option, ...inputs]
@@ -54,8 +58,8 @@ const MathNode = memo(({ data, id, updateNode }) => {
     }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
 
-    return <div className="bg-gray-200 border border-blue-600  border-black flex flex-col justify-center pb-4 w-64">
-        <div className="bg-gradient-to-r  from-blue-600 to-blue-400 p-2 text-white px-4">
+    return <div className="bg-gray-200 border border-red-600  border-black flex flex-col justify-center pb-4 w-64">
+        <div className="bg-gradient-to-r  from-red-600 to-red-400 p-2 text-white px-4">
             <h3 className="text-2xl">{data.name}</h3>
             {/* <p className="text-xs opacity-70">{data.purposes}</p> */}
         </div>

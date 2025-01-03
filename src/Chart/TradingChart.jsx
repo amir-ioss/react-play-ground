@@ -295,9 +295,11 @@ const Chart = ({ data: results, state }) => {
             else ctx.lineTo(x, y);
 
 
+
+
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color, undefined, true);
+              Text(ctx, name, x, y, color, undefined, chartOffsetX > 0);
               hasDrawName = true
             }
 
@@ -330,7 +332,7 @@ const Chart = ({ data: results, state }) => {
 
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color, undefined, true);
+              Text(ctx, name, x, y, color, undefined, chartOffsetX > 0);
               hasDrawName = true
             }
           }
@@ -389,7 +391,7 @@ const Chart = ({ data: results, state }) => {
 
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color, undefined, true);
+              Text(ctx, name, x, y, color, undefined, chartOffsetX > 0);
               hasDrawName = true
             }
 
@@ -462,7 +464,7 @@ const Chart = ({ data: results, state }) => {
 
             // NAME
             if (!hasDrawName) {
-              Text(ctx, name, x, y, color, undefined, true);
+              Text(ctx, name, x, y, color, undefined, chartOffsetX > 0);
               hasDrawName = true
             }
 
@@ -473,12 +475,76 @@ const Chart = ({ data: results, state }) => {
 
         }
 
+        function plotHorizontalLines(name, out, color = '#000', lineWidth = 2) {
+          if (!name || !out) return;
+
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineWidth;
+          let hasDrawName = false;
+
+          const line = out.reverse();
+
+          // Group consecutive same values together
+          let groups = [];
+          let currentGroup = {
+            value: line[0],
+            startIdx: 0,
+            endIdx: 0
+          };
+
+          for (let i = 1; i < line.length; i++) {
+            if (line[i] === currentGroup.value) {
+              currentGroup.endIdx = i;
+            } else {
+              groups.push({ ...currentGroup });
+              currentGroup = {
+                value: line[i],
+                startIdx: i,
+                endIdx: i
+              };
+            }
+          }
+          groups.push(currentGroup); // Add the last group
+
+          // Plot each group as a single line
+          groups.forEach(group => {
+            const dataStartIndex = group.startIdx + startIndex;
+            const dataEndIndex = group.endIdx + startIndex;
+
+            // if (dataStartIndex < 0 || dataEndIndex >= candleStickData.length) return;
+
+            // Calculate coordinates
+            const x1 = chartWidth - (group.startIdx * totalCandleWidth) + chartOffsetX;
+            const x2 = chartWidth - (group.endIdx * totalCandleWidth) + chartOffsetX;
+
+            // Skip if outside visible area
+            // if (x2 > chartWidth - padding.right || x1 < padding.left) return;
+
+            // Calculate y position
+            const y = padding.top + ((highPrice - group.value) / priceRange) * chartHeight;
+
+            // Draw the line
+            ctx.moveTo(x1, y);
+            ctx.lineTo(x2, y);
+
+            // Draw name for the first visible line
+            if (!hasDrawName) {
+              Text(ctx, name, x1, y, color, undefined, chartOffsetX > 0);
+              hasDrawName = true;
+            }
+          });
+
+          ctx.stroke();
+        }
+
+
 
 
         // Function to draw order blocks on canvas
         function drawOrderBlock(orderBlock, endTime) {
           // console.log(orderBlock);
-          
+
 
           // Extract order block properties
           const { top, bottom, startTime, obType } = orderBlock;
@@ -579,7 +645,7 @@ const Chart = ({ data: results, state }) => {
 
 
         ///////////  INDICATORS ///////////
-        if (node?.type == 'indicator' || node?.type == 'hhll') {
+        if (node?.type == 'indicator' || node?.type == 'math' || node?.type == "hhll" || node?.type == 'math_utils_np') {
 
 
           var BoundedType = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX", "STOCHRSI"]
@@ -601,7 +667,11 @@ const Chart = ({ data: results, state }) => {
 
             // console.log("ARRAY", { dataType, out });
             if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
-              plotLineOnChart(node.label, out, getColor(id))
+              if (node?.plot == 'lines') {
+                plotHorizontalLines(node.label, out, getColor(id))
+              } else {
+                plotLineOnChart(node.label, out, getColor(id))
+              }
             } else if (dataType == 'boolean') {
               plotBooleans(node.label, out, getColor(id))
             } else {
@@ -637,7 +707,11 @@ const Chart = ({ data: results, state }) => {
               // console.log(name, named_out);
 
               if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
-                plotLineOnChart(`${node.label} (${name})`, named_out, getColor(id + key))
+                if (node?.plot == 'lines') {
+                  plotHorizontalLines(`${node.label} (${name})`, named_out, getColor(id + key))
+                } else {
+                  plotLineOnChart(`${node.label} (${name})`, named_out, getColor(id + key))
+                }
               } else {
                 // console.log("MULTI ARRAY", named_out);
                 // drawMACD
@@ -661,15 +735,32 @@ const Chart = ({ data: results, state }) => {
 
 
         }
-        else {
-          for (let i = 0; i < out.length; i++) {
-            // drawOrderBlock(out[i], out[i + 1]?.['startTime'] ?? 0)
-            console.log(out[i]);
 
-          }
+
+
+        if (node?.type == "hhll") {
+          // console.log("WORKS", node);
+
+          // plotLineOnChart(out)
+          // for (let i = 0; i < out.length; i++) {
+          //   // drawOrderBlock(out[i], out[i + 1]?.['startTime'] ?? 0)
+          //   console.log(out[i]);
+          // }
+
+
+
+          // plotHorizontalLines("asasd", out['high_pivot'])
 
         }
 
+
+        else {
+          // for (let i = 0; i < out.length; i++) {
+          //   // drawOrderBlock(out[i], out[i + 1]?.['startTime'] ?? 0)
+          //   console.log(out[i]);
+
+          // }
+        }
 
       })
     }

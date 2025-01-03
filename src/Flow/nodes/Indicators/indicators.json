@@ -4498,12 +4498,12 @@
       {
         "name": "acceleration",
         "type": "number",
-        "value": 0
+        "value": 0.02
       },
       {
         "name": "maximum",
         "type": "number",
-        "value": 0
+        "value": 0.2
       }
     ],
     "Outputs": [

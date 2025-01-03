@@ -3,7 +3,7 @@ import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, a
 // import Plot from './chart'
 import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode } from './nodes'
+import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode , MathUtils} from './nodes'
 import { queriesMaker } from './utils/queriesMaker';
 import { twMerge } from 'tailwind-merge';
 import mock_data from './chart/data.json'
@@ -76,6 +76,7 @@ function FlowExample() {
         CoinNode: (props) => <CoinNode {...props} updateNode={updateNodeValue} />,
         TradeNode: (props) => <TradeNode {...props} updateNode={updateNodeValue} />,
         LogicalNode: (props) => <LogicalNode {...props} updateNode={updateNodeValue} />,
+        MathUtils: (props) => <MathUtils {...props} updateNode={updateNodeValue} />,
     }), []);
 
 

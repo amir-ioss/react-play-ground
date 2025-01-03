@@ -53,6 +53,38 @@ const queriesMaker = (obj) => {
         query = buildCheckQuery(vals[0], vals[1], condition, inputs);
       }
 
+      if ($.type == "math") {
+        const [condition, ...vals] = $.value;
+
+        $.preNode.map((_, k) => {
+          var ID = store_id(_.id);
+          vals[k] = value(vals[k], ID, false);
+          return ID;
+        });
+
+        query = `${vals[0]} ${$.func["Value"]} ${vals[1]}`;
+      }
+
+      if ($.type == "math_utils_np") {
+        const [func, ...vals] = $.value;
+        // const source_length = $.preNode.length;
+        // let vals = rest.slice(0, source_length);
+        // let params = rest.slice(source_length);
+        $.preNode.map((_, k) => {
+          var ID = store_id(_.id);
+          vals[k] = value(vals[k], ID, false);
+          return ID;
+        });
+
+        // query = `talib.${indicator}(${[...vals, ...params].join(",")})`;
+        query = `np.${func}(${vals.join(",")})`;
+
+        // RETURNS TO NAMED KEYS
+        if ($.returns && $.returns.length > 0) {
+          query += ` -> ${toSingleQuotes($.returns)}`;
+        }
+      }
+
       /////////////  CHECK  /////////////
       if ($.type == "logic") {
         // 10, AND, 20
@@ -102,7 +134,7 @@ const queriesMaker = (obj) => {
           query = `support_resistance(output['${ohlcvIndex}'], window=${period}) -> ['supports', 'resists']`;
         }
         if (fun == "luxalgo_support_resistance") {
-          query = `luxalgo_support_resistance(output['${ohlcvIndex}']) -> ['low_pivot', 'high_pivot']`;
+          query = `luxalgo_support_resistance(output['${ohlcvIndex}']) -> ['low_pivot', 'high_pivot', 'breaks', 'wick_breaks', 'osc']`;
         }
       }
 

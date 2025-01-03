@@ -43,7 +43,14 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                         name: "Math Operation",
                         purposes: "Specifies that this node performs mathematical calculations.",
                         node: "MathNode",
-                        type: 'math'
+                        type: 'math',
+
+                    },
+                    {
+                        name: "Math Utils",
+                        purposes: "Specifies that this node performs mathematical special calculations.",
+                        node: "MathUtils",
+                        type: 'math_utils_np'
                     },
                     {
                         name: "Condition",
@@ -55,7 +62,8 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                         name: "High-Low Detector",
                         purposes: "Explicitly states that this node detects high-high or low-low patterns.",
                         node: "HHLLNode",
-                        type: 'hhll'
+                        type: 'hhll',
+                        plot: "lines"
                     },
                     {
                         name: "Trade Executor",

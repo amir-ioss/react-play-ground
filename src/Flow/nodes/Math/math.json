@@ -1,0 +1,212 @@
+{
+  "Addition": {
+    "Name": "Addition",
+    "Description": "Adds corresponding elements from two arrays.",
+    "Type": "Arithmetic Operation",
+    "Value": "+",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Adding quantities of two products.",
+      "Code": "np.array([1, 2, 3]) + np.array([4, 5, 6])",
+      "Result": "[5, 7, 9]"
+    }
+  },
+  "Subtraction": {
+    "Name": "Subtraction",
+    "Description": "Subtracts corresponding elements in the second array from the first.",
+    "Type": "Arithmetic Operation",
+    "Value": "-",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Calculating profit by subtracting cost from revenue.",
+      "Code": "np.array([10, 20, 30]) - np.array([1, 5, 10])",
+      "Result": "[9, 15, 20]"
+    }
+  },
+  "Multiplication": {
+    "Name": "Multiplication",
+    "Description": "Multiplies corresponding elements from two arrays.",
+    "Type": "Arithmetic Operation",
+    "Value": "*",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Calculating total cost when you have quantity and price per unit.",
+      "Code": "np.multiply([2, 3, 4], [1.5, 2.0, 2.5])",
+      "Result": "[3.0, 6.0, 10.0]"
+    }
+  },
+  "Division": {
+    "Name": "Division",
+    "Description": "Divides corresponding elements in the first array by the second array.",
+    "Type": "Arithmetic Operation",
+    "Value": "/",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Dividing total cost by quantity to find price per unit.",
+      "Code": "np.array([10, 20, 30]) / np.array([2, 5, 10])",
+      "Result": "[5.0, 4.0, 3.0]"
+    }
+  },
+  "Power": {
+    "Name": "Power",
+    "Description": "Raises each element of the first array to the power of the corresponding element in the second array.",
+    "Type": "Arithmetic Operation",
+    "Value": "**",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Finding the power of numbers.",
+      "Code": "np.array([2, 3, 4]) ** np.array([2, 2, 2])",
+      "Result": "[4, 9, 16]"
+    }
+  },
+  "Floor Division": {
+    "Name": "Floor Division",
+    "Description": "Performs integer division (floor) between corresponding elements.",
+    "Type": "Arithmetic Operation",
+    "Value": "//",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Calculating how many full sets of items can be purchased with a certain budget.",
+      "Code": "np.array([10, 20, 30]) // np.array([3, 4, 5])",
+      "Result": "[3, 5, 6]"
+    }
+  },
+  "Modulus": {
+    "Name": "Modulus",
+    "Description": "Returns the remainder of the division of corresponding elements.",
+    "Type": "Arithmetic Operation",
+    "Value": "%",
+    "Inputs": [
+      {
+        "name": "list1",
+        "type": "list of numbers",
+        "target": true
+      },
+      {
+        "name": "list2",
+        "type": "list of numbers",
+        "target": true
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "result",
+        "type": "list of numbers",
+        "source": true
+      }
+    ],
+    "Example": {
+      "Explanation": "Calculating the remainder when dividing numbers.",
+      "Code": "np.array([10, 20, 30]) % np.array([3, 4, 5])",
+      "Result": "[1, 0, 0]"
+    }
+  }
+}

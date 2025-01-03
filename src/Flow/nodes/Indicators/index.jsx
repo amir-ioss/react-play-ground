@@ -13,24 +13,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
     // Inputs 
     // Parameters 
     // Outputs 
-
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
-
-    // Handler for input changes
-    // const onChangeIndicator = (event) => {
-    //     const inputs = Indicators[event.target.value]?.Inputs.map(_ => _.value)
-    //     const params = Indicators[event.target.value]?.Parameters.map(_ => _.value)
-
-    //     const rest = [event.target.value, ...inputs, ...params]
-
-    //     let returns = Indicators[event.target.value]?.Outputs.map(_ => _.value)
-    //     console.log("----------------", returns.length);
-
-    //     if (returns.length == 1) returns = []
-    //     updateNode(id, { value: rest, returns, indicator: Indicators[event.target.value] });
-    // };
-
-
 
     const onPickIndicator = (option) => {
         const indicator = Indicators[option]

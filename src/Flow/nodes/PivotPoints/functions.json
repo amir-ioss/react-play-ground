@@ -1,0 +1,39 @@
+{
+  "SAR": {
+    "Name": "SAR",
+    "Description": "Parabolic SAR",
+    "Type": "Overlap Studies",
+    "Inputs": [
+      {
+        "name": "high",
+        "type": "number",
+        "target": true
+      },
+      {
+        "name": "low",
+        "type": "number",
+        "target": true
+      }
+    ],
+    "Parameters": [
+      {
+        "name": "acceleration",
+        "type": "number",
+        "value": 0.02
+      },
+      {
+        "name": "maximum",
+        "type": "number",
+        "value": 0.2
+      }
+    ],
+    "Outputs": [
+      {
+        "name": "real",
+        "type": "number",
+        "source": true,
+        "value": "real"
+      }
+    ]
+  }
+}
