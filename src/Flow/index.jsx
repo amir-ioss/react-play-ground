@@ -3,15 +3,16 @@ import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, a
 // import Plot from './chart'
 import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode , MathUtils} from './nodes'
+import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode, MathUtils } from './nodes'
 import { queriesMaker } from './utils/queriesMaker';
+import { Panes } from './utils/help';
 import { twMerge } from 'tailwind-merge';
 import mock_data from './chart/data.json'
 // import { getCandlestickData } from '../Chart/data/dataProcessor';
 // const candleStickData = getCandlestickData();
 import PaneMenu from './components/PaneMenu'
 import Modal from './components/Modal';
-import { calculatePercentageChange } from '../Chart/utils/helpers';
+import { calculatePercentageChange, Pane } from '../Chart/utils/helpers';
 
 
 const initialNodes = [
@@ -37,7 +38,8 @@ function FlowExample() {
     const [results, setResults] = useEdgesState();
     const [menu, setMenu] = useNodesState({ visible: false, x: 0, y: 0, data: null });
     const [paneMenu, setPaneMenu] = useNodesState({ visible: false, x: 0, y: 0 });
-    const [state, setState] = useNodesState({ chart: true, resultsOn: true });
+    const [state, setState] = useNodesState({ chart: true, resultsOn: true, panes: [] });
+    const [panes, setPanes] = useState(['flow', 'results']);
 
     const updateNodeValue = (nodeId, newData) => {
         setNodes((nds) =>
@@ -138,12 +140,14 @@ function FlowExample() {
             id: `${nodes.length + 1}`, // Unique ID for the new node
             // type: 'default',
             type: node,
-            data: { label: `${data.name} ${nodes.length + 1}`, value: [], ...data },
+            node: node,
+            data: { label: `${data?.name ?? node} ${nodes.length + 1}`, value: [], ...data },
             position: {
                 x: Math.random() * 500, // Random x position
                 y: Math.random() * 500, // Random y position
             },
         };
+        // console.log({newNode});
         setNodes((nds) => [...nds, newNode]);
         closePaneMenu()
     };
@@ -199,7 +203,7 @@ function FlowExample() {
 
             //   console.log(`Executing Node: ${currentNode?.data.label}`);
             //   console.log(`Previous Node Values:`, previousNodeValues);
-            return { id: node.id, ...node.data, preNode };
+            return { id: node.id, node: node.node, type: node.type, ...node.data, preNode };
         });
 
         // console.log('Execution Order:', orderedOutput);
@@ -225,7 +229,8 @@ function FlowExample() {
         const result = await response.json();
         // console.log({ result }); // Handle the response
         setResults({ kahn_nodes, ...result })
-        setState({ ...state, resultsOn: true })
+        // setState({ ...state })
+        setPanes(_ => [..._, 'chart'])
         // console.log("outputs", result.outputs);
 
     };
@@ -280,7 +285,7 @@ function FlowExample() {
 
                     </div>
                 )}
-                <div className={twMerge("overflow-hidden ", (results && state.chart) ? 'h-1/2' : 'h-full')}>
+                <div className={twMerge("overflow-hidden ", (results?.outputs) ? 'h-1/2' : 'h-full', !panes.includes('flow') ? 'hidden' : 'block')}>
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
@@ -313,14 +318,6 @@ function FlowExample() {
                             {state.resultsOn ? "Result On" : "Result Off"}
                         </button>
 
-                        <button
-                            className='m-2  bg-black p-2 px-10 text-gray-200 rounded-lg'
-                            onClick={() => setState({ ...state, chart: !state.chart })}
-                        >
-                            {state.chart ? "Chart On" : "Chart Off"}
-                        </button>
-
-
 
                         <button
                             className='m-2  bg-black p-2 px-10 text-gray-200  rounded-lg'
@@ -331,7 +328,7 @@ function FlowExample() {
                                 console.log("nodes : ", kahn_nodes);
                                 let query = queriesMaker(kahn_nodes)
                                 console.log("query : ", query);
-                                if (state.chart) handleSubmit(query, kahn_nodes)
+                                handleSubmit(query, kahn_nodes)
 
                             }}
                         >
@@ -339,16 +336,116 @@ function FlowExample() {
                         </button>
                     </div>
 
+
+                    <div className='absolute left-0 top-0 bg-white text-black hover:text-black/40 flex items-center gap-x-2 m-2'>
+                        {/* CLOSE PANEL */}
+                        <button className=''
+                            onClick={() => {
+                                console.log(panes);
+
+                                let _panes = panes.filter(_ => _ != 'flow')
+                                setPanes(_panes)
+                            }}
+                        >
+                            <span className="material-symbols-outlined">
+                                close
+                            </span>
+                        </button>
+
+
+                    </div>
+
                 </div>
 
 
-                {results && state.chart && <div className={`h-1/2 w-screen`}>
-                    <Plot data={results} state={state.resultsOn} />
+                {results?.outputs && <div className={twMerge(`w-screen relative`, !panes.includes('flow') ? 'h-full' : 'h-1/2')}>
+
+                    {panes.includes('chart') && (
+                        <Plot data={results} panes={panes} />
+                    )}
+
+                    {panes.includes('log') && (
+                        <div className='text-black text-xs break-words text-wrap font-mono h-full overflow-y-scroll'>
+                            {Object.entries(JSON.parse(results.outputs)).map((lg, key) => {
+                                const node = results.kahn_nodes[lg[0]];
+                                return (
+                                    <div key={key}>
+                                        <p className='bg-black text-white px-2 w-fit'>
+                                            {node?.name + ' - ' + node?.label}
+                                        </p>
+                                        <p className='mb-2 px-2'>{JSON.stringify(lg[1])}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    <div className='absolute left-0 top-0 bg-white text-black flex items-center gap-x-2 m-2'>
+                        {/* <p>{panes.join()}</p> */}
+                        <button
+                            className=''
+                            // onClick={() => setState({ ...state, panes: panes.filter(_ => _ != '') })}
+                            onClick={() => {
+                                let _panes = panes.filter(_ => _ != 'log')
+                                setPanes([..._panes, 'chart'])
+                            }}
+                        >
+                            {/* {state.chart ? "Chart On" : "Chart Off"} */}
+                            <span class="material-symbols-outlined">
+                                legend_toggle
+                            </span>
+                        </button>
+
+                        <button
+                            className=''
+                            onClick={() => {
+                                let _panes = panes.filter(_ => _ != 'chart')
+                                // setPanes([..._panes, 'log'])
+                                setPanes([..._panes, 'log'])
+                            }}
+                        >
+                            <span class="material-symbols-outlined">
+                                terminal
+                            </span>
+                        </button>
+
+
+                        <button
+                            className=''
+                            onClick={() => {
+                                // let _panes = panes.filter(_ => _ != 'chart')
+                                // setPanes([..._panes, 'log'])
+                                setPanes([...panes, 'flow'])
+                            }}
+                        >
+                            <span class="material-symbols-outlined">
+                                collapse_all
+                            </span>
+                        </button>
+
+
+
+                        {/* CLOSE PANEL */}
+                        <button className=''
+                            onClick={() => {
+                                let destroyPanes = ['chart', 'log']
+                                let _panes = panes.filter(_ => !destroyPanes.includes(_))
+                                setPanes(_panes)
+                                setResults()
+                            }}
+                        >
+                            <span className="material-symbols-outlined">
+                                close
+                            </span>
+                        </button>
+
+
+                    </div>
                 </div>}
             </div>
 
             {/* RESULTS RIGHT MODAL */}
-            {results?.result && state.resultsOn && <div className='absolute right-0 bg-white w-[20vw] h-screen overflow-y-scroll'>
+            {results?.result && panes.includes('results') && <div className='absolute right-0 bg-white w-[20vw] h-screen overflow-y-scroll'>
                 <div className='fixed bottom-0 bg-gradient-to-t from-white via-white p-4 w-full'>
                     <h3>Results</h3>
                     <p className='text-xl'>Balance : {(results.result?.final_balance).toFixed(2)}</p>

@@ -266,7 +266,7 @@
       }
     }
   },
-  "Array_Shape_and_Reshaping": {
+  "Array_Shape_&_Reshaping": {
     "shape": {
       "Name": "Shape",
       "Description": "Gets the shape of an array as a tuple of dimensions.",
@@ -374,7 +374,7 @@
       }
     }
   },
-  "Array_Concatenation_and_Splitting": {
+  "Concatenation_&_Splitting": {
     "concatenate": {
       "Name": "Concatenate",
       "Description": "Joins a sequence of arrays along an existing axis.",
@@ -518,7 +518,7 @@
       }
     }
   },
-  "Indexing_and_Slicing": {
+  "Indexing_&_Slicing": {
     "take": {
       "Name": "Take",
       "Description": "Extracts elements along a specified axis.",
@@ -591,7 +591,7 @@
       }
     }
   },
-  "Sorting_and_Searching": {
+  "Sorting_&_Searching": {
     "sort": {
       "Name": "Sort",
       "Description": "Sorts an array.",
@@ -651,7 +651,7 @@
       }
     }
   },
-  "Arithmetic_and_Logical_Operations": {
+  "Arithmetic_&_Logical_Ops": {
     "add": {
       "Name": "Add",
       "Description": "Adds numbers in two arrays element by element.",
@@ -665,7 +665,8 @@
         "Explanation": "Add two arrays element by element.",
         "Code": "np.add([1, 2, 3], [4, 5, 6])",
         "Result": "[5, 7, 9]"
-      }
+      },
+      "Value": "+"
     },
     "subtract": {
       "Name": "Subtract",
@@ -680,7 +681,8 @@
         "Explanation": "Subtract the second array from the first element by element.",
         "Code": "np.subtract([10, 20, 30], [1, 2, 3])",
         "Result": "[9, 18, 27]"
-      }
+      },
+      "Value": "-"
     },
     "multiply": {
       "Name": "Multiply",
@@ -695,7 +697,8 @@
         "Explanation": "Multiply two arrays element by element.",
         "Code": "np.multiply([1, 2, 3], [4, 5, 6])",
         "Result": "[4, 10, 18]"
-      }
+      },
+      "Value": "*"
     },
     "divide": {
       "Name": "Divide",
@@ -710,7 +713,8 @@
         "Explanation": "Divide the first array by the second element by element.",
         "Code": "np.divide([10, 20, 30], [2, 4, 5])",
         "Result": "[5.0, 5.0, 6.0]"
-      }
+      },
+      "Value": "/"
     },
     "power": {
       "Name": "Power",
@@ -725,52 +729,206 @@
         "Explanation": "Raise elements in the first array to the power of elements in the second.",
         "Code": "np.power([2, 3, 4], [1, 2, 3])",
         "Result": "[2, 9, 64]"
-      }
+      },
+      "Value": "**"
     },
-    "logical_and": {
+    "Logical AND": {
       "Name": "Logical AND",
-      "Description": "Performs a logical AND operation element by element.",
+      "Description": "Performs an element-wise logical AND operation between two arrays.",
       "Type": "Logical Operation",
+      "Value": "logical_and",
       "Inputs": [
-        { "name": "array1", "type": "numpy array (boolean)", "target": true },
-        { "name": "array2", "type": "numpy array (boolean)", "target": true }
+        {
+          "name": "array1",
+          "type": "array of booleans",
+          "target": true
+        },
+        {
+          "name": "array2",
+          "type": "array of booleans",
+          "target": true
+        }
       ],
-      "Outputs": [{ "name": "result", "type": "numpy array (boolean)", "source": true }],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "array of booleans",
+          "source": true
+        }
+      ],
       "Example": {
-        "Explanation": "Perform a logical AND operation on two arrays.",
-        "Code": "np.logical_and([True, False, True], [False, False, True])",
-        "Result": "[False, False, True]"
+        "Explanation": "Checks if elements in two conditions are both true.",
+        "Code": "np.logical_and([True, False, True], [True, True, False])",
+        "Result": "[True, False, False]"
       }
     },
-    "isin": {
-      "Name": "IsIn",
-      "Description": "Checks if elements of an array are in a list or another array.",
+    "Logical OR": {
+      "Name": "Logical OR",
+      "Description": "Performs an element-wise logical OR operation between two arrays.",
       "Type": "Logical Operation",
+      "Value": "logical_or",
       "Inputs": [
-        { "name": "array", "type": "numpy array", "target": true },
-        { "name": "test_elements", "type": "list or numpy array", "target": true }
+        {
+          "name": "array1",
+          "type": "array of booleans",
+          "target": true
+        },
+        {
+          "name": "array2",
+          "type": "array of booleans",
+          "target": true
+        }
       ],
-      "Outputs": [{ "name": "result", "type": "numpy array (boolean)", "source": true }],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "array of booleans",
+          "source": true
+        }
+      ],
       "Example": {
-        "Explanation": "Check which elements in the array are in the test list.",
-        "Code": "np.isin([1, 2, 3], [2, 3, 4])",
+        "Explanation": "Checks if at least one condition is true.",
+        "Code": "np.logical_or([True, False, True], [True, True, False])",
+        "Result": "[True, True, True]"
+      }
+    },
+    "Logical NOT": {
+      "Name": "Logical NOT",
+      "Description": "Performs a logical NOT operation on each element of an array.",
+      "Type": "Logical Operation",
+      "Value": "logical_not",
+      "Inputs": [
+        {
+          "name": "array",
+          "type": "array of booleans",
+          "target": true
+        }
+      ],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "array of booleans",
+          "source": true
+        }
+      ],
+      "Example": {
+        "Explanation": "Negates each boolean value in the array.",
+        "Code": "np.logical_not([True, False, True])",
+        "Result": "[False, True, False]"
+      }
+    },
+    "Logical XOR": {
+      "Name": "Logical XOR",
+      "Description": "Performs an element-wise logical XOR operation between two arrays.",
+      "Type": "Logical Operation",
+      "Value": "logical_xor",
+      "Inputs": [
+        {
+          "name": "array1",
+          "type": "array of booleans",
+          "target": true
+        },
+        {
+          "name": "array2",
+          "type": "array of booleans",
+          "target": true
+        }
+      ],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "array of booleans",
+          "source": true
+        }
+      ],
+      "Example": {
+        "Explanation": "Checks if exactly one of the conditions is true.",
+        "Code": "np.logical_xor([True, False, True], [True, True, False])",
         "Result": "[False, True, True]"
       }
     },
-    "any": {
-      "Name": "Any",
-      "Description": "Returns True if at least one element in the array evaluates to True.",
+    "Is In": {
+      "Name": "Is In",
+      "Description": "Checks if elements of one array are present in another array.",
       "Type": "Logical Operation",
-      "Inputs": [{ "name": "array", "type": "numpy array (boolean)", "target": true }],
-      "Outputs": [{ "name": "result", "type": "boolean", "source": true }],
+      "Value": "isin",
+      "Inputs": [
+        {
+          "name": "array",
+          "type": "array of values",
+          "target": true
+        },
+        {
+          "name": "values",
+          "type": "list of values",
+          "target": true
+        }
+      ],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "array of booleans",
+          "source": true
+        }
+      ],
       "Example": {
-        "Explanation": "Check if any element in the array is True.",
+        "Explanation": "Checks if elements are in the given list.",
+        "Code": "np.isin([1, 2, 3], [1, 3, 5])",
+        "Result": "[True, False, True]"
+      }
+    },
+    "Any": {
+      "Name": "Any",
+      "Description": "Checks if any element in the array evaluates to True.",
+      "Type": "Logical Operation",
+      "Value": "any",
+      "Inputs": [
+        {
+          "name": "array",
+          "type": "array of booleans",
+          "target": true
+        }
+      ],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "boolean",
+          "source": true
+        }
+      ],
+      "Example": {
+        "Explanation": "Checks if any value in the array is True.",
         "Code": "np.any([False, False, True])",
+        "Result": "True"
+      }
+    },
+    "All": {
+      "Name": "All",
+      "Description": "Checks if all elements in the array evaluate to True.",
+      "Type": "Logical Operation",
+      "Value": "all",
+      "Inputs": [
+        {
+          "name": "array",
+          "type": "array of booleans",
+          "target": true
+        }
+      ],
+      "Outputs": [
+        {
+          "name": "result",
+          "type": "boolean",
+          "source": true
+        }
+      ],
+      "Example": {
+        "Explanation": "Checks if all values in the array are True.",
+        "Code": "np.all([True, True, True])",
         "Result": "True"
       }
     }
   },
-  "Array_Statistics_and_Aggregations": {
+  "Statistics_&_Aggregations": {
     "sum": {
       "Name": "Sum",
       "Description": "Compute the sum of array elements.",
@@ -904,7 +1062,7 @@
       }
     }
   },
-  "Broadcasting_and_Copying": {
+  "Broadcasting_&_Copying": {
     "tile": {
       "Name": "Tile",
       "Description": "Repeat an array along specified axes.",

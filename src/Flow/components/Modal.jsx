@@ -27,7 +27,7 @@ const CustomModal = (props) => {
                 <div className="flex justify-between items-center m-2">
                     <h2 className="text-xl font-bold">{props?.title}</h2>
                     {props?.onClose && <button
-                        className="bg-white text-black dark:text-white dark:bg-black w-10 h-10 rounded-full"
+                        className="bg-white text-black w-10 h-10 rounded-full"
                         onClick={props?.onClose}
                     >
                         <span className="material-symbols-outlined mt-2 hover:font-bold">

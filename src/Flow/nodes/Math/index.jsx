@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { Handle, MarkerType, Position, useEdges, useNodesData } from "@xyflow/react";
 import useNodeValue from "../useNodeValue";
-import Funcs from './math.json'
+import Math from './math.json'
 import Modal from '../../components/Modal'
 
 // Object.values(Funcs).map(_=> console.log(_.Outputs))
@@ -12,15 +12,19 @@ const MathNode = memo(({ data, id, updateNode }) => {
     // Inputs 
     // Parameters 
     // Outputs 
+
+    // const Funcs = Math[data['type']]
+
+
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     const onPickIndicator = (option) => {
-        const func = Funcs[option]
+        const func = Math[option]
 
         const Name = func?.Name
-        const inputs = func?.Inputs.map(_ => 0)
-        // const params = func?.Parameters.map(_ => _.value)
+        const inputs = func?.Inputs.map(_ => null)
 
+        // const params = func?.Parameters.map(_ => _.value)
         const rest = [option, ...inputs]
 
         let returns = func?.Outputs.map(_ => _.value)
@@ -29,7 +33,12 @@ const MathNode = memo(({ data, id, updateNode }) => {
         updateNode(id, { label: Name, value: rest, returns, func: func });
     };
 
+    // Auto Pick
+    useEffect(() => {
+        onPickIndicator(data.value[0])
+    }, [])
 
+    // On Connect
     useEffect(() => {
         const updatedValues = [...data.value];  // Clone the array to avoid direct mutation
 
@@ -67,8 +76,8 @@ const MathNode = memo(({ data, id, updateNode }) => {
             placeholder="Indicator"
             className={'bg-white border p-2 m-2 rounded-xl'}
         >
-            {Object.entries(Funcs)?.map((fun, optIndex) => {
-                return <option key={optIndex} value={fun[0]}>
+            {Object.entries(Math)?.map((fun, optIndex) => {
+                return <option key={optIndex} value={fun[1]['Name']}>
                     {fun[1]['Name']}
                 </option>
             })}

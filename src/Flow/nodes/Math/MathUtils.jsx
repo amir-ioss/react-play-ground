@@ -7,15 +7,19 @@ import Modal from '../../components/Modal'
 
 // Object.values(Funcs).map(_=> console.log(_.Outputs))
 
-const Funcs = Utils.Array_Creation
 
 const MathNode = memo(({ data, id, updateNode }) => {
-    const [state, setState] = useState({ pickerOn: true, option: null, type: 'Overlap Studies' })
+    // const [state, setState] = useState({})
     // 0 = Indicator 
     // Inputs 
     // Parameters 
     // Outputs 
+
+    const Funcs = Utils[data['type']]
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
+
+
+
 
     const onPickIndicator = (option) => {
         const func = Funcs[option]
@@ -33,7 +37,12 @@ const MathNode = memo(({ data, id, updateNode }) => {
         updateNode(id, { label: Name, value: rest, returns, func: func });
     };
 
+    // Auto Pick
+    useEffect(() => {
+        onPickIndicator(data.value[0])
+    }, [])
 
+    // On Connect
     useEffect(() => {
         const updatedValues = [...data.value];  // Clone the array to avoid direct mutation
 
@@ -120,7 +129,7 @@ const MathNode = memo(({ data, id, updateNode }) => {
                     type="source"
                     position={Position.Right}
                     id={`${ID}`}
-                    style={{ background: 'green', width: 15, height: 15, }}
+                    style={{ background: 'gray', width: 15, height: 15, }}
                     reconnectable="target"
                 />
 
@@ -131,7 +140,7 @@ const MathNode = memo(({ data, id, updateNode }) => {
             type="source"
             position={Position.Right}
             id={'0'}
-            style={{ background: 'green', width: 15, height: 15, }}
+            style={{ background: 'gray', width: 15, height: 15, }}
             reconnectable="target"
         />}
 

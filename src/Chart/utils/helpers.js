@@ -77,7 +77,7 @@ const calculateRSI = (data, period = 14) => {
   return rsi;
 };
 
-function Text(ctx, text, x, y, bgColor, textColor = "white", isPriceLine) {
+function Text(ctx, text, x, y, bgColor, textColor = "white", isPriceLine, center=false) {
   // Set font and measure text
   ctx.font = "12px Arial";
   const padding = 5; // Padding around the text
@@ -86,6 +86,7 @@ function Text(ctx, text, x, y, bgColor, textColor = "white", isPriceLine) {
   const textHeight = 12; // Approx height for the font size
   let _x = x;
   if (isPriceLine) _x = _x - textWidth;
+  if (center) _x = _x + (textWidth/2);
   // Draw background rectangle
   ctx.fillStyle = bgColor;
   ctx.fillRect(_x - padding, y - textHeight - padding, textWidth + padding * 2, textHeight + padding * 2);

@@ -145,7 +145,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
         <Modal isOpen={state?.pickerOn}
             onClose={() => setState({ ...state, pickerOn: false })}
             title="Indicators"
-            className=" bg-white xl:w-1/2 cursor-pointer py-0 rounded-lg p-4 md:p-0"
+            className=" bg-white w-full md:w-3/4 xl:w-[800px] cursor-pointer py-0 rounded-lg p-4 md:p-0 text-sm"
         >
             <div>
                 <input className="w-full border p-4 outline-none" placeholder="Search" onChange={(e) => {
@@ -156,7 +156,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
                 <div className="w-fit  border-r">
                     {[{ "name": "Math Operators" }, { "name": "Math Transform" }, { "name": "Pattern Recognition" }, { "name": "Momentum Indicators" }, { "name": "Overlap Studies" }, { "name": "Statistic Functions" }, { "name": "Volatility Indicators" }, { "name": "Volume Indicators" }, { "name": "Price Transform" }]?.map((ind_type, idx) => {
                         return <div key={idx} className="py-2 px-10 hover:bg-slate-50"
-                            onClick={() => setState({ ...state, type: ind_type.name })}
+                            onClick={() => setState({ ...state, type: ind_type.name, search: null })}
                         >
                             <p className={state.type == ind_type.name ? `text-blue-600` : ''}>{ind_type.name}</p>
                         </div>

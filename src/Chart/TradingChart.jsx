@@ -7,7 +7,7 @@ const initialCandleWidth = 5
 const RED = "#f04042"
 const GREEN = "#1dda9e"
 
-const Chart = ({ data: results, state }) => {
+const Chart = ({ data: results, panes }) => {
   const canvasRef = useRef(null);
   const [chartOffsetX, setChartOffsetX] = useState(0);
   const [zoomFactor, setZoomFactor] = useState(1);
@@ -170,7 +170,7 @@ const Chart = ({ data: results, state }) => {
 
 
     // PLOT
-    const outputs = JSON.parse(results?.outputs)
+    const outputs = results?.outputs ? JSON.parse(results?.outputs) : null
     var component_layer = 0
     var line_layer = 0
 
@@ -539,7 +539,43 @@ const Chart = ({ data: results, state }) => {
         }
 
 
+        // BOOLEAN
+        function plotTexts(name = "", out, color = '#000') {
+          if (!name || !out) return;
+          const data = out.reverse();
 
+          for (let index = 0; index < maxVisibleCandles; index++) {
+            const dataIndex = index + startIndex;
+            if (dataIndex < 0 || dataIndex >= candleStickData.length || !data[dataIndex]) continue;
+
+            const x = chartWidth - ((index + startIndex) * totalCandleWidth) + chartOffsetX;
+            if (x < padding.left || x > canvasWidth - padding.right) continue;
+            // const y = padding.top + (20 * line_layer);
+            // PLOT TEXT FOR VALUES 100 OR -100
+            const value = out[dataIndex];
+            const isBullish = value === 100
+            const y = padding.top + ((highPrice - candleStickData[dataIndex][isBullish ? 'high' : 'low']) / priceRange) * chartHeight;
+
+
+            if (value === 100 || value === -100) {
+
+              ctx.beginPath();
+              ctx.arc(x + (candleWidth / 2), isBullish ? (y - 5) : (y + 10), 3, 0, 2 * Math.PI); // Circle with radius 1.5
+              ctx.fillStyle = isBullish ? GREEN : RED; // Circle color
+              ctx.fill();
+
+
+
+              // const text = value.toString(); // Convert value to string for rendering
+              const text = node.indicator.Description;
+              
+              // const text = "0" // Convert value to string for rendering
+
+              Text(ctx, text, x + (candleWidth / 2), y - (isBullish ? 10 : -30), "#00000000", isBullish ? GREEN : RED, chartOffsetX > 0, true); // Adjust `y` for text positioning
+            }
+
+          }
+        }
 
         // Function to draw order blocks on canvas
         function drawOrderBlock(orderBlock, endTime) {
@@ -649,7 +685,7 @@ const Chart = ({ data: results, state }) => {
 
 
           var BoundedType = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX", "STOCHRSI"]
-          var CenteredType = ["MACD", "MOM", "ROC", "AO", "TRIX"]
+          var CenteredType = ["MACD", "MOM", "ROC", "AO", "TRIX", "COS"]
           var UnboundeType = ["ATR", "OBV"]
           // var Percentage = ["ROC", "WILLR"]
 
@@ -681,7 +717,12 @@ const Chart = ({ data: results, state }) => {
                 plotCenteredComponent(`${node.label}`, out, getColor(id), maxValue, minValue)
                 component_layer += 1
               } else {
-                console.log("SPECIAL", out);
+                // CANDLE PATTERNS
+                if (node.indicator.Outputs[0]['OutputRule'] == "values are -100, 0 or 100") {
+                  plotTexts(node.label, out, getColor(id))
+                } else {
+                  console.log("SPECIAL", out);
+                }
               }
             }
 
@@ -819,7 +860,7 @@ const Chart = ({ data: results, state }) => {
 
   useEffect(() => {
     renderChart();
-  }, [mousePos, chartOffsetX, zoomFactor, canvasWidth, canvasHeight, state]);
+  }, [mousePos, chartOffsetX, zoomFactor, canvasWidth, canvasHeight, panes]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

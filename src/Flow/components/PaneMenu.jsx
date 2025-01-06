@@ -1,100 +1,133 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { nodesList } from './nodes'
+import { colors } from '../utils/colors'
+
+const nodes = nodesList()
+
+function formatString(input) {
+    return input
+        .replace(/[_.,]/g, ' ') // Replace _,. with spaces
+        .replace(/\b\w/g, char => char.toUpperCase()); // Capitalize each word
+}
+
 
 function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
-    if (!paneMenu.visible) return
+    const [searchQuery, setSearchQuery] = useState('');
+    const [expandedSubmenu, setExpandedSubmenu] = useState(null);
+    const [expandedSubSubmenu, setExpandedSubSubmenu] = useState(null);
 
+    if (!paneMenu.visible) return null;
+
+
+    const filteredNodes = nodes.filter(nd =>
+        nd.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (nd.submenu && nd.submenu.some(sub =>
+            sub.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (sub.submenu && sub.submenu.some(subSub => subSub.name.toLowerCase().includes(searchQuery.toLowerCase())))
+        ))
+    );
 
     return (
         <div
-            style={{
-                top: paneMenu.y,
-                left: paneMenu.x,
-            }}
-            className='absolute z-10 border bg-white min-w-64 rounded-lg'
+            style={{ top: paneMenu.y, left: paneMenu.x }}
+            className='absolute z-10 border bg-white w-56 rounded-lg'
         >
             <div className='flex items-center justify-between border-b'>
-                <p className='m-2 font-bold'>+ New Node</p>
-                <button className='mx-2 text-xl'
+                <input
+                    type="text"
+                    placeholder="Search nodes..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="m-2 px-2 p-1 rounded-full w-full outline-none bg-gray-100"
+                />
+                <button
+                    className='mx-2 text-xl'
                     onClick={closePaneMenu}
-                >  <span className="material-symbols-outlined mt-2 hover:font-bold">
+                >
+                    <span className="material-symbols-outlined mt-2 hover:font-bold">
                         close
-                    </span></button>
+                    </span>
+                </button>
             </div>
             <div className='flex flex-col'>
-                {[
-                    {
-                        name: "Asset Selector",
-                        purposes: "Makes it clear that users are selecting an asset or coin.",
-                        node: "CoinNode",
-                        type: 'coin_data'
-                    },
-                    {
-                        name: "Technical Indicator",
-                        purposes: "Clarifies that the node deals with technical analysis indicators like RSI, MACD, etc.",
-                        node: "IndicatorNode",
-                        type: 'indicator'
-                    },
-                    {
-                        name: "Constant Value",
-                        purposes: "Indicates a fixed value or user-defined numeric input.",
-                        node: "ValueNode"
-                    },
-                    {
-                        name: "Math Operation",
-                        purposes: "Specifies that this node performs mathematical calculations.",
-                        node: "MathNode",
-                        type: 'math',
+                {/* LEYER 1 */}
+                {filteredNodes.map((nd, idx) => (
+                    <div key={idx} className="relative group text-sm">
+                        <button
+                            onClick={() => addNode(nd.node, nd)}
+                            className={`py-1 pl-4 flex items-center justify-between w-full text-left hover:bg-blue-50 border-black border-l ${expandedSubmenu === idx ? 'bg-blue-50' : ''}`}
+                            style={{ borderColor: colors[idx] }}
+                            onMouseOver={() => setExpandedSubmenu(idx)}
+                        >
 
-                    },
-                    {
-                        name: "Math Utils",
-                        purposes: "Specifies that this node performs mathematical special calculations.",
-                        node: "MathUtils",
-                        type: 'math_utils_np'
-                    },
-                    {
-                        name: "Condition",
-                        purposes: "Simple and clear to describe a conditional logic node, e.g., >, <, =, etc.",
-                        node: "ConditionNode",
-                        type: 'check'
-                    },
-                    {
-                        name: "High-Low Detector",
-                        purposes: "Explicitly states that this node detects high-high or low-low patterns.",
-                        node: "HHLLNode",
-                        type: 'hhll',
-                        plot: "lines"
-                    },
-                    {
-                        name: "Trade Executor",
-                        purposes: "Indicates that this node is responsible for executing trades.",
-                        node: "TradeNode",
-                        type: 'trade'
-                    },
-                    {
-                        name: "Logic Gate",
-                        purposes: "Describes the node's role in applying logical operations like AND, OR, NOT, etc.",
-                        node: "LogicalNode",
-                        type: 'logic'
-                    },
-                    // { name: "Coin", node: addNode('IndicatorNode', { type: 'coin_data' }) },
-                ].map((nd, idx) => <button
-                    // onClick={nd.add}
-                    onClick={() => addNode(nd.node, nd)}
-                    key={idx}
-                    className="py-2 px-2 text-left relative group hover:bg-blue-50 border-black"
-                >
-                    <h3>{nd.name}</h3>
-                    {/* Tooltip */}
-                    <div
-                        className="absolute bottom-full left-0 bottom-1 transform translate-y-4 w-max px-2 py-1 bg-black text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
-                    >
-                        {nd.purposes}
+                            <h3 className='capitalize'>{formatString(nd.name)}</h3>
+                            {nd?.submenu && <span class="material-symbols-outlined -scale-x-100 text-lg opacity-40">
+                                arrow_left
+                            </span>}
+                        </button>
+                        {/* Submenu */}
+
+                        {nd.submenu && (
+                            <div>
+                                {/* <button
+                                    className="text-xs ml-4 mt-1 hover:underline"
+                                    onClick={() => setExpandedSubmenu(expandedSubmenu === idx ? null : idx)}
+                                    onMouseOver={() => setExpandedSubSubmenu(idx)}
+
+                                >
+                                    {expandedSubmenu === idx ? 'Hide Submenu' : 'Show Submenu'}
+                                </button> */}
+                                {expandedSubmenu === idx && (
+                                    <div className="absolute border left-full w-full top-0 border-l bg-white rounded-r-lg">
+
+                                        {/* LEYER 2 */}
+                                        {nd.submenu.map((sub, subIdx) => {
+                                            return <div key={subIdx} className="relative group">
+                                                <button
+                                                    onClick={() => {
+                                                        if (sub.submenu) return
+                                                        addNode(sub.node, sub.data)
+                                                    }}
+                                                    className={`py-0 pl-4 flex items-center justify-between w-full text-left hover:bg-blue-50 ${expandedSubSubmenu === subIdx ? 'bg-blue-50' : ''}`}
+                                                    onMouseOver={() => setExpandedSubSubmenu(subIdx)}
+                                                >
+                                                    <h3 className='capitalize'>{formatString(sub.name)}</h3>
+                                                    <span class={`material-symbols-outlined -scale-x-100 text-lg opacity-40 ${sub?.submenu ? 'visible' : 'invisible'}`}>
+                                                        arrow_left
+                                                    </span>
+                                                </button>
+
+
+                                                {/* LEYER 3 */}
+                                                {sub.submenu && (
+                                                    <div>
+                                                        {expandedSubSubmenu === subIdx && (
+                                                            <div className="absolute border left-full min-w-44 top-0 border-l bg-white rounded-r-lg">
+                                                                {sub.submenu.map((subSub, subSubIdx) => (
+                                                                    <button
+                                                                        key={subSubIdx}
+                                                                        onClick={() => addNode(subSub.node, subSub.data)}
+                                                                        // onClick={() => console.log(subSub)}
+                                                                        className="py-1 pl-4 text-left w-full hover:bg-blue-50 capitalize"
+                                                                    >
+                                                                        {formatString(subSub.name)}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
-                </button>)}
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
-export default PaneMenu
+export default PaneMenu;
