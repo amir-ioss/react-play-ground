@@ -19,7 +19,7 @@ const queriesMaker = (obj) => {
       let query = $.value[0];
 
       const store_id = (ID) => obj.findIndex((_) => _.id == ID);
-      const input = (INDEX) => store_id($.preNode[INDEX]?.["id"]);
+      // const input = (INDEX) => store_id($.preNode[INDEX]?.["id"]);
 
       /////////////  COIN  /////////////
       if ($.node == "CoinNode") {
@@ -28,7 +28,7 @@ const queriesMaker = (obj) => {
         let symbol = "BTC/USDT";
         let timeframe = timeFrame ?? "5m";
         let limit = period ?? 500;
-        query = `fetch_ohlcv('${symbol}', '${timeframe}', ${value(limit, input(0), false)})`;
+        query = `fetch_ohlcv('${symbol}', '${timeframe}', ${value(limit, store_id(0), false)})`;
 
         ohlcvIndex = key;
       }
@@ -84,7 +84,7 @@ const queriesMaker = (obj) => {
           vals[k] = value(vals[k], ID, false);
           return ID;
         });
-        
+
         if ($.type == "Arithmetic_&_Logical_Ops") {
           query = `np.${$.func["Value"]}(${vals.join(",")})`;
         } else {
@@ -102,7 +102,7 @@ const queriesMaker = (obj) => {
         // np.logical_and(array1, array2)
         const [val1, val2, condition] = $.value;
         // query = `${condition}(${value(val1, input(0), false)}, ${value(val2, input(1), false)})`;
-        query = `${condition}(output['${input(0)}'], output['${input(1)}'])`;
+        query = `${condition}(output['${store_id(0)}'], output['${store_id(1)}'])`;
       }
 
       /////////////  INDICATOR  /////////////
@@ -113,15 +113,15 @@ const queriesMaker = (obj) => {
         let vals = rest.slice(0, source_length);
         let params = rest.slice(source_length);
 
-        const inputs = $.preNode.map((_, k) => {
+        $.preNode.map((_, k) => {
           var ID = store_id(_.id);
-          // if (!["coin_data", "indicator"].includes(_?.type)) {
-          //   if (isSource(vals[k])) {
-          //     vals[k] = value(vals[k] + "_", ID, false);
-          //   }
-          // } else {
-          vals[k] = value(vals[k], ID, false);
-          // }
+          if (!["coin_data", "indicator"].includes(_?.type)) {
+            if (isSource(vals[k])) {
+              vals[k] = value(vals[k] + "_", ID, false);
+            }
+          } else {
+            vals[k] = value(vals[k], ID, false);
+          }
           return ID;
         });
 
@@ -136,7 +136,7 @@ const queriesMaker = (obj) => {
       /////////////  HH/LL  /////////////
       if ($.node == "HHLLNode") {
         const [fun, source, period] = $.value;
-        query = `talib.${fun}(${value(source, input(0), false)}, ${period})`;
+        query = `talib.${fun}(${value(source, store_id(0), false)}, ${period})`;
         if (fun == "support_resistance_levels") {
           query = `support_resistance_levels(output['${ohlcvIndex}'], window=${period}) -> ['support1', 'support2', 'support3', 'resistance1', 'resistance2', 'resistance3']`;
         }
@@ -164,6 +164,24 @@ const queriesMaker = (obj) => {
           vals[k] = ID >= 0 ? `output['${ID}']` : _;
         });
         query = `paper_trading(${vals.join(", ")}, ohlcv=output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
+      }
+
+      if ($.node == "IndexNode") {
+        const [source, offset] = $.value;
+        // query = `np.array([None] * ${offset} + list(${value(source, input(0), false)}[:-${offset}]))`;
+        query = `offset_index(${value(source, store_id(0), false)}, ${offset})`;
+      }
+
+      if ($.node == "InvertNode") {
+        let vals = $.value;
+        $.preNode.map((_, k) => {
+          var ID = store_id(_.id);
+          vals[k] = value(vals[k], ID, false);
+          return ID;
+        });
+
+        // query = `np.array([None] * ${offset} + list(${value(source, input(0), false)}[:-${offset}]))`;
+        query = `~${vals[0]}`;
       }
 
       /////////////  DEFAULT  /////////////
@@ -195,32 +213,32 @@ const value = (value, indices = 0, multi = true) => {
   return result;
 };
 
-function buildCheckQuery(val1, val2, condition, inputs) {
-  // Determine the range length, ensuring no IndexError
-  const rangeExpr = isSource(val1)
-    ? `len(output['${inputs[0]}']['${val1}'])`
-    : isSource(val2)
-    ? `len(output['${inputs[1]}']['${val2}'])`
-    : isNum(val1)
-    ? `len(output['${inputs[1]}'])`
-    : isNum(val2)
-    ? `len(output['${inputs[0]}'])`
-    : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
+// function buildCheckQuery(val1, val2, condition, inputs) {
+//   // Determine the range length, ensuring no IndexError
+//   const rangeExpr = isSource(val1)
+//     ? `len(output['${inputs[0]}']['${val1}'])`
+//     : isSource(val2)
+//     ? `len(output['${inputs[1]}']['${val2}'])`
+//     : isNum(val1)
+//     ? `len(output['${inputs[1]}'])`
+//     : isNum(val2)
+//     ? `len(output['${inputs[0]}'])`
+//     : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
 
-  // Build expressions for val1 and val2
-  const val1Expr = value(val1, inputs[0]);
-  const val2Expr = value(val2, inputs[1]);
-  let query = "";
+//   // Build expressions for val1 and val2
+//   const val1Expr = value(val1, inputs[0]);
+//   const val2Expr = value(val2, inputs[1]);
+//   let query = "";
 
-  // Build the query string
-  if (isNum(val1) && isNum(val2)) {
-    query = `${val1Expr} ${condition} ${val2Expr}`;
-  } else {
-    query =
-      `np.array([${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
-      (isNum(0) || isNum(1) ? `])` : `if (${val1Expr} is not None and ${val2Expr} is not None)])`);
-  }
-  return query;
-}
+//   // Build the query string
+//   if (isNum(val1) && isNum(val2)) {
+//     query = `${val1Expr} ${condition} ${val2Expr}`;
+//   } else {
+//     query =
+//       `np.array([${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
+//       (isNum(0) || isNum(1) ? `])` : `if (${val1Expr} is not None and ${val2Expr} is not None)])`);
+//   }
+//   return query;
+// }
 
 const toSingleQuotes = (data) => JSON.stringify(data).replace(/"/g, "'"); // Replace double quotes with single quotes

@@ -18,6 +18,10 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
 
     if (!paneMenu.visible) return null;
 
+    const screenWidth = window.innerWidth
+    const isMouseOnRight = paneMenu.x > screenWidth*.6
+
+
 
     const filteredNodes = nodes.filter(nd =>
         nd.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -29,7 +33,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
 
     return (
         <div
-            style={{ top: paneMenu.y, left: paneMenu.x }}
+            style={{ top: paneMenu.y-100, left: paneMenu.x }}
             className='absolute z-10 border bg-white w-56 rounded-lg'
         >
             <div className='flex items-center justify-between border-b'>
@@ -62,7 +66,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
 
                             <h3 className='capitalize'>{formatString(nd.name)}</h3>
                             {nd?.submenu && <span class="material-symbols-outlined -scale-x-100 text-lg opacity-40">
-                                arrow_left
+                                {isMouseOnRight ? "arrow_right" : "arrow_left"}
                             </span>}
                         </button>
                         {/* Submenu */}
@@ -78,7 +82,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                                     {expandedSubmenu === idx ? 'Hide Submenu' : 'Show Submenu'}
                                 </button> */}
                                 {expandedSubmenu === idx && (
-                                    <div className="absolute border left-full w-full top-0 border-l bg-white rounded-r-lg">
+                                    <div className={`absolute border ${isMouseOnRight ? 'right-full' : 'left-full'}   w-full top-0 border-l bg-white rounded-r-lg`}>
 
                                         {/* LEYER 2 */}
                                         {nd.submenu.map((sub, subIdx) => {
@@ -93,7 +97,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                                                 >
                                                     <h3 className='capitalize'>{formatString(sub.name)}</h3>
                                                     <span class={`material-symbols-outlined -scale-x-100 text-lg opacity-40 ${sub?.submenu ? 'visible' : 'invisible'}`}>
-                                                        arrow_left
+                                                        {isMouseOnRight ? "arrow_right" : "arrow_left"}
                                                     </span>
                                                 </button>
 
@@ -102,7 +106,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                                                 {sub.submenu && (
                                                     <div>
                                                         {expandedSubSubmenu === subIdx && (
-                                                            <div className="absolute border left-full min-w-44 top-0 border-l bg-white rounded-r-lg">
+                                                            <div className={`absolute border ${isMouseOnRight ? 'right-full' : 'left-full'} min-w-44 top-0 border-l bg-white rounded-r-lg`}>
                                                                 {sub.submenu.map((subSub, subSubIdx) => (
                                                                     <button
                                                                         key={subSubIdx}

@@ -8,7 +8,7 @@ import Modal from '../../components/Modal'
 // Object.values(Indicators).map(_=> console.log(_.Outputs))
 
 const IndicatorNode = memo(({ data, id, updateNode }) => {
-    const [state, setState] = useState({ pickerOn: true, option: null, type: 'Overlap Studies' })
+    const [state, setState] = useState({ pickerOn: false, option: null, type: 'Overlap Studies' })
     // 0 = Indicator 
     // Inputs 
     // Parameters 
@@ -57,7 +57,7 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
     }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
 
-    return <div className="bg-gray-200 border border-indigo-600  border-black flex flex-col justify-center pb-4">
+    return <div className="bg-[#e0e3eb] border border-indigo-600  border-black flex flex-col justify-center pb-4">
         <div className="bg-gradient-to-r  from-indigo-600 to-indigo-400 p-2 text-white px-4">
             <h3 className="text-2xl">{data.name}</h3>
             {/* <p className="text-xs opacity-70">{data.purposes}</p> */}

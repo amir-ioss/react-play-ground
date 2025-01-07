@@ -12,13 +12,23 @@ import useNodeValue from './useNodeValue';
 
 const OPTIONS = [
     { value: null, name: "SELECT" },
-    { value: "1m", name: "1 Minutes" },
+    { value: "1m", name: "1 Minute" },
     { value: "3m", name: "3 Minutes" },
     { value: "5m", name: "5 Minutes" },
     { value: "10m", name: "10 Minutes" },
     { value: "15m", name: "15 Minutes" },
     { value: "30m", name: "30 Minutes" },
-    { value: "1H", name: "1 Hour" }]
+    { value: "1h", name: "1 Hour" },
+    { value: "2h", name: "2 Hours" },
+    { value: "4h", name: "4 Hours" },
+    { value: "6h", name: "6 Hours" },
+    { value: "8h", name: "8 Hours" },
+    { value: "12h", name: "12 Hours" },
+    { value: "1d", name: "1 Day" },
+    { value: "3d", name: "3 Days" },
+    { value: "1w", name: "1 Week" },
+    { value: "1M", name: "1 Month" }
+]
 
 
 
@@ -69,7 +79,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
 
-    // Handler for input changes
+    // Handler for input changes    
     const onInputChange = (event) => {
         if (data.value[TimeFrameID] !== event.target.value) {
             updateNode(id, { value: setVal(data.value, TimeFrameID, event.target.value) });
@@ -95,7 +105,7 @@ const CoinNode = memo(({ data, id, updateNode }) => {
 
 
 
-    return <div  className="bg-gray-200 min-w-64 border border-amber-600  border-black flex flex-col justify-center pb-4">
+    return <div className="bg-gray-200 min-w-64 border border-amber-600  border-black flex flex-col justify-center pb-4">
         <div className="bg-gradient-to-r  from-amber-600 to-amber-400 p-2 text-white px-4">
             <h3 className="text-2xl">{data.name}</h3>
             <p className="text-xs opacity-70">{data.purposes}</p>

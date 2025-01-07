@@ -94,6 +94,20 @@ function nodesList() {
       node: "LogicalNode",
       type: "logic",
     },
+    {
+      name: "Past Value (n)",
+      purposes: "access any value at a specified offset (like close[10], open[10], etc.)",
+      node: "PastValue",
+      // type: "index_node",
+    },
+    {
+      name: "Invert",
+      purposes: "true to false and false to true ",
+      node: "InvertNode",
+      // type: "invertNode",
+    },
+
+    
   ];
 
   return nodes;
