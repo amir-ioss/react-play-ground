@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { nodesList } from './nodes'
 import { colors } from '../utils/colors'
+import { twMerge } from 'tailwind-merge';
 
 const nodes = nodesList()
 
@@ -19,7 +20,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
     if (!paneMenu.visible) return null;
 
     const screenWidth = window.innerWidth
-    const isMouseOnRight = paneMenu.x > screenWidth*.6
+    const isMouseOnRight = paneMenu.x > screenWidth * .6
 
 
 
@@ -33,7 +34,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
 
     return (
         <div
-            style={{ top: paneMenu.y-100, left: paneMenu.x }}
+            style={{ top: paneMenu.y - 100, left: paneMenu.x }}
             className='absolute z-10 border bg-white w-56 rounded-lg'
         >
             <div className='flex items-center justify-between border-b'>
@@ -72,17 +73,10 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                         {/* Submenu */}
 
                         {nd.submenu && (
-                            <div>
-                                {/* <button
-                                    className="text-xs ml-4 mt-1 hover:underline"
-                                    onClick={() => setExpandedSubmenu(expandedSubmenu === idx ? null : idx)}
-                                    onMouseOver={() => setExpandedSubSubmenu(idx)}
-
-                                >
-                                    {expandedSubmenu === idx ? 'Hide Submenu' : 'Show Submenu'}
-                                </button> */}
+                            <>
                                 {expandedSubmenu === idx && (
-                                    <div className={`absolute border ${isMouseOnRight ? 'right-full' : 'left-full'}   w-full top-0 border-l bg-white rounded-r-lg`}>
+                                    <div className={twMerge("absolute border w-full top-0 border-l bg-white rounded-r-lg", 
+                                    isMouseOnRight ? 'right-full' : 'left-full', (nd?.layer != 3 && nd.submenu.length > 15) ? 'min-w-96 h-[700px] overflow-y-scroll' : '')}>
 
                                         {/* LEYER 2 */}
                                         {nd.submenu.map((sub, subIdx) => {
@@ -125,7 +119,7 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                                         })}
                                     </div>
                                 )}
-                            </div>
+                            </>
                         )}
                     </div>
                 ))}

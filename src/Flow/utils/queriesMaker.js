@@ -5,9 +5,9 @@ const isSource = (_) => ["time", "open", "high", "low", "close", "volume", ...ma
 const queriesMaker = (obj) => {
   var ohlcvIndex = 0;
   // Validate the input object
-  // if (typeof obj !== 'object' || obj === null) {
-  //   throw new Error('Invalid input: Expected an object.');
-  // }
+  if (typeof obj !== "object" || obj === null) {
+    throw new Error("Invalid input: Expected an object.");
+  }
 
   const inputs = {}; // Use inputs for any required processing
   // console.log(obj); // Log the input object for debugging
@@ -17,78 +17,64 @@ const queriesMaker = (obj) => {
     if (Object.hasOwnProperty.call(obj, key)) {
       var $ = obj[key];
       let query = $.value[0];
+      const preNodeLen = $.preNode.length;
 
       const store_id = (ID) => obj.findIndex((_) => _.id == ID);
-      // const input = (INDEX) => store_id($.preNode[INDEX]?.["id"]);
+      const source = (_) => {
+        let values = _;
+        for (let i = 0; i < preNodeLen; i++) {
+          let _ = $.preNode[i];
+          var ID = store_id(_.id);
+          var isMulti = _.returns && _.returns.length > 1;
+          values[i] = VALUE(values[i], ID, isMulti);
+        }
+        return values
+      };
 
       /////////////  COIN  /////////////
-      if ($.node == "CoinNode") {
-        const [t, o, h, l, c, v, period, timeFrame] = $.value;
+      if ($.node == "CandlesNode") {
+        const [asset, timeFrame, period] = $.value;
 
-        let symbol = "BTC/USDT";
+        let symbol = asset ?? "BTC/USDT";
         let timeframe = timeFrame ?? "5m";
-        let limit = period ?? 500;
-        query = `fetch_ohlcv('${symbol}', '${timeframe}', ${value(limit, store_id(0), false)})`;
+        let limit = period ?? 50;
+        query = `fetch_ohlcv('${symbol}', '${timeframe}', ${limit})`;
 
         ohlcvIndex = key;
       }
 
-      /////////////  MATH  /////////////
       /////////////  CHECK  /////////////
       if ($.node == "ConditionNode") {
         // ==, !=, <, <=, >
-
         let [val1, val2, condition] = $.value;
         let vals = [val1, val2];
+        const inputs = source(vals);
 
-        $.preNode.map((_, k) => {
-          var ID = store_id(_.id);
-          vals[k] = value(vals[k], ID, false);
-          return ID;
-        });
-
-        query = `${vals[0]} ${condition} ${vals[1]}`;
-
-        // const inputs = $.preNode.map((_, k) => {
-        //   if (!["coin_data", "indicator"].includes(_?.type)) {
-        //     if (isSource(vals[k])) {
-        //       vals[k] = vals[k] + "_";
-        //     }
-        //   }
-        //   return store_id(_.id);
-        // });
-
-        // const inputs = $.preNode.map((_, k) => store_id(_.id));
-        // query = buildCheckQuery(vals[0], vals[1], condition, inputs);
+        query = `${inputs[0]} ${condition} ${inputs[1]}`;
       }
 
+      if ($.node == "LogicalNode") {
+        // 10, AND, 20
+        const [val1, val2, condition] = $.value;
+        query = `${condition}(output['${store_id(0)}'], output['${store_id(1)}'])`;
+      }
+
+      /////////////  MATH  /////////////
       if ($.node == "MathNode") {
         const [condition, ...vals] = $.value;
+        const inputs = source(vals);
 
-        $.preNode.map((_, k) => {
-          var ID = store_id(_.id);
-          vals[k] = value(vals[k], ID, false);
-          return ID;
-        });
-
-        query = `${vals[0]} ${$.func["Value"]} ${vals[1]}`;
+        query = `${inputs[0]} ${$.func["Value"]} ${inputs[1]}`;
       }
 
       if ($.node == "MathUtils") {
         const [func, ...vals] = $.value;
-        // const source_length = $.preNode.length;
-        // let vals = rest.slice(0, source_length);
-        // let params = rest.slice(source_length);
-        $.preNode.map((_, k) => {
-          var ID = store_id(_.id);
-          vals[k] = value(vals[k], ID, false);
-          return ID;
-        });
+        const inputs = source(vals);
 
         if ($.type == "Arithmetic_&_Logical_Ops") {
-          query = `np.${$.func["Value"]}(${vals.join(",")})`;
+          query = `np.${$.func["Value"]}(${inputs.join(",")})`;
         } else {
-          query = `np.${func}(${vals.join(",")})`;
+          query = `np.${func}(${inputs.join(",")})`;
         }
         // RETURNS TO NAMED KEYS
         if ($.returns && $.returns.length > 0) {
@@ -96,36 +82,15 @@ const queriesMaker = (obj) => {
         }
       }
 
-      /////////////  CHECK  /////////////
-      if ($.node == "LogicalNode") {
-        // 10, AND, 20
-        // np.logical_and(array1, array2)
-        const [val1, val2, condition] = $.value;
-        // query = `${condition}(${value(val1, input(0), false)}, ${value(val2, input(1), false)})`;
-        query = `${condition}(output['${store_id(0)}'], output['${store_id(1)}'])`;
-      }
-
       /////////////  INDICATOR  /////////////
       if ($.node == "IndicatorNode") {
         const [indicator, ...rest] = $.value;
 
-        const source_length = $.preNode.length;
-        let vals = rest.slice(0, source_length);
-        let params = rest.slice(source_length);
+        let vals = rest.slice(0, preNodeLen);
+        let params = rest.slice(preNodeLen);
+        const inputs = source(vals);
 
-        $.preNode.map((_, k) => {
-          var ID = store_id(_.id);
-          if (!["coin_data", "indicator"].includes(_?.type)) {
-            if (isSource(vals[k])) {
-              vals[k] = value(vals[k] + "_", ID, false);
-            }
-          } else {
-            vals[k] = value(vals[k], ID, false);
-          }
-          return ID;
-        });
-
-        query = `talib.${indicator}(${[...vals, ...params].join(",")})`;
+        query = `talib.${indicator}(${[...inputs, ...params].join(",")})`;
 
         // RETURNS TO NAMED KEYS
         if ($.returns && $.returns.length > 0) {
@@ -136,7 +101,7 @@ const queriesMaker = (obj) => {
       /////////////  HH/LL  /////////////
       if ($.node == "HHLLNode") {
         const [fun, source, period] = $.value;
-        query = `talib.${fun}(${value(source, store_id(0), false)}, ${period})`;
+        query = `talib.${fun}(${VALUE(source, store_id(0), false)}, ${period})`;
         if (fun == "support_resistance_levels") {
           query = `support_resistance_levels(output['${ohlcvIndex}'], window=${period}) -> ['support1', 'support2', 'support3', 'resistance1', 'resistance2', 'resistance3']`;
         }
@@ -156,8 +121,9 @@ const queriesMaker = (obj) => {
         let vals = $.value.slice(0, source_length);
         let params = $.value.slice(source_length);
         const [balance, size, fee] = params;
+        // const inputs = source(vals);
 
-        // $.preNode.map((_, k) => {
+        // $.preNode.forEach((_, k) => {
         new Array(source_length).fill("None").map((_, k) => {
           var ID = store_id($.preNode[k]?.id);
           // vals[k] = value(vals[k], ID, false) ?? _;
@@ -166,22 +132,18 @@ const queriesMaker = (obj) => {
         query = `paper_trading(${vals.join(", ")}, ohlcv=output['${ohlcvIndex}'], starting_balance=${balance}, position_size=${size}, fee=${fee})`;
       }
 
-      if ($.node == "IndexNode") {
-        const [source, offset] = $.value;
-        // query = `np.array([None] * ${offset} + list(${value(source, input(0), false)}[:-${offset}]))`;
-        query = `offset_index(${value(source, store_id(0), false)}, ${offset})`;
+      if ($.node == "PastValue") {
+        const [val, offset] = $.value;
+        const inputs = source([val]);
+
+        query = `offset_index(${inputs[0]}, ${offset})`;
       }
 
       if ($.node == "InvertNode") {
         let vals = $.value;
-        $.preNode.map((_, k) => {
-          var ID = store_id(_.id);
-          vals[k] = value(vals[k], ID, false);
-          return ID;
-        });
+        const inputs = source([vals]);
 
-        // query = `np.array([None] * ${offset} + list(${value(source, input(0), false)}[:-${offset}]))`;
-        query = `~${vals[0]}`;
+        query = `~${inputs[0]}`;
       }
 
       /////////////  DEFAULT  /////////////
@@ -197,48 +159,14 @@ const queriesMaker = (obj) => {
 export { queriesMaker };
 
 // Handle Value
-const value = (value, indices = 0, multi = true) => {
+const VALUE = (value, ID, multi = false) => {
   let result = value;
-  if (indices < 0) return result;
-  if (isSource(value)) {
-    result = `output['${indices}']['${value}']${multi ? "[i]" : ""}`;
-  } else if (isNum(value)) {
-    // return `${value}`;
-    result = `output['${indices}']`;
+  if (isNum(value)) {
+    result = `output['${ID}']`;
   } else {
-    result = `output['${indices}']${multi ? "[i]" : ""}`;
+    result = `output['${ID}']${multi ? `['${value}']` : ""}`;
   }
-
-  if (multi) return `non_num(${result})`;
   return result;
 };
-
-// function buildCheckQuery(val1, val2, condition, inputs) {
-//   // Determine the range length, ensuring no IndexError
-//   const rangeExpr = isSource(val1)
-//     ? `len(output['${inputs[0]}']['${val1}'])`
-//     : isSource(val2)
-//     ? `len(output['${inputs[1]}']['${val2}'])`
-//     : isNum(val1)
-//     ? `len(output['${inputs[1]}'])`
-//     : isNum(val2)
-//     ? `len(output['${inputs[0]}'])`
-//     : `min(len(output['${inputs[0]}']), len(output['${inputs[1]}']))`;
-
-//   // Build expressions for val1 and val2
-//   const val1Expr = value(val1, inputs[0]);
-//   const val2Expr = value(val2, inputs[1]);
-//   let query = "";
-
-//   // Build the query string
-//   if (isNum(val1) && isNum(val2)) {
-//     query = `${val1Expr} ${condition} ${val2Expr}`;
-//   } else {
-//     query =
-//       `np.array([${val1Expr} ${condition} ${val2Expr} for i in range(${rangeExpr})` +
-//       (isNum(0) || isNum(1) ? `])` : `if (${val1Expr} is not None and ${val2Expr} is not None)])`);
-//   }
-//   return query;
-// }
 
 const toSingleQuotes = (data) => JSON.stringify(data).replace(/"/g, "'"); // Replace double quotes with single quotes

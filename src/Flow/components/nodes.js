@@ -1,5 +1,6 @@
 import np_all_json from "../nodes/Math/np_all.json";
 import math_json from "../nodes/Math/math.json";
+import indicators from "../nodes/Indicators/indicators.json";
 
 function nodesList() {
   // const numpy_utils = Object.keys(np_all)
@@ -37,23 +38,40 @@ function nodesList() {
     return level;
   });
 
+  const PatternRecognition = Object.values(indicators).filter((_) => _.Type == "Pattern Recognition");
+  const candle_patterns = PatternRecognition.map((lv1) => {
+    const level = {
+      name: lv1?.Description,
+      node: "IndicatorNode",
+      type: "math",
+      data: { value: [lv1?.Name], type: lv1?.Description, name: lv1?.Name },
+    };
+
+    return level;
+  });
+
+  // console.log(candle_patterns);
+
   const nodes = [
     {
-      name: "Asset Selector",
+      name: "Candles",
       purposes: "Makes it clear that users are selecting an asset or coin.",
-      node: "CoinNode",
-      type: "coin_data",
+      node: "CandlesNode",
+      // type: "coin_data",
+      returns: ["time", "open", "high", "low", "close", "volume"],
     },
     {
       name: "Technical Indicator",
       purposes: "Clarifies that the node deals with technical analysis indicators like RSI, MACD, etc.",
       node: "IndicatorNode",
-      type: "indicator",
+      type: "Overlap Studies",
     },
     {
-      name: "Constant Value",
-      purposes: "Indicates a fixed value or user-defined numeric input.",
-      node: "ValueNode",
+      name: "CandleStick Pattern",
+      purposes: "like RSI, MACD, etc.",
+      node: "IndicatorNode",
+      type: "Pattern Recognition",
+      submenu: candle_patterns,
     },
     {
       name: "Math Operation",
@@ -68,6 +86,7 @@ function nodesList() {
       node: "MathUtils",
       type: "math_utils_np",
       submenu: numpy_utils_list,
+      layer: "3",
     },
     {
       name: "Condition",
@@ -89,6 +108,11 @@ function nodesList() {
       type: "trade",
     },
     {
+      name: "Constant Value",
+      purposes: "Indicates a fixed value or user-defined numeric input.",
+      node: "ValueNode",
+    },
+    {
       name: "Logic Gate",
       purposes: "Describes the nodes role in applying logical operations like AND, OR, NOT, etc.",
       node: "LogicalNode",
@@ -106,8 +130,6 @@ function nodesList() {
       node: "InvertNode",
       // type: "invertNode",
     },
-
-    
   ];
 
   return nodes;

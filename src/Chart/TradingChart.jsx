@@ -177,10 +177,10 @@ const Chart = ({ data: results, panes }) => {
     if (outputs) {
       Object.entries(outputs).forEach(([id, out]) => {
         const node = results.kahn_nodes[id]
-        // console.log("--------", node?.type, out)
+        // console.log("--------", node?.node, out)
 
 
-        if (node?.type == 'coin_data') {
+        if (node?.node == 'CandlesNode') {
           candleStickData = out['time'].map((_, idx) => ({ time: out['time'][idx], open: out['open'][idx], high: out['high'][idx], low: out['low'][idx], close: out['close'][idx] })).reverse()
 
           // Calculate price range for visible candleStickData
@@ -538,7 +538,6 @@ const Chart = ({ data: results, panes }) => {
           ctx.stroke();
         }
 
-
         // BOOLEAN
         function plotTexts(name = "", out, color = '#000') {
           if (!name || !out) return;
@@ -568,7 +567,7 @@ const Chart = ({ data: results, panes }) => {
 
               // const text = value.toString(); // Convert value to string for rendering
               const text = node.indicator.Description;
-              
+
               // const text = "0" // Convert value to string for rendering
 
               Text(ctx, text, x + (candleWidth / 2), y - (isBullish ? 10 : -30), "#00000000", isBullish ? GREEN : RED, chartOffsetX > 0, true); // Adjust `y` for text positioning
@@ -620,7 +619,7 @@ const Chart = ({ data: results, panes }) => {
         // }
 
         ///////////  P O S I T I O N S  ///////////
-        if (node?.type == 'trade') {
+        if (node?.node == 'TradeNode') {
           const trades = results.result.trades
           // console.log(trades);
 
@@ -673,15 +672,14 @@ const Chart = ({ data: results, panes }) => {
         }
 
         ///////////  C H E C K  ///////////
-        if (node?.type == "check") {
+        if (node?.node == "ConditionNode") {
           // console.log(node, out);
           plotBooleans(node.name, out, getColor(id))
           line_layer += 1
         }
 
-
         ///////////  INDICATORS ///////////
-        if (node?.type == 'indicator' || node?.type == 'math' || node?.type == "hhll" || node?.type == 'math_utils_np') {
+        if (node?.node == 'IndicatorNode' || node?.node == 'MathNode' || node?.node == "HHLLNode" || node?.node == 'MathUtils') {
 
 
           var BoundedType = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX", "STOCHRSI"]
@@ -699,6 +697,8 @@ const Chart = ({ data: results, panes }) => {
             const isOverlay = lastVal < (highPrice * 1.2) && lastVal > lowPrice - (lowPrice * .2)
             const maxValue = Math.max(...out);
             const minValue = Math.min(...out);
+
+            
 
 
             // console.log("ARRAY", { dataType, out });
@@ -779,7 +779,7 @@ const Chart = ({ data: results, panes }) => {
 
 
 
-        if (node?.type == "hhll") {
+        if (node?.node == "HHLLNode") {
           // console.log("WORKS", node);
 
           // plotLineOnChart(out)
@@ -794,6 +794,12 @@ const Chart = ({ data: results, panes }) => {
 
         }
 
+
+
+        // ValueNode
+        // LogicalNode
+        // PastValue
+        // InvertNode
 
         else {
           // for (let i = 0; i < out.length; i++) {

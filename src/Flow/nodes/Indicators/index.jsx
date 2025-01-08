@@ -8,7 +8,7 @@ import Modal from '../../components/Modal'
 // Object.values(Indicators).map(_=> console.log(_.Outputs))
 
 const IndicatorNode = memo(({ data, id, updateNode }) => {
-    const [state, setState] = useState({ pickerOn: false, option: null, type: 'Overlap Studies' })
+    const [state, setState] = useState({ pickerOn: false, option: null, type: data?.type ?? 'Overlap Studies' })
     // 0 = Indicator 
     // Inputs 
     // Parameters 
@@ -32,6 +32,11 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
         setState({ ...state, pickerOn: false })
     };
 
+
+    // Auto Pick
+    useEffect(() => {
+        onPickIndicator(data.value[0])
+    }, [])
 
     useEffect(() => {
         const updatedValues = [...data.value];  // Clone the array to avoid direct mutation

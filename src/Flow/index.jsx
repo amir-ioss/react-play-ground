@@ -3,7 +3,7 @@ import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, a
 // import Plot from './chart'
 import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, CoinNode, TradeNode, LogicalNode, MathUtils, InvertNode, PastValue } from './nodes'
+import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, TradeNode, LogicalNode, MathUtils, InvertNode, PastValue, CandlesNode} from './nodes'
 import { queriesMaker } from './utils/queriesMaker';
 import { Panes } from './utils/help';
 import { twMerge } from 'tailwind-merge';
@@ -160,17 +160,18 @@ function FlowExample() {
 
 
     const nodeTypes = useMemo(() => ({
+        CandlesNode: (props) => <CandlesNode {...props} updateNode={updateNodeValue} />,
         ValueNode: (props) => <ValueNode {...props} updateNode={updateNodeValue} />,
         IndicatorNode: (props) => <IndicatorNode {...props} updateNode={updateNodeValue} />,
         MathNode: (props) => <MathNode {...props} updateNode={updateNodeValue} />,
         ConditionNode: (props) => <ConditionNode {...props} updateNode={updateNodeValue} />,
         HHLLNode: (props) => <HHLLNode {...props} updateNode={updateNodeValue} />,
-        CoinNode: (props) => <CoinNode {...props} updateNode={updateNodeValue} />,
         TradeNode: (props) => <TradeNode {...props} updateNode={updateNodeValue} />,
         LogicalNode: (props) => <LogicalNode {...props} updateNode={updateNodeValue} />,
         MathUtils: (props) => <MathUtils {...props} updateNode={updateNodeValue} />,
         PastValue: (props) => <PastValue {...props} updateNode={updateNodeValue} />,
         InvertNode: (props) => <InvertNode {...props} updateNode={updateNodeValue} />,
+        
     }), []);
 
 
