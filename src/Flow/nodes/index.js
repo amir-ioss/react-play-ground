@@ -9,6 +9,7 @@ import LogicalNode from "./LogicalNode";
 import PastValue from "./PastValue";
 import InvertNode from "./InvertNode";
 import CandlesNode from "./CandlesNode";
+import ListOperationNode from "./ListOperations";
 
 export { ConditionNode, ValueNode, MathNode, MathUtils, IndicatorNode, HHLLNode, TradeNode, LogicalNode, PastValue, InvertNode };
-export { CandlesNode };
+export { CandlesNode, ListOperationNode };

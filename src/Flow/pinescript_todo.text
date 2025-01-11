@@ -6,7 +6,7 @@ alert()
 alertcondition()
 
 
-
+List Operations 
 
 array.abs()
 array.avg()
@@ -25,7 +25,7 @@ array.get()
 array.includes()
 array.indexof()
 array.insert()
-array.join()
+array.join()                              |      ", ".join(array_str)
 array.last()
 array.lastindexof()
 array.max()
@@ -48,7 +48,7 @@ array.percentile_nearest_rank()
 array.percentrank()
 array.pop()
 array.push()
-array.range()
+array.range()                             |       np.arange(0, 10, 2)
 array.remove()
 array.reverse()
 array.set()

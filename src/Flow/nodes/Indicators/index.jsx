@@ -16,6 +16,8 @@ const IndicatorNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     const onPickIndicator = (option) => {
+        if(!option)return
+        
         const indicator = Indicators[option]
         const Name = indicator?.Name
         const inputs = indicator?.Inputs.map(_ => _.value)

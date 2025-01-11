@@ -225,7 +225,8 @@
         {
           "name": "shape",
           "type": "tuple of integers",
-          "target": true
+          "target": true,
+          "value": 10
         }
       ],
       "Outputs": [
@@ -249,7 +250,8 @@
         {
           "name": "shape",
           "type": "tuple of integers",
-          "target": true
+          "target": true,
+          "value": 10
         }
       ],
       "Outputs": [

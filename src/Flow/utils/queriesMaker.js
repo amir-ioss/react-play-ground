@@ -28,7 +28,7 @@ const queriesMaker = (obj) => {
           var isMulti = _.returns && _.returns.length > 1;
           values[i] = VALUE(values[i], ID, isMulti);
         }
-        return values
+        return values;
       };
 
       /////////////  COIN  /////////////
@@ -37,7 +37,7 @@ const queriesMaker = (obj) => {
 
         let symbol = asset ?? "BTC/USDT";
         let timeframe = timeFrame ?? "5m";
-        let limit = period ?? 50;
+        let limit = period ?? 1000;
         query = `fetch_ohlcv('${symbol}', '${timeframe}', ${limit})`;
 
         ohlcvIndex = key;
@@ -67,7 +67,7 @@ const queriesMaker = (obj) => {
         query = `${inputs[0]} ${$.func["Value"]} ${inputs[1]}`;
       }
 
-      if ($.node == "MathUtils") {
+      if ($.node == "MathUtils" || $.node == "ListOperationNode") {
         const [func, ...vals] = $.value;
         const inputs = source(vals);
 
@@ -75,10 +75,6 @@ const queriesMaker = (obj) => {
           query = `np.${$.func["Value"]}(${inputs.join(",")})`;
         } else {
           query = `np.${func}(${inputs.join(",")})`;
-        }
-        // RETURNS TO NAMED KEYS
-        if ($.returns && $.returns.length > 0) {
-          query += ` -> ${toSingleQuotes($.returns)}`;
         }
       }
 
@@ -91,11 +87,6 @@ const queriesMaker = (obj) => {
         const inputs = source(vals);
 
         query = `talib.${indicator}(${[...inputs, ...params].join(",")})`;
-
-        // RETURNS TO NAMED KEYS
-        if ($.returns && $.returns.length > 0) {
-          query += ` -> ${toSingleQuotes($.returns)}`;
-        }
       }
 
       /////////////  HH/LL  /////////////
@@ -144,6 +135,11 @@ const queriesMaker = (obj) => {
         const inputs = source([vals]);
 
         query = `~${inputs[0]}`;
+      }
+
+      // RETURNS TO NAMED KEYS
+      if ($.returns && $.returns.length > 0) {
+        query += ` -> ${toSingleQuotes($.returns)}`;
       }
 
       /////////////  DEFAULT  /////////////

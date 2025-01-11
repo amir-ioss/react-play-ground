@@ -1,35 +1,31 @@
 import { memo, useEffect, useState } from "react";
 import { Handle, MarkerType, Position, useEdges, useNodesData } from "@xyflow/react";
 import useNodeValue from "../useNodeValue";
-// import Funcs from './utils.json'
-import Utils from './np_all.json'
-import Modal from '../../components/Modal'
+import List from './list.json'
 
 // Object.values(Funcs).map(_=> console.log(_.Outputs))
 
-
-const MathNode = memo(({ data, id, updateNode }) => {
-    // const [state, setState] = useState({})
+const ListOperationNode = memo(({ data, id, updateNode }) => {
+    // const [state, setState] = useState({ pickerOn: true, option: null, type: 'Overlap Studies' })
     // 0 = Indicator 
     // Inputs 
     // Parameters 
     // Outputs 
 
-    const Funcs = Utils[data['type']]
+    // const Funcs = List[data['type']]
+
+
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
-
-
-
 
     const onPickIndicator = (option) => {
         if(!option)return
 
-        const func = Funcs[option]
+        const func = List[option]
 
         const Name = func?.Name
-        // const inputs = func?.Inputs.map(_ => 0)
-        const inputs = func?.Inputs.map(_ => _?.value ?? null)
+        const inputs = func?.Inputs.map(_ => null)
 
+        // const params = func?.Parameters.map(_ => _.value)
         const rest = [option, ...inputs]
 
         let returns = func?.Outputs.map(_ => _.value)
@@ -68,8 +64,8 @@ const MathNode = memo(({ data, id, updateNode }) => {
     }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
 
-    return <div className="bg-gray-200 border border-red-600  border-black flex flex-col justify-center pb-4 w-64">
-        <div className="bg-gradient-to-r  from-red-600 to-red-400 p-2 text-white px-4">
+    return <div className="bg-gray-200 border border-blue-600  border-black flex flex-col justify-center pb-4 w-64">
+        <div className="bg-gradient-to-r  from-blue-600 to-blue-400 p-2 text-white px-4">
             <h3 className="text-2xl">{data.name}</h3>
             {/* <p className="text-xs opacity-70">{data.purposes}</p> */}
         </div>
@@ -81,7 +77,7 @@ const MathNode = memo(({ data, id, updateNode }) => {
             placeholder="Indicator"
             className={'bg-white border p-2 m-2 rounded-xl'}
         >
-            {Object.entries(Funcs)?.map((fun, optIndex) => {
+            {Object.entries(List)?.map((fun, optIndex) => {
                 return <option key={optIndex} value={fun[0]}>
                     {fun[1]['Name']}
                 </option>
@@ -130,7 +126,7 @@ const MathNode = memo(({ data, id, updateNode }) => {
                     type="source"
                     position={Position.Right}
                     id={`${ID}`}
-                    style={{ background: 'gray', width: 15, height: 15, }}
+                    style={{ background: 'green', width: 15, height: 15, }}
                     reconnectable="target"
                 />
 
@@ -141,7 +137,7 @@ const MathNode = memo(({ data, id, updateNode }) => {
             type="source"
             position={Position.Right}
             id={'0'}
-            style={{ background: 'gray', width: 15, height: 15, }}
+            style={{ background: 'green', width: 15, height: 15, }}
             reconnectable="target"
         />}
 
@@ -164,4 +160,4 @@ const MathNode = memo(({ data, id, updateNode }) => {
 })
 
 
-export default MathNode
+export default ListOperationNode

@@ -19,6 +19,8 @@ const MathNode = memo(({ data, id, updateNode }) => {
     const { setVal, edges, nodesData, getVal } = useNodeValue(id);
 
     const onPickIndicator = (option) => {
+        if(!option)return
+
         const func = Math[option]
 
         const Name = func?.Name

@@ -1,5 +1,6 @@
 import np_all_json from "../nodes/Math/np_all.json";
 import math_json from "../nodes/Math/math.json";
+import list_json from "../nodes/ListOperations/list.json";
 import indicators from "../nodes/Indicators/indicators.json";
 
 function nodesList() {
@@ -38,7 +39,21 @@ function nodesList() {
     return level;
   });
 
+  const array_list = Object.entries(list_json).map((lv1) => {
+    const level = {
+      name: lv1[1]["Name"],
+      node: "ListOperationNode",
+      // type: "math",
+      data: { value: [lv1[0]], type: lv1[0], name: "List Operation" },
+
+      //   submenu: lv1[0],
+    };
+
+    return level;
+  });
+
   const PatternRecognition = Object.values(indicators).filter((_) => _.Type == "Pattern Recognition");
+
   const candle_patterns = PatternRecognition.map((lv1) => {
     const level = {
       name: lv1?.Description,
@@ -65,6 +80,7 @@ function nodesList() {
       purposes: "Clarifies that the node deals with technical analysis indicators like RSI, MACD, etc.",
       node: "IndicatorNode",
       type: "Overlap Studies",
+      data: { value: [""] },
     },
     {
       name: "CandleStick Pattern",
@@ -93,6 +109,13 @@ function nodesList() {
       purposes: "Simple and clear to describe a conditional logic node, e.g., >, <, =, etc.",
       node: "ConditionNode",
       type: "check",
+    },
+    {
+      name: "List Operations",
+      purposes: "Specifies that this node performs mathematical calculations.",
+      node: "ListOperationNode",
+      // type: "array_operation",
+      submenu: array_list,
     },
     {
       name: "High-Low Detector",

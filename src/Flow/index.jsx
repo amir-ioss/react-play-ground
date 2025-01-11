@@ -3,7 +3,7 @@ import { ReactFlow, addEdge, Handle, useEdgesState, useNodesState, Background, a
 // import Plot from './chart'
 import Plot from '../Chart/TradingChart'
 import '@xyflow/react/dist/style.css';
-import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, TradeNode, LogicalNode, MathUtils, InvertNode, PastValue, CandlesNode} from './nodes'
+import { ValueNode, MathNode, ConditionNode, IndicatorNode, HHLLNode, TradeNode, LogicalNode, MathUtils, InvertNode, PastValue, CandlesNode, ListOperationNode } from './nodes'
 import { queriesMaker } from './utils/queriesMaker';
 import { Panes } from './utils/help';
 import { twMerge } from 'tailwind-merge';
@@ -118,6 +118,17 @@ const initialEdges = [
 ];
 
 
+
+const ConnectionLineType = {
+    Bezier: 'default',
+    Straight: 'straight',
+    Step: 'step',
+    SmoothStep: 'smoothstep',
+    SimpleBezier: 'simplebezier',
+}
+
+
+
 function FlowExample() {
 
     const edgeReconnectSuccessful = useRef(true);
@@ -171,7 +182,8 @@ function FlowExample() {
         MathUtils: (props) => <MathUtils {...props} updateNode={updateNodeValue} />,
         PastValue: (props) => <PastValue {...props} updateNode={updateNodeValue} />,
         InvertNode: (props) => <InvertNode {...props} updateNode={updateNodeValue} />,
-        
+        ListOperationNode: (props) => <ListOperationNode {...props} updateNode={updateNodeValue} />,
+
     }), []);
 
 
@@ -319,12 +331,13 @@ function FlowExample() {
         });
 
         const data_processed = await response.json();
-        // console.log({ data_processed }); // Handle the response
+        console.log({ data_processed }); // Handle the response
         setResults({ kahn_nodes, ...data_processed })
         // setState({ ...state })
 
         let _panes = []
-        if (!panes.includes('chart')) _panes.push('chart')
+        // if (!panes.includes('chart')) _panes.push('chart')
+        if (!panes.includes('log')) _panes.push('log')
         if (data_processed?.result) _panes.push('results')
         setPanes(_ => [..._, ..._panes])
 
@@ -399,6 +412,7 @@ function FlowExample() {
                         edgesSelectable={true} // Enables edge selection
                         onNodeContextMenu={onNodeContextMenu}
                         onPaneContextMenu={onPaneContextMenu}
+                        connectionLineType={ConnectionLineType.Straight}
                     >
                         <Background />
                     </ReactFlow>
@@ -430,6 +444,9 @@ function FlowExample() {
                         <div className='text-black text-xs break-words text-wrap font-mono h-full overflow-y-scroll pt-8'>
                             {Object.entries(JSON.parse(results.outputs)).map((lg, key) => {
                                 const node = results.kahn_nodes[lg[0]];
+                                
+                                if(!node || node.node == "CandlesNode")return
+                                
                                 return (
                                     <div key={key}>
                                         <p className='bg-black text-white px-2 w-fit'>

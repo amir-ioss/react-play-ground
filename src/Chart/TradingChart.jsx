@@ -176,11 +176,11 @@ const Chart = ({ data: results, panes }) => {
 
     if (outputs) {
       Object.entries(outputs).forEach(([id, out]) => {
-        const node = results.kahn_nodes[id]
-        // console.log("--------", node?.node, out)
+        const $ = results.kahn_nodes[id]
+        // console.log("--------", $?.node, out)
 
 
-        if (node?.node == 'CandlesNode') {
+        if ($?.node == 'CandlesNode') {
           candleStickData = out['time'].map((_, idx) => ({ time: out['time'][idx], open: out['open'][idx], high: out['high'][idx], low: out['low'][idx], close: out['close'][idx] })).reverse()
 
           // Calculate price range for visible candleStickData
@@ -566,7 +566,7 @@ const Chart = ({ data: results, panes }) => {
 
 
               // const text = value.toString(); // Convert value to string for rendering
-              const text = node.indicator.Description;
+              const text = $?.indicator.Description;
 
               // const text = "0" // Convert value to string for rendering
 
@@ -619,7 +619,7 @@ const Chart = ({ data: results, panes }) => {
         // }
 
         ///////////  P O S I T I O N S  ///////////
-        if (node?.node == 'TradeNode') {
+        if ($?.node == 'TradeNode') {
           const trades = results.result.trades
           // console.log(trades);
 
@@ -672,14 +672,15 @@ const Chart = ({ data: results, panes }) => {
         }
 
         ///////////  C H E C K  ///////////
-        if (node?.node == "ConditionNode") {
+        if ($?.node == "ConditionNode") {
           // console.log(node, out);
-          plotBooleans(node.name, out, getColor(id))
+          plotBooleans($?.name, out, getColor(id))
           line_layer += 1
         }
 
         ///////////  INDICATORS ///////////
-        if (node?.node == 'IndicatorNode' || node?.node == 'MathNode' || node?.node == "HHLLNode" || node?.node == 'MathUtils') {
+        if ($?.node == 'IndicatorNode' || $?.node == 'MathNode' || $?.node == "HHLLNode" || $?.node == 'MathUtils') {
+          
 
 
           var BoundedType = ["RSI", "STOCH", "WILLR", "CCI", "MFI", "ADX", "STOCHRSI"]
@@ -687,8 +688,8 @@ const Chart = ({ data: results, panes }) => {
           var UnboundeType = ["ATR", "OBV"]
           // var Percentage = ["ROC", "WILLR"]
 
-          const isBounded = BoundedType.includes(node?.indicator?.Name)
-          const isCentered = CenteredType.includes(node?.indicator?.Name)
+          const isBounded = BoundedType.includes($?.indicator?.Name)
+          const isCentered = CenteredType.includes($?.indicator?.Name)
 
 
           if (Array.isArray(out)) { // []
@@ -703,23 +704,25 @@ const Chart = ({ data: results, panes }) => {
 
             // console.log("ARRAY", { dataType, out });
             if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
-              if (node?.plot == 'lines') {
-                plotHorizontalLines(node.label, out, getColor(id))
+              if ($?.plot == 'lines') {
+                plotHorizontalLines($?.label, out, getColor(id))
               } else {
-                plotLineOnChart(node.label, out, getColor(id))
+                plotLineOnChart($?.label, out, getColor(id))
               }
             } else if (dataType == 'boolean') {
-              plotBooleans(node.label, out, getColor(id))
+              plotBooleans($?.label, out, getColor(id))
             } else {
               if (isBounded) {
-                plotBoundedComponent(node.label, out, getColor(id))
+                plotBoundedComponent($?.label, out, getColor(id))
               } else if (isCentered) {
-                plotCenteredComponent(`${node.label}`, out, getColor(id), maxValue, minValue)
+                plotCenteredComponent(`${$?.label}`, out, getColor(id), maxValue, minValue)
                 component_layer += 1
               } else {
                 // CANDLE PATTERNS
-                if (node.indicator.Outputs[0]['OutputRule'] == "values are -100, 0 or 100") {
-                  plotTexts(node.label, out, getColor(id))
+                return
+                
+                if ($.node == "MathUtils" && $?.indicator.Outputs[0]['OutputRule'] == "values are -100, 0 or 100") {
+                  plotTexts($?.label, out, getColor(id))
                 } else {
                   console.log("SPECIAL", out);
                 }
@@ -748,20 +751,20 @@ const Chart = ({ data: results, panes }) => {
               // console.log(name, named_out);
 
               if (dataType == 'number' && isOverlay && !isBounded && !isCentered) {
-                if (node?.plot == 'lines') {
-                  plotHorizontalLines(`${node.label} (${name})`, named_out, getColor(id + key))
+                if ($?.plot == 'lines') {
+                  plotHorizontalLines(`${$?.label} (${name})`, named_out, getColor(id + key))
                 } else {
-                  plotLineOnChart(`${node.label} (${name})`, named_out, getColor(id + key))
+                  plotLineOnChart(`${$?.label} (${name})`, named_out, getColor(id + key))
                 }
               } else {
                 // console.log("MULTI ARRAY", named_out);
                 // drawMACD
 
                 if (isBounded) {
-                  plotBoundedComponent(`${node.label} (${name})`, named_out, getColor(id + key))
+                  plotBoundedComponent(`${$?.label} (${name})`, named_out, getColor(id + key))
                 } else if (isCentered) {
 
-                  plotCenteredComponent(`${node.label} (${name})`, named_out, getColor(id + key), maxValue, minValue)
+                  plotCenteredComponent(`${$?.label} (${name})`, named_out, getColor(id + key), maxValue, minValue)
                 }
 
 
@@ -779,7 +782,7 @@ const Chart = ({ data: results, panes }) => {
 
 
 
-        if (node?.node == "HHLLNode") {
+        if ($?.node == "HHLLNode") {
           // console.log("WORKS", node);
 
           // plotLineOnChart(out)

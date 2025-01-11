@@ -59,7 +59,10 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                 {filteredNodes.map((nd, idx) => (
                     <div key={idx} className="relative group text-sm">
                         <button
-                            onClick={() => addNode(nd.node, nd)}
+                            onClick={() => {
+                                if (nd.layer == '3') return
+                                addNode(nd.node, nd)
+                            }}
                             className={`py-1 pl-4 flex items-center justify-between w-full text-left hover:bg-blue-50 border-black border-l ${expandedSubmenu === idx ? 'bg-blue-50' : ''}`}
                             style={{ borderColor: colors[idx] }}
                             onMouseOver={() => setExpandedSubmenu(idx)}
@@ -75,8 +78,8 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                         {nd.submenu && (
                             <>
                                 {expandedSubmenu === idx && (
-                                    <div className={twMerge("absolute border w-full top-0 border-l bg-white rounded-r-lg", 
-                                    isMouseOnRight ? 'right-full' : 'left-full', (nd?.layer != 3 && nd.submenu.length > 15) ? 'min-w-96 h-[700px] overflow-y-scroll' : '')}>
+                                    <div className={twMerge("absolute border w-full top-0 border-l bg-white rounded-r-lg",
+                                        isMouseOnRight ? 'right-full' : 'left-full', (nd?.layer != 3 && nd.submenu.length > 15) ? 'min-w-96 h-[700px] overflow-y-scroll' : '')}>
 
                                         {/* LEYER 2 */}
                                         {nd.submenu.map((sub, subIdx) => {
