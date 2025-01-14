@@ -78,8 +78,8 @@ function PaneMenu({ paneMenu, addNode, closePaneMenu }) {
                         {nd.submenu && (
                             <>
                                 {expandedSubmenu === idx && (
-                                    <div className={twMerge("absolute border w-full top-0 border-l bg-white rounded-r-lg",
-                                        isMouseOnRight ? 'right-full' : 'left-full', (nd?.layer != 3 && nd.submenu.length > 15) ? 'min-w-96 h-[700px] overflow-y-scroll' : '')}>
+                                    <div className={twMerge("absolute border w-full top-0 border-l bg-white rounded-r-lg pb-4",
+                                        isMouseOnRight ? 'right-full' : 'left-full', (nd?.layer != 3 && nd.submenu.length > 15) ? 'h-[700px] overflow-y-scroll' : '')}>
 
                                         {/* LEYER 2 */}
                                         {nd.submenu.map((sub, subIdx) => {

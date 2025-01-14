@@ -7,6 +7,7 @@ import {
   useNodesData,
 } from '@xyflow/react';
 import useNodeValue from './useNodeValue'
+import { Color } from '../utils/colors';
 
 
 
@@ -15,7 +16,7 @@ const PastValue = memo(({ data, id, updateNode }) => {
 
 
 
-  
+
 
   useEffect(() => {
     const val1 = getVal(0) ?? null;
@@ -33,46 +34,46 @@ const PastValue = memo(({ data, id, updateNode }) => {
 
 
 
-  return <div className="bg-gray-200 min-w-64 border border-orange-600  border-black flex flex-col justify-center pb-4 w-44">
-    <div className="bg-gradient-to-r  from-orange-600 to-orange-400 p-2 text-white px-4 mb-4">
+  return <div className={`bg-white border border-[${Color.PAST_NODE}] border-black flex flex-col justify-center pb-4 rounded-sm max-w-52`}>
+    <div className={`bg-gradient-to-r from-[${Color.PAST_NODE}] to-pink-400 p-2 text-white px-4`}>
       <h3 className="text-2xl">{data.name}</h3>
     </div>
 
 
 
+    <div className="relative flex flex-col mt-6 relative ">
+      <label className="text-gray-500 -top-4 text-xs mx-4 absolute">{getVal(0) ?? "Data"}</label>
+      {/* INPUT*/}
+
+      <div className="mx-4 flex-1 ">
+        <input
+          type="text"
+          value={data.value['1']}
+          onChange={_ => updateNode(id, setVal(data.value, 1, _.target.value))}
+          placeholder={"index"}
+          className={`w-full bg-gray-100 p-2 rounded-md outline-none focus:border-gray-400`}
+          id={'1'}
+        />
+        <Handle
+          type="target"
+          position={Position.Left}
+          id={"0"} // Another unique id
+          style={{ background: Color.list, width: 15, height: 15 }}
+        />
+
+        {/* OUTPUT */}
+        <Handle
+          type="source"
+          position={Position.Right}
+          id={'0'} // Another unique id
+          style={{ background: Color.list, width: 15, height: 15 }}
+        />
 
 
-    {/* INPUT*/}
-
-    <div className="relative  items-center my-2">
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={"0"} // Another unique id
-        style={{ background: 'orange', width: 15, height: 15 }}
-      />
-      <p className="px-4">{getVal(0) ?? 'Value 1'}</p>
+      </div>
     </div>
 
-    <div className="relative flex mt-2">
-      <input
-        type="text"
-        value={data.value['1']}
-        onChange={_ => updateNode(id, setVal(data.value, 1, _.target.value))}
-        placeholder={"index"}
-        className="w-full p-1 border mx-2"
-        id={'1'}
-      />
-    </div>
 
-
-    {/* OUTPUT */}
-    <Handle
-      type="source"
-      position={Position.Right}
-      id={'0'} // Another unique id
-      style={{ background: 'gray', width: 15, height: 15 }}
-    />
 
     {/* purposes */}
     <p className="text-xs opacity-70 m-4 my-2">{data.purposes}</p>

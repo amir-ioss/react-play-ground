@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { Handle, MarkerType, Position, useEdges, useNodesData } from "@xyflow/react";
 import useNodeValue from "./useNodeValue";
+import { Color } from '../utils/colors'
 
 
 const TIME_FRAMES = [
@@ -125,45 +126,53 @@ const CandlesNode = memo(({ data, id, updateNode }) => {
     }, [edges, data.value]);  // Ensure `data.value` and `edges` are dependencies
 
 
-    return <div className="bg-gray-200 border border-slate-600   border-black flex flex-col justify-center pb-4 w-64">
-        <div className="bg-gradient-to-r  from-slate-600 to-slate-400 p-2 text-white px-4">
+    return <div className={`bg-white border border-[${Color.CANDLE_NODE}] border-black flex flex-col justify-center pb-4 rounded-sm`}>
+        <div className={`bg-gradient-to-r from-[${Color.CANDLE_NODE}] to-emerald-400 p-2 text-white px-4`}>
             <h3 className="text-2xl">{data.name}</h3>
-            {/* <p className="text-xs opacity-70">{data.purposes}</p> */}
         </div>
-
 
         {/* <div className="mx-4 my-2">
             <p className="text-sm">{Func.Description}</p>
             <p className="text-xs">{Func?.Type}</p>
         </div> */}
 
-
-        <label className="mx-2">Coin</label>
-        <div className="relative flex">
-            <input
-                type="text"
-                value={data.value[0]}
-                onChange={_ => updateNode(id, setVal(data.value, 0, _.target.value))}
-                placeholder={"BTC/USDT"}
-                className="w-full p-1 border mx-2"
-            />
+        <div className="m-4 flex items-center">
+            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" className="size-12" />
+            <h3 className="font-semibold text-xl ml-4">BTC/USDT</h3>
         </div>
 
 
 
-        <select
-            type="text"
-            value={data.value?.[1] ?? ''}
-            onChange={_ => updateNode(id, setVal(data.value, 1, _.target.value))}
-            placeholder="Indicator"
-            className={'bg-white border p-2 m-2 rounded-xl'}
-        >
-            {TIME_FRAMES.map((fun, optIndex) => {
-                return <option key={optIndex} value={fun.value}>
-                    {fun.name}
-                </option>
-            })}
-        </select>
+        <div className="relative flex flex-col mt-6 relative ">
+            <label className="text-gray-500 -top-4 text-xs mx-4 absolute">{"ASSET"}  </label>
+            <div className="mx-4 flex-1 ">
+                <input
+                    type="text"
+                    value={data.value[0]}
+                    onChange={_ => updateNode(id, setVal(data.value, 0, _.target.value))}
+                    placeholder={"BTC/USDT"}
+                    className={`w-full bg-gray-100 p-2 rounded-md outline-none focus:border-gray-400 mt-2 font-semibold`}
+                />
+            </div>
+        </div>
+
+
+        <div className="relative flex flex-col mt-6 relative mx-4">
+            <label className="text-gray-500 -top-4 text-xs  absolute">{"TIME FRAME"}</label>
+            <select
+                type="text"
+                value={data.value?.[1] ?? ''}
+                onChange={_ => updateNode(id, setVal(data.value, 1, _.target.value))}
+                placeholder="Indicator"
+                className={`w-full bg-gray-100 p-2 rounded-md outline-none focus:border-gray-400 mt-2`}
+            >
+                {TIME_FRAMES.map((fun, optIndex) => {
+                    return <option key={optIndex} value={fun.value}>
+                        {fun.name}
+                    </option>
+                })}
+            </select>
+        </div>
 
 
 
@@ -185,7 +194,7 @@ const CandlesNode = memo(({ data, id, updateNode }) => {
                     type="target"
                     position="left"
                     id={ID}
-                    style={{ background: 'gray', width: 15, height: 15 }}
+                    style={{ background: Color.list, width: 15, height: 15 }}
                 />}
 
             </div>
@@ -194,7 +203,7 @@ const CandlesNode = memo(({ data, id, updateNode }) => {
         {/* OUTPUTS */}
         {Func.Outputs.map((field, idx) => {
             let ID = idx // offset
-            return <div className="relative flex mt-2 justify-end" key={ID}>
+            return <div className="relative flex flex-col mt-2 relative " key={ID}>
                 <div className="text-right mx-4">
                     <label for={ID}>{field.name}</label>
                     <p className="text-xs">{field?.OutputRule}</p>
@@ -203,22 +212,21 @@ const CandlesNode = memo(({ data, id, updateNode }) => {
                     type="source"
                     position={Position.Right}
                     id={`${ID}`}
-                    style={{ background: 'gray', width: 15, height: 15, }}
+                    style={{ background: Color.list, width: 15, height: 15, }}
                     reconnectable="target"
                 />
 
             </div>
         })}
 
-
-        <label className="mx-2">{"Number of candles"}  </label>
-        <div className="relative flex">
+        <div className="relative flex flex-col mt-6 relative mx-4">
+            <label className="text-gray-500 -top-4 text-xs  absolute">Number of candles</label>
             <input
                 type="text"
                 value={data.value[2]}
                 onChange={_ => updateNode(id, setVal(data.value, 2, _.target.value))}
                 placeholder={"50"}
-                className="w-full p-1 border mx-2"
+                className="w-full bg-gray-100 p-2 rounded-md outline-none focus:border-gray-400 mt-2"
             />
         </div>
 
@@ -228,7 +236,7 @@ const CandlesNode = memo(({ data, id, updateNode }) => {
             type="source"
             position={Position.Right}
             id={'0'}
-            style={{ background: 'gray', width: 15, height: 15, }}
+            style={{ background: Color.list, width: 15, height: 15, }}
             reconnectable="target"
         />}
 

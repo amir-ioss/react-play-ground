@@ -8,6 +8,7 @@ import {
     useNodesData,
 } from '@xyflow/react';
 import useNodeValue from './useNodeValue';
+import { Color } from '../utils/colors';
 
 
 const OPTIONS = [
@@ -106,7 +107,7 @@ const HHLLNode = memo(({ data, id, updateNode }) => {
                     type="target"
                     position="left"
                     id={ID}
-                    style={{ background: 'gray', width: 15, height: 15 }}
+                    style={{ background: Color.list, width: 15, height: 15 }}
                 />}
 
             </div>

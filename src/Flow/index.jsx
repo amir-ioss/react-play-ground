@@ -16,6 +16,7 @@ import Header from './components/Header'
 import { calculatePercentageChange, Pane } from '../Chart/utils/helpers';
 import PaneToolBar from './components/PaneToolBar';
 import NodeMenu from './components/NodeMenu'
+import ConnectionLine from './components/ConnectionLine'
 
 const initialNodes = [
     // {
@@ -337,7 +338,7 @@ function FlowExample() {
 
         let _panes = []
         // if (!panes.includes('chart')) _panes.push('chart')
-        if (!panes.includes('log')) _panes.push('log')
+        if (!panes.includes('chart')) _panes.push('chart')
         if (data_processed?.result) _panes.push('results')
         setPanes(_ => [..._, ..._panes])
 
@@ -408,11 +409,12 @@ function FlowExample() {
                         onReconnect={onReconnect}
                         onReconnectStart={onReconnectStart}
                         onReconnectEnd={onReconnectEnd}
+                        // connectionLineComponent={ConnectionLine}
                         // fitView
                         edgesSelectable={true} // Enables edge selection
                         onNodeContextMenu={onNodeContextMenu}
                         onPaneContextMenu={onPaneContextMenu}
-                        connectionLineType={ConnectionLineType.Straight}
+                    // connectionLineType={ConnectionLineType.Straight}
                     >
                         <Background />
                     </ReactFlow>
@@ -444,9 +446,9 @@ function FlowExample() {
                         <div className='text-black text-xs break-words text-wrap font-mono h-full overflow-y-scroll pt-8'>
                             {Object.entries(JSON.parse(results.outputs)).map((lg, key) => {
                                 const node = results.kahn_nodes[lg[0]];
-                                
-                                if(!node || node.node == "CandlesNode")return
-                                
+
+                                if (!node || node.node == "CandlesNode") return
+
                                 return (
                                     <div key={key}>
                                         <p className='bg-black text-white px-2 w-fit'>
@@ -507,8 +509,8 @@ function FlowExample() {
             </div>
 
             {/* RESULTS RIGHT MODAL */}
-            {results?.result && panes.includes('results') && <div className='absolute right-0 bg-white w-[18vw] h-screen overflow-y-scroll'>
-                <div className='fixed bottom-0 bg-gradient-to-t from-white via-white p-4 w-full'>
+            {results?.result && panes.includes('results') && <div className='absolute right-0 bg-white w-[18vw] h-[95vh] bottom-0 overflow-y-scroll pb-44'>
+                <div className='fixed bottom-0  bg-white via-white p-4 w-full z-10'>
                     <h3>Results</h3>
                     <p className='text-xl'>Balance : {(results.result?.final_balance).toFixed(2)}</p>
                     <p>Total trades : {results.result.trades.length}</p>
@@ -517,19 +519,20 @@ function FlowExample() {
                 <div>
                     {results.result.trades.map((trade, count) => {
                         const isLoss = trade.pnl < 0
-                        return <div className='border-b text-sm p-2 flex justify-between items-center' key={count}>
+                        return <div className='mb-1 text-sm p-2 flex justify-between items-center overflow-clip relative' key={count}>
                             <div>
-                                <p className={`${trade.type == 'long' ? 'bg-green-400' : 'bg-red-400'} w-fit text-xs px-1 py-1 text-white uppercase`}>{trade.type}</p>
+                                <p className={`${trade.type == 'long' ? 'bg-emerald-400' : 'bg-red-400'} w-fit text-xs px-1 py-1 text-white uppercase`}>{trade.type}</p>
                                 <p>Entry : {trade.entry_price}</p>
                                 <p>Exit : {trade.exit_price}</p>
                             </div>
                             <div className=''>
                                 <div>
-                                    <p className='border w-fit'>PNL : {trade.pnl.toFixed(2)}</p>
+                                    <p className='w-fit'>PNL : {trade.pnl.toFixed(2)}</p>
                                     <p>Fee : {trade.fee.toFixed(2)}</p>
                                 </div>
                             </div>
-                            <p className={`text-2xl ${isLoss ? 'text-red-400' : 'text-green-400'}`}>{calculatePercentageChange(trade.entry_price, trade.exit_price)}%</p>
+                            <p className={`text-2xl ${isLoss ? 'text-red-400' : 'text-emerald-400'}`}>{calculatePercentageChange(trade.entry_price, trade.exit_price)}%</p>
+                            <div className={`size-44 ${isLoss ? 'bg-red-400' : 'bg-emerald-400 '} absolute right-[10%] blur-3xl z-0 opacity-10`} />
                         </div>
                     })}
                 </div>

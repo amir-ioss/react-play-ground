@@ -8,6 +8,7 @@ import {
     useNodesData,
 } from '@xyflow/react';
 import useNodeValue from './useNodeValue';
+import { Color } from '../utils/colors';
 
 const Parameters = [
     {
@@ -28,7 +29,7 @@ const Parameters = [
     {
         name: "fee",
         type: "number",
-        value: 0.01,
+        value: 0.001, // 0.1 %
         placeholder: "Fee",
         target: true
 
@@ -101,14 +102,14 @@ const TradeNode = memo(({ data, id, updateNode }) => {
 
 
 
-    return <div className="bg-gray-200 min-w-64 border border-blue-600  border-black flex flex-col justify-center pb-4">
-        <div className="bg-gradient-to-r  from-green-600 to-blue-400 p-2 text-white px-4 mb-4">
+    return <div className={`bg-white border border-emerald-600 flex flex-col justify-center pb-4 rounded-sm`}>
+        <div className={`bg-gradient-to-r from-[${Color.TRADE_NODE}] to-emerald-400 p-2 text-white px-4`}>
             <h3 className="text-2xl">{data.name}</h3>
         </div>
 
-        <h3 className='font-bold ml-8'>LONG</h3>
+        <h3 className='font-bold  p-4 pb-2 border-b'>LONG</h3>
         <div className="relative flex mt-2">
-            <label for={'0'} className="mx-2">{"Entry"}  </label>
+            <label for={'0'} className="ml-4">{"Entry"}  </label>
             <Handle
                 type="target"
                 position="left"
@@ -119,7 +120,7 @@ const TradeNode = memo(({ data, id, updateNode }) => {
         </div>
 
         <div className="relative flex mt-2">
-            <label for={'1'} className="mx-2">{"Exit"}  </label>
+            <label for={'1'} className="ml-4">{"Exit"}  </label>
             <Handle
                 type="target"
                 position="left"
@@ -129,12 +130,12 @@ const TradeNode = memo(({ data, id, updateNode }) => {
         </div>
 
 
-        <h3 className='font-bold ml-8'>SHORT</h3>
+        <h3 className='font-bold p-4 pb-2 border-b'>SHORT</h3>
 
         <div>
 
             <div className="relative flex mt-2">
-                <label for={'2'} className="mx-2">{"Entry"}  </label>
+                <label for={'2'} className="mx-4">{"Entry"}  </label>
                 <Handle
                     type="target"
                     position="left"
@@ -145,7 +146,7 @@ const TradeNode = memo(({ data, id, updateNode }) => {
             </div>
 
             <div className="relative flex mt-2">
-                <label for={'3'} className="mx-2">{"Exit"}  </label>
+                <label for={'3'} className="mx-4">{"Exit"}  </label>
                 <Handle
                     type="target"
                     position="left"
@@ -155,17 +156,20 @@ const TradeNode = memo(({ data, id, updateNode }) => {
             </div>
         </div>
 
+        <h3 className='font-bold  my-4 border-b'></h3>
+
+
         {/* INPUTS*/}
         {Parameters?.map((field, idx) => {
             const ID = idx + 4 // offset
-            return <div className="relative flex mt-2" key={ID}>
-                <label for={ID} className="mx-2">{field.placeholder}  </label>
+            return <div className="relative flex items-center mx-4" key={ID}>
+                <label for={ID} className="flex-1">{field.placeholder}  </label>
                 <input
                     type="text"
                     value={data.value[ID] ?? field.value}
                     onChange={_ => updateNode(id, setVal(data.value, ID, _.target.value))}
                     placeholder={field.type}
-                    className="flex-1 p-1 border mx-2 rounded-xl"
+                    className={`flex-1  bg-gray-100 m-1 p-1 rounded-md outline-none focus:border-gray-400`}
                     id={ID}
                 />
 
@@ -173,7 +177,7 @@ const TradeNode = memo(({ data, id, updateNode }) => {
                     type="target"
                     position="left"
                     id={ID}
-                    style={{ background: 'gray', width: 15, height: 15, }}
+                    style={{ background: Color.list, width: 15, height: 15, }}
                 />} */}
 
             </div>

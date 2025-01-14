@@ -105,7 +105,7 @@ const PivotPoints = memo(({ data, id, updateNode }) => {
                     type="target"
                     position="left"
                     id={ID}
-                    style={{ background: 'gray', width: 15, height: 15 }}
+                    style={{ background: Color.list, width: 15, height: 15 }}
                 />}
 
             </div>
